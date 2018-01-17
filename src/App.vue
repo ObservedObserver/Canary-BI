@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted () {
+    this.$store.commit('globalDataInit')
+  }
 }
 </script>
 <style src="../node_modules/semantic-ui-css/semantic.css"></style>
