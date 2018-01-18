@@ -11,10 +11,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, i) in globalData" :key="row.id">
+        <tr v-for="(row, i) in filterData" :key="row.id">
           <td v-for="column in xDataLabels" :key="column.id">
-            {{globalData[i][column.name]}}
-            <span v-for="ykeys in yDataLabels" :key="ykeys.id">,{{globalData[i][ykeys.name]}}</span>
+            {{filterData[i][column.name]}}
+            <span v-for="ykeys in yDataLabels" :key="ykeys.id">,{{filterData[i][ykeys.name]}}</span>
           </td>
         </tr>
       </tbody>
@@ -29,9 +29,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, i) in globalData" :key="row.id">
+        <tr v-for="(row, i) in filterData" :key="row.id">
           <td v-for="column in yDataLabels" :key="column.id">
-            {{globalData[i][column.name]}}
+            {{filterData[i][column.name]}}
           </td>
         </tr>
       </tbody>
@@ -45,14 +45,29 @@ export default {
   data () {
     return {
       xDataLabels: this.$store.state.globalDataLabels.X,
-      yDataLabels: this.$store.state.globalDataLabels.Y,
-      globalData: this.$store.state.globalData
+      yDataLabels: this.$store.state.globalDataLabels.Y
     }
   },
   computed: {
     horizontalTable () {
       // bug
       return this.xDataLabels.length === 0 && this.yDataLabels.length !== 0
+    },
+    filterData () {
+      var paras = []
+      for (var i = 0; i < this.xDataLabels.length; i++) {
+        paras.push(this.xDataLabels[i].name)
+      }
+      for (i = 0; i < this.yDataLabels.length; i++) {
+        paras.push(this.yDataLabels[i].name)
+      }
+      // this.$store.commit('getLocalData', paras)
+      this.$store.commit('getLocalData', paras)
+      if (this.$store.state.filterData.length === 0 && this.$store.state.localData.length !== 0) {
+        return this.$store.state.localData
+      } else {
+        return this.$store.state.filterData
+      }
     }
   }
 }

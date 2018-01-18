@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import 'semantic-ui-css/semantic.js'
 export default {
   name: 'App',
   mounted () {

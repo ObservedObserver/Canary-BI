@@ -36,6 +36,11 @@ export default {
       dataLabels: this.$store.state.globalDataLabels[this.$props.areaName]
     }
   },
+  // mounted () {
+  //   if (this.name === 'data') {
+  //     this.dataLabels = this.$store.state.constDataLabels
+  //   }
+  // },
   methods: {
     drag (event, i) {
       this.$store.commit('drag', {
@@ -59,7 +64,6 @@ export default {
 
 <style lang="css" scoped>
 .ui.label{
-  width: 10rem;
   margin: 0.28rem;
 }
 </style>

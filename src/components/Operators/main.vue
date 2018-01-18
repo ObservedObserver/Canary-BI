@@ -9,6 +9,7 @@
         <div class="ui basic segment">
           <filters></filters>
           <pages></pages>
+          <dimension></dimension>
           <data-board></data-board>
         </div>
       </div>
@@ -22,6 +23,7 @@ import pages from './pages.vue'
 import dataBoard from './data.vue'
 import xymenu from './xymenu.vue'
 import vizBoard from './vizboard.vue'
+import dimension from './dimension.vue'
 
 export default {
   name: 'main-operator',
@@ -30,7 +32,8 @@ export default {
     pages,
     dataBoard,
     xymenu,
-    vizBoard
+    vizBoard,
+    dimension
   }
 }
 </script>
