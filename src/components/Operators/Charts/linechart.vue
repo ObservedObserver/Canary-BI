@@ -12,29 +12,11 @@ export default {
     }
   },
   computed: {
-    // horizontalTable () {
-    //   // bug
-    //   return this.xDataLabels.length === 0 && this.yDataLabels.length !== 0
-    // },
-    // filterData () {
-    //   var paras = []
-    //   for (var i = 0; i < this.xDataLabels.length; i++) {
-    //     paras.push(this.xDataLabels[i].name)
-    //   }
-    //   for (i = 0; i < this.yDataLabels.length; i++) {
-    //     paras.push(this.yDataLabels[i].name)
-    //   }
-    //   // this.$store.commit('getLocalData', paras)
-    //   this.$store.commit('getLocalData', paras)
-    //   if (this.$store.state.filterData.length === 0 && this.$store.state.localData.length !== 0) {
-    //     return this.$store.state.localData
-    //   } else {
-    //     return this.$store.state.filterData
-    //   }
-    // },
     option () {
       var _trans = this.$store.getters.transData
-
+      if (this.$store.state.filterCheckedList.length !== 0) {
+        _trans = this.$store.getters.transFilterData
+      }
       var _sum = (x, y) => {
         let i, _length, xList, yList
         _length = _trans[x].length
@@ -56,13 +38,7 @@ export default {
         // option.xAxis.data = _trans[this.xDataLabels[0].name]
         // option.series[0].data = _trans[this.yDataLabels[0].name]
         let xList, yList, i, numberAxis, stringAxis
-        // [xList, yList] = _sum(this.xDataLabels[0].name, this.yDataLabels[0].name)
-        // console.log([xList, yList])
-        // option.xAxis.data = xList
-        // option.series.push({
-        //   data: yList,
-        //   type: 'bar'
-        // })
+
         stringAxis = {
           type: 'category',
           data: []
@@ -98,15 +74,6 @@ export default {
             })
           }
         }
-        // for (i = 0; i < this.yDataLabels.length; i++) {
-        //   [xList, yList] = _sum(this.xDataLabels[0].name, this.yDataLabels[i].name)
-        //   console.log([xList, yList])
-        //   stringAxis.data = xList
-        //   option.series.push({
-        //     data: yList,
-        //     type: 'bar'
-        //   })
-        // }
       }
       return option
     }

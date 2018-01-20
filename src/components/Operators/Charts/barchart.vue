@@ -34,6 +34,9 @@ export default {
     // },
     option () {
       var _trans = this.$store.getters.transData
+      if (this.$store.state.filterCheckedList.length !== 0) {
+        _trans = this.$store.getters.transFilterData
+      }
 
       var _sum = (x, y) => {
         let i, _length, xList, yList

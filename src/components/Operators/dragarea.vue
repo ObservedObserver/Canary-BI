@@ -3,7 +3,7 @@
     {{title}}
       <div class="ui label" draggable="true"
        v-for="(label, i) in dataLabels"
-       :key="label.id"
+       :key="label.name"
        :class="{
          teal: label.type === 'string',
          blue: label.type === 'number'

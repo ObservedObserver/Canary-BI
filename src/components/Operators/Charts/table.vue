@@ -4,17 +4,17 @@
     <table class="ui collapsing table" v-if="!horizontalTable">
       <thead>
         <tr>
-          <th v-for="keys in xDataLabels" :key="keys.id">
+          <th v-for="keys in xDataLabels" :key="keys.name">
             {{keys.name}}
-            <span v-for="ykeys in yDataLabels" :key="ykeys.id">,{{ykeys.name}}</span>
+            <span v-for="ykeys in yDataLabels" :key="ykeys.name">,{{ykeys.name}}</span>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, i) in filterData" :key="row.id">
-          <td v-for="column in xDataLabels" :key="column.id">
+        <tr v-for="(row, i) in filterData" :key="i">
+          <td v-for="column in xDataLabels" :key="column.name">
             {{filterData[i][column.name]}}
-            <span v-for="ykeys in yDataLabels" :key="ykeys.id">,{{filterData[i][ykeys.name]}}</span>
+            <span v-for="ykeys in yDataLabels" :key="ykeys.name">,{{filterData[i][ykeys.name]}}</span>
           </td>
         </tr>
       </tbody>
@@ -23,14 +23,14 @@
     <table class="ui collapsing table" v-if="horizontalTable">
       <thead>
         <tr>
-          <th v-for="ykeys in yDataLabels" :key="ykeys.id">
+          <th v-for="ykeys in yDataLabels" :key="ykeys.name">
             {{ykeys.name}}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, i) in filterData" :key="row.id">
-          <td v-for="column in yDataLabels" :key="column.id">
+        <tr v-for="(row, i) in filterData" :key="i">
+          <td v-for="column in yDataLabels" :key="column.name">
             {{filterData[i][column.name]}}
           </td>
         </tr>

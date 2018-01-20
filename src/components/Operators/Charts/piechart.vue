@@ -14,6 +14,9 @@ export default {
   computed: {
     option () {
       var _trans = this.$store.getters.transData
+      if (this.$store.state.filterCheckedList.length !== 0) {
+        _trans = this.$store.getters.transFilterData
+      }
       var option = {
         tooltip: {
           trigger: 'item',
