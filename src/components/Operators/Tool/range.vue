@@ -1,30 +1,51 @@
 <template lang="html">
-  <div>
+  <div class="ui basic segment">
     <div class="range-container" @mousemove="rangeMove" @mouseup="rangeEnd" @mouseleave="rangeEnd" ref="container">
       <div class="range-value" :style="{left: leftPos, right: rightPos}"></div>
       <div class="ui grey circular label left" :style="{left: leftPos}"
-      @mousedown="rangeStart($event, 'left')"></div>
-      <div @mousedown="rangeStart($event, 'right')" class="ui grey circular label right" :style="{right: rightPos}"></div>
+      @mousedown="rangeStart($event, 'left')">{{leftValue}}</div>
+      <div @mousedown="rangeStart($event, 'right')"
+      class="ui grey circular label right"
+      :style="{right: rightPos}">{{rightValue}}</div>
     </div>
+    {{extremum.min}} | {{extremum.max}}
   </div>
-
 </template>
 
 <script>
 // import $ from 'jquery'
 export default {
   name: 'range',
+  props: {
+    fid: {
+      type: Number
+    },
+    extremum: {
+      type: Object,
+      default: () => {
+        return {
+          min: 0,
+          max: 0
+        }
+      }
+    }
+  },
   data () {
     return {
       range: {
-        left: 5,
-        right: 75
+        left: 0,
+        right: 100
       },
+      max: 0,
+      min: 0,
       status: undefined,
-      startX: 5,
-      startY: 75
+      startX: 0
     }
   },
+  // beforeMounted () {
+  //   [this.min, this.max] = this.$store.state.filterStatistics[this.$props.fid].value
+  //   console.log('max and min', [this.min, this.max])
+  // },
   methods: {
     rangeStart (event, ele) {
       if (this.status === undefined) {
@@ -72,10 +93,22 @@ export default {
     rightPos () {
       return 100 - this.range.right + '%'
     },
+    rightValue () {
+      let ans = (this.$props.extremum.max - this.$props.extremum.min) * this.range.right / 100 + this.$props.extremum.min
+      // console.log('leftValue', [this.$props.fid, 1, ans])
+      this.$store.commit('changeFilterRange', [this.$props.fid, 'max', ans])
+      return Number(ans.toFixed(1))
+    },
     leftPos () {
-      console.log(this.range, 'in computed')
+      // console.log(this.range, 'in computed')
       // return this.range[0] + '%'
       return this.range.left + '%'
+    },
+    leftValue () {
+      let ans = (this.$props.extremum.max - this.$props.extremum.min) * this.range.left / 100 + this.$props.extremum.min
+      this.$store.commit('changeFilterRange', [this.$props.fid, 'min', ans])
+      return Number(ans.toFixed(1))
+      // 问题在于未确定数值的范围便约定保留位数
     }
   }
 }
@@ -84,9 +117,8 @@ export default {
 <style lang="css" scpoed>
 .range-container{
   position: relative;
-  left: 2rem;
-  top: 2rem;
-  width: 60rem;
+  width: 100%;
+  /*width: 60rem;*/
   height: 1.2rem;
   padding: 0.15rem;
   border-radius: 0.6rem;

@@ -10,10 +10,16 @@
       <div class="content">
         <div class="ui segment" v-for="(list, i) in uiCheckedList" :key="list.id">
           <h5 class="ui header">{{list.dimension}}</h5>
-          <div class="ui toggle checkbox" v-for="(option, j) in list.value" :key="option.id">
-            <input type="checkbox" name="public" :value="checkedList[i].value[j]" v-model="checkedList[i].value">
-            <label>{{option}}</label>
+          <div v-if="list.type === 'string'">
+            <div class="ui toggle checkbox" v-for="(option, j) in list.value" :key="option.id">
+              <input type="checkbox" name="public" :value="uiCheckedList[i].value[j]" v-model="checkedList[i].value">
+              <label>{{option}}</label>
+            </div>
           </div>
+          <div v-if="list.type === 'number'">
+            <range :fid="i" :extremum="getRange(i)"></range>
+          </div>
+
         </div>
       </div>
       <div class="actions">
@@ -26,6 +32,7 @@
 
 <script>
 import dragArea from './dragarea.vue'
+import range from './Tool/range.vue'
 export default {
   name: 'filter-board',
   data () {
@@ -33,11 +40,14 @@ export default {
       name: 'filter',
       modalStatus: false,
       dataLabels: this.$store.state.globalDataLabels.filter,
-      checkedList: this.$store.state.filterCheckedList,
-      uiCheckedList: this.$store.state.filterCheckedList
+      checkedList: this.$store.state.filterStatistics,
+      uiCheckedList: this.$store.state.filterStatistics
     }
   },
   methods: {
+    getRange (i) {
+      return this.$store.state.filterStatistics[i].value
+    },
     showModal () {
       var i, paras
       paras = []
@@ -46,8 +56,8 @@ export default {
       }
       // console.log('paras', paras)
       this.$store.commit('filterStatistics', paras)
-      this.checkedList = this.$store.state.filterCheckedList
-      this.uiCheckedList = JSON.parse(JSON.stringify(this.$store.state.filterCheckedList))
+      this.checkedList = this.$store.state.filterStatistics
+      this.uiCheckedList = JSON.parse(JSON.stringify(this.$store.state.filterStatistics))
       // console.log(this.$store.state.filterStatistics === this.filterStatistics)
       this.modalStatus = true
     },
@@ -56,8 +66,9 @@ export default {
     },
     runFilter () {
       this.modalStatus = false
-      console.log(this.checkedList)
+      console.log(this.checkedList, 'runfilter')
       this.$store.commit('getFilterData', this.checkedList)
+      // this.$store.commit('transFilterData', this.$store.getters.transData)
     }
   },
   computed: {
@@ -69,7 +80,8 @@ export default {
     // }
   },
   components: {
-    dragArea
+    dragArea,
+    range
   }
 }
 </script>

@@ -34,7 +34,7 @@ export default {
     // },
     option () {
       var _trans = this.$store.getters.transData
-      if (this.$store.state.filterCheckedList.length !== 0) {
+      if (this.$store.state.filterStatistics.length !== 0) {
         _trans = this.$store.getters.transFilterData
       }
 
@@ -52,7 +52,7 @@ export default {
             yList[xList.indexOf(_trans[x][i])] += _trans[y][i]
           }
         }
-        console.log(xList, yList)
+        // console.log(xList, yList)
         return [xList, yList]
       }
       if (this.xDataLabels.length !== 0 && this.yDataLabels.length !== 0) {

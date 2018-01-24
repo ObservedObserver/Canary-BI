@@ -14,7 +14,7 @@ export default {
   computed: {
     option () {
       var _trans = this.$store.getters.transData
-      if (this.$store.state.filterCheckedList.length !== 0) {
+      if (this.$store.state.filterStatistics.length !== 0) {
         _trans = this.$store.getters.transFilterData
       }
       var option = {
@@ -44,7 +44,7 @@ export default {
             yList[xList.indexOf(_trans[x][i])] += _trans[y][i]
           }
         }
-        console.log(xList, yList)
+        // console.log(xList, yList)
         for (i = 0; i < xList.length; i++) {
           ans.push({
             name: xList[i],

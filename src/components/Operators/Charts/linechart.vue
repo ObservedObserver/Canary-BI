@@ -1,5 +1,5 @@
 <template lang="html">
-  <chart :options="option"></chart>
+  <chart :options="option()"></chart>
 </template>
 
 <script>
@@ -11,10 +11,12 @@ export default {
       yDataLabels: this.$store.state.globalDataLabels.Y
     }
   },
-  computed: {
+  methods: {
     option () {
       var _trans = this.$store.getters.transData
-      if (this.$store.state.filterCheckedList.length !== 0) {
+      if (this.$store.state.filterStatistics.length !== 0) {
+        console.log(this.$store.getters.transFilterData)
+        // _trans = this.$store.state.transFilterData
         _trans = this.$store.getters.transFilterData
       }
       var _sum = (x, y) => {
