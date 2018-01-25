@@ -170,7 +170,7 @@ var store = new Vuex.Store({
             }
           } else if (paras[j].type === 'number') {
             // console.log('number', _data[i][paras[j].dimension], paras[j].value)
-            if (_data[i][paras[j].dimension] < paras[j].value[0] || _data[i][paras[j].dimension] > paras[j].value[1]) {
+            if (_data[i][paras[j].dimension] < paras[j].value.min || _data[i][paras[j].dimension] > paras[j].value.max) {
               keep = false
             }
           }

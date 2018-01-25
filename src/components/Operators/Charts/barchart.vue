@@ -82,7 +82,7 @@ export default {
           [option.xAxis, option.yAxis] = [stringAxis, numberAxis]
           for (i = 0; i < this.yDataLabels.length; i++) {
             [xList, yList] = _sum(this.xDataLabels[0].name, this.yDataLabels[i].name)
-            console.log([xList, yList])
+            // console.log([xList, yList])
             stringAxis.data = xList
             option.series.push({
               data: yList,
@@ -93,7 +93,7 @@ export default {
           [option.xAxis, option.yAxis] = [numberAxis, stringAxis]
           for (i = 0; i < this.xDataLabels.length; i++) {
             [xList, yList] = _sum(this.yDataLabels[0].name, this.xDataLabels[i].name)
-            console.log([xList, yList])
+            // console.log([xList, yList])
             stringAxis.data = xList
             option.series.push({
               data: yList,

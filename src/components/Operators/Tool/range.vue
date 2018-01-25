@@ -2,9 +2,9 @@
   <div class="ui basic segment">
     <div class="range-container" @mousemove="rangeMove" @mouseup="rangeEnd" @mouseleave="rangeEnd" ref="container">
       <div class="range-value" :style="{left: leftPos, right: rightPos}"></div>
-      <div class="ui grey circular label left" :style="{left: leftPos}"
+      <div ref="leftLabel" class="ui grey circular label left" :style="{left: leftPos}"
       @mousedown="rangeStart($event, 'left')">{{leftValue}}</div>
-      <div @mousedown="rangeStart($event, 'right')"
+      <div ref="rightLabel" @mousedown="rangeStart($event, 'right')"
       class="ui grey circular label right"
       :style="{right: rightPos}">{{rightValue}}</div>
     </div>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-// import $ from 'jquery'
+import $ from 'jquery'
 export default {
   name: 'range',
   props: {
@@ -39,7 +39,9 @@ export default {
       max: 0,
       min: 0,
       status: undefined,
-      startX: 0
+      startX: 0,
+      WIDTH: 0,
+      LEFT: 0
     }
   },
   // beforeMounted () {
@@ -49,43 +51,41 @@ export default {
   methods: {
     rangeStart (event, ele) {
       if (this.status === undefined) {
+        this.LEFT = $('.range-container').offset().left
+        this.WIDTH = this.$refs.container.clientWidth
         this.status = ele
-        this.startX = event.pageX
+        // this.startX = event.pageX
       }
     },
     rangeMove (event) {
       if (this.status !== undefined) {
-        // console.log(this.$refs.container.clientWidth, $('.range-container').width())
+        // console.log(event.offsetX, this.$refs.container.clientWidth)
         event.preventDefault()
-        let width = this.$refs.container.clientWidth
-        let delta = event.pageX - this.startX
-        this.startX = event.pageX
+        // let width = this.$refs.container.clientWidth
+        // let delta = event.pageX - this.startX
+        // this.startX = event.pageX
         if (this.status === 'left') {
-          this.range.left = Math.min(Math.max(this.range.left + Number((delta / width * 100).toFixed(3)), 0), this.range.right)
+          this.range.left = Number(((event.pageX - this.LEFT) / this.WIDTH * 100).toFixed(3))
+          // this.range.left = Math.min(Math.max(this.range.left + Number((delta / width * 100).toFixed(3)), 0), this.range.right)
         } else {
-          this.range.right = Math.max(Math.min(this.range.right + Number((delta / width * 100).toFixed(3)), 100), this.range.left)
+          this.range.right = Number(((event.pageX - this.LEFT) / this.WIDTH * 100).toFixed(3))
+          // this.range.right = Math.max(Math.min(this.range.right + Number((delta / width * 100).toFixed(3)), 100), this.range.left)
         }
-        // console.log(delta)
-        // console.log(this.range)
       }
     },
     rangeEnd (event) {
-      // this.status = false
       if (this.status !== undefined) {
-        let width = this.$refs.container.clientWidth
-        let delta = event.pageX - this.startX
-        // console.log(delta, width)
-        this.startX = event.pageX
-        // this.range[this.status] += Number((delta / width * 100).toFixed(3))
+        // let width = this.$refs.container.clientWidth
+        // let delta = event.pageX - this.startX
+        // this.startX = event.pageX
         if (this.status === 'left') {
-          this.range.left = Math.min(Math.max(this.range.left + Number((delta / width * 100).toFixed(3)), 0), this.range.right)
+          this.range.left = Number(((event.pageX - this.LEFT) / this.WIDTH * 100).toFixed(3))
+          // this.range.left = Math.min(Math.max(this.range.left + Number((delta / width * 100).toFixed(3)), 0), this.range.right)
         } else {
-          this.range.right = Math.max(Math.min(this.range.right + Number((delta / width * 100).toFixed(3)), 100), this.range.left)
+          // this.range.right = Math.max(Math.min(this.range.right + Number((delta / width * 100).toFixed(3)), 100), this.range.left)
+          this.range.right = Number(((event.pageX - this.LEFT) / this.WIDTH * 100).toFixed(3))
         }
-        // this.r.x += parseInt((delta / width * 100).toFixed(0))
-        // this.range[0] = this.range[0].splice()
         this.status = undefined
-        // console.log(delta, this.range, this.leftPos, 'in methods')
       }
     }
   },
@@ -114,7 +114,7 @@ export default {
 }
 </script>
 
-<style lang="css" scpoed>
+<style lang="css" scoped>
 .range-container{
   position: relative;
   width: 100%;
@@ -128,13 +128,13 @@ export default {
   position: absolute;
   left: 0%;
   top: 0.6rem;;
-  transform: translate(-100%, -50%);
+  transform: translate(0%, -50%);
 }
 .range-container > .ui.circular.label.right{
   position: absolute;
   right: 0%;
   top: 0.6rem;;
-  transform: translate(100%, -50%);
+  transform: translate(0%, -50%);
 }
 .range-value{
   height: 0.8rem;

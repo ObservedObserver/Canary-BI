@@ -7,7 +7,7 @@
 
     <div class="ui active modal" v-if="modalStatus">
       <div class="header">Header</div>
-      <div class="content">
+      <div class="content" id="filter-content">
         <div class="ui segment" v-for="(list, i) in uiCheckedList" :key="list.id">
           <h5 class="ui header">{{list.dimension}}</h5>
           <div v-if="list.type === 'string'">
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     getRange (i) {
-      return this.$store.state.filterStatistics[i].value
+      return this.uiCheckedList[i].value
     },
     showModal () {
       var i, paras
@@ -89,5 +89,13 @@ export default {
 <style lang="css" scoped>
 .ui.basic.segment.infilter{
   height: 6rem;
+}
+.ui.modal{
+  top: 50%;
+  transform: translateY(-50%);
+}
+#filter-content{
+  max-height: 600px;
+  overflow-y: auto;
 }
 </style>

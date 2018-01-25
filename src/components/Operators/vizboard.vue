@@ -14,6 +14,8 @@
     <bar-chart v-if="currentChart === 1"></bar-chart>
     <line-chart v-if="currentChart === 2"></line-chart>
     <pie-chart v-if="currentChart === 3"></pie-chart>
+    <scatter-chart v-if="currentChart === 4"></scatter-chart>
+    <map-scatter v-if="currentChart === 5"></map-scatter>
   </div>
 </template>
 
@@ -22,6 +24,8 @@ import tableChart from './Charts/table.vue'
 import barChart from './Charts/barchart.vue'
 import lineChart from './Charts/linechart.vue'
 import pieChart from './Charts/piechart.vue'
+import scatterChart from './Charts/Scatter/scatter.vue'
+import mapScatter from './Charts/Scatter/mapScatter.vue'
 export default {
   name: 'vizboard',
   data () {
@@ -42,6 +46,14 @@ export default {
         {
           name: 'pie chart',
           child: '<pie-chart></pie-chart>'
+        },
+        {
+          name: 'scatter chart',
+          child: '<scatter-chart></scatter-chart>'
+        },
+        {
+          name: 'map',
+          child: '<map-scatter></map-scatter>'
         }
       ],
       currentChart: 0
@@ -56,7 +68,9 @@ export default {
     tableChart,
     barChart,
     lineChart,
-    pieChart
+    pieChart,
+    scatterChart,
+    mapScatter
   }
 }
 </script>
