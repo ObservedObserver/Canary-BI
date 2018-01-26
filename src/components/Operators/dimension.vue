@@ -33,8 +33,8 @@ export default {
   data () {
     return {
       name: 'dimension',
-      dimensionLabels: this.$store.state.dimensionLabels,
-      dataLabels: this.$store.state.globalDataLabels.dimension
+      dimensionLabels: this.$store.state.dimensionLabels
+      // dataLabels: this.$store.state.globalDataLabels.dimension
     }
   },
   methods: {
@@ -44,9 +44,16 @@ export default {
     drop (event, i) {
       this.$store.commit('drop', {
         event: event,
-        component: this.name
+        component: this.name,
+        index: i
       })
-      this.dataLabels[this.dataLabels.length - 1].label = this.dimensionLabels[i]
+      // this.dataLabels[this.dataLabels.length - 1].label = this.dimensionLabels[i]
+      // 存在更新延时
+    }
+  },
+  computed: {
+    dataLabels () {
+      return this.$store.getters.globalDimensionLabels
     }
   }
 }

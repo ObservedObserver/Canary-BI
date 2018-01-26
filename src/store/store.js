@@ -22,7 +22,7 @@ var store = new Vuex.Store({
     dimensionLabels: [
       {name: '形状', style: ['circle', 'thin']},
       {name: '大小', style: ['square']},
-      {name: '颜色', style: ['circle', 'teal']}
+      {name: '颜色', style: ['circle', 'green']}
     ],
     filterStatistics: [],
     filterCheckedList: [],
@@ -99,6 +99,28 @@ var store = new Vuex.Store({
         }
       }
       return ans
+    },
+    globalDimensionLabels (state) {
+      // var storage = JSON.parse(JSON.stringify(state.globalDataLabels.dimension))
+      var storage = state.globalDataLabels.dimension
+      // console.log(storage, state.globalDataLabels.dimen  sion)
+      while (storage.length > 2) {
+        // storage[1] = storage[storage.length - 1]
+        storage.shift()
+      }
+      if (storage.length > 1) {
+        // console.log(storage)
+        let tmp
+        if (storage[0].label.name === '颜色') {
+          // storage.shift()
+          tmp = storage[0]
+          // storage.shift()
+          // storage.push(tmp)
+          storage[0] = storage[1]
+          storage[1] = tmp
+        }
+      }
+      return storage
     }
   },
   mutations: {
@@ -117,6 +139,9 @@ var store = new Vuex.Store({
       })
       // deepcopy
       state.currentLabel = {}
+      if (paras.component === 'dimension') {
+        state.globalDataLabels.dimension[state.globalDataLabels.dimension.length - 1].label = state.dimensionLabels[paras.index]
+      }
     },
     globalDataInit (state) {
       if (state.globalData.length !== 0) {
