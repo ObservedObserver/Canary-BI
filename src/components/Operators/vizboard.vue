@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="ui basic segment invizboard">
     <!-- <table-chart></table-chart> -->
-    <div class="ui secondary menu">
+    <div class="ui secondary pointing menu">
       <a class="item"
       v-for="(item, i) in menu"
       :class="{active: currentChart === i}"
@@ -16,6 +16,7 @@
     <pie-chart v-if="currentChart === 3"></pie-chart>
     <scatter-chart v-if="currentChart === 4"></scatter-chart>
     <map-scatter v-if="currentChart === 5"></map-scatter>
+    <!-- <statistics/> -->
   </div>
 </template>
 
@@ -26,33 +27,34 @@ import lineChart from './Charts/linechart.vue'
 import pieChart from './Charts/piechart.vue'
 import scatterChart from './Charts/Scatter/scatter.vue'
 import mapScatter from './Charts/Scatter/mapScatter.vue'
+import statistics from './Tool/statistics.vue'
 export default {
   name: 'vizboard',
   data () {
     return {
       menu: [
         {
-          name: 'table',
+          name: '表格',
           child: '<table-chart></table-chart>'
         },
         {
-          name: 'bar chart',
+          name: '柱状图',
           child: '<bar-chart></bar-chart>'
         },
         {
-          name: 'line chart',
+          name: '折线图',
           child: '<line-chart></line-chart>'
         },
         {
-          name: 'pie chart',
+          name: '饼图',
           child: '<pie-chart></pie-chart>'
         },
         {
-          name: 'scatter chart',
+          name: '散点图',
           child: '<scatter-chart></scatter-chart>'
         },
         {
-          name: 'map',
+          name: '地图',
           child: '<map-scatter></map-scatter>'
         }
       ],
@@ -70,7 +72,8 @@ export default {
     lineChart,
     pieChart,
     scatterChart,
-    mapScatter
+    mapScatter,
+    statistics
   }
 }
 </script>

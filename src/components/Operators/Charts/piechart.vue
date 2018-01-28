@@ -29,36 +29,13 @@ export default {
         },
         series: []
       }
-      var _sum = (x, y) => {
-        let i, _length, xList, yList, ans
-        _length = _trans[x].length
-        xList = []
-        yList = []
-        ans = []
-        for (i = 0; i < _length; i++) {
-          // if (_trans[name][i])
-          if (xList.indexOf(_trans[x][i]) < 0) {
-            xList.push(_trans[x][i])
-            yList.push(_trans[y][i])
-          } else {
-            yList[xList.indexOf(_trans[x][i])] += _trans[y][i]
-          }
-        }
-        // console.log(xList, yList)
-        for (i = 0; i < xList.length; i++) {
-          ans.push({
-            name: xList[i],
-            value: yList[i]
-          })
-        }
-        return [xList, ans]
-      }
+      var func = this.$store.getters.statisticFunc
       if (this.xDataLabels.length !== 0 && this.yDataLabels.length !== 0) {
         let xList, data, i
 
         if (this.xDataLabels[0].type === 'string') {
           for (i = 0; i < this.yDataLabels.length; i++) {
-            [xList, data] = _sum(this.xDataLabels[0].name, this.yDataLabels[i].name)
+            [xList, data] = func(this.xDataLabels[0].name, this.yDataLabels[i].name, _trans)
             option.legend.data = xList
             let rad = [`${80 - i * 20}%`, `${100 - i * 20}%`]
             option.series.push({
@@ -89,7 +66,7 @@ export default {
           }
         } else if (this.yDataLabels[0].type === 'string') {
           for (i = 0; i < this.xDataLabels.length; i++) {
-            [xList, data] = _sum(this.yDataLabels[0].name, this.xDataLabels[i].name)
+            [xList, data] = func(this.yDataLabels[0].name, this.xDataLabels[i].name, _trans)
             option.legend.data = xList
             let rad = [`${80 - i * 20}%`, `${100 - i * 20}%`]
             option.series.push({

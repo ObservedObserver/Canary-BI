@@ -19,23 +19,7 @@ export default {
         // _trans = this.$store.state.transFilterData
         _trans = this.$store.getters.transFilterData
       }
-      var _sum = (x, y) => {
-        let i, _length, xList, yList
-        _length = _trans[x].length
-        xList = []
-        yList = []
-        for (i = 0; i < _length; i++) {
-          // if (_trans[name][i])
-          if (xList.indexOf(_trans[x][i]) < 0) {
-            xList.push(_trans[x][i])
-            yList.push(_trans[y][i])
-          } else {
-            yList[xList.indexOf(_trans[x][i])] += _trans[y][i]
-          }
-        }
-        // console.log(xList, yList)
-        return [xList, yList]
-      }
+      var func = this.$store.getters.statisticFunc
       if (this.xDataLabels.length !== 0 && this.yDataLabels.length !== 0) {
         // option.xAxis.data = _trans[this.xDataLabels[0].name]
         // option.series[0].data = _trans[this.yDataLabels[0].name]
@@ -56,7 +40,7 @@ export default {
         if (this.xDataLabels[0].type === 'string') {
           [option.xAxis, option.yAxis] = [stringAxis, numberAxis]
           for (i = 0; i < this.yDataLabels.length; i++) {
-            [xList, yList] = _sum(this.xDataLabels[0].name, this.yDataLabels[i].name)
+            [xList, yList] = func(this.xDataLabels[0].name, this.yDataLabels[i].name, _trans)
             // console.log([xList, yList])
             stringAxis.data = xList
             option.series.push({
@@ -67,8 +51,8 @@ export default {
         } else if (this.yDataLabels[0].type === 'string') {
           [option.xAxis, option.yAxis] = [numberAxis, stringAxis]
           for (i = 0; i < this.xDataLabels.length; i++) {
-            [xList, yList] = _sum(this.yDataLabels[0].name, this.xDataLabels[i].name)
-            console.log([xList, yList])
+            [xList, yList] = func(this.yDataLabels[0].name, this.xDataLabels[i].name, _trans)
+            // console.log([xList, yList])
             stringAxis.data = xList
             option.series.push({
               data: yList,

@@ -6,9 +6,10 @@
         <viz-board></viz-board>
       </div>
       <div class="ui five wide column">
-        <div class="ui basic segment">
+        <div class="ui basic segment" id="right-tools">
           <filters></filters>
-          <pages></pages>
+          <!-- <pages></pages> -->
+          <statistics/>
           <dimension></dimension>
           <data-board></data-board>
         </div>
@@ -24,7 +25,7 @@ import dataBoard from './data.vue'
 import xymenu from './xymenu.vue'
 import vizBoard from './vizboard.vue'
 import dimension from './dimension.vue'
-
+import statistics from './Tool/statistics.vue'
 export default {
   name: 'main-operator',
   components: {
@@ -33,17 +34,23 @@ export default {
     dataBoard,
     xymenu,
     vizBoard,
-    dimension
+    dimension,
+    statistics
   }
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .main-operator{
   position: fixed;
   left: 6.2rem;
   right: 0rem;
   top: 0rem;
   bottom: 0rem;
+}
+#right-tools{
+  height: 900px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

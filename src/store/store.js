@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import globalData from './globalData.json'
+import {sum, median, mean, count} from './statistic.func.js'
+
 Vue.use(Vuex)
 
 var store = new Vuex.Store({
@@ -26,7 +28,9 @@ var store = new Vuex.Store({
     ],
     filterStatistics: [],
     filterCheckedList: [],
-    transFilterData: []
+    transFilterData: [],
+    func: ['Sum', 'Mean', 'Median', 'Count'],
+    pickedFunc: 'Sum'
   },
   getters: {
     filterStatistics (state) {
@@ -100,6 +104,15 @@ var store = new Vuex.Store({
       }
       return ans
     },
+    statisticFunc (state) {
+      var func = {
+        Sum: sum,
+        Median: median,
+        Mean: mean,
+        Count: count
+      }
+      return func[state.pickedFunc]
+    },
     globalDimensionLabels (state) {
       // var storage = JSON.parse(JSON.stringify(state.globalDataLabels.dimension))
       var storage = state.globalDataLabels.dimension
@@ -133,14 +146,18 @@ var store = new Vuex.Store({
     },
     drop (state, paras) {
       paras.event.preventDefault()
-      state.globalDataLabels[paras.component].push({
-        name: state.currentLabel.name,
-        type: state.currentLabel.type
-      })
-      // deepcopy
-      state.currentLabel = {}
-      if (paras.component === 'dimension') {
-        state.globalDataLabels.dimension[state.globalDataLabels.dimension.length - 1].label = state.dimensionLabels[paras.index]
+      if (paras.component !== 'data') {
+        state.globalDataLabels[paras.component].push({
+          name: state.currentLabel.name,
+          type: state.currentLabel.type
+        })
+        // deepcopy
+        state.currentLabel = {}
+        if (paras.component === 'dimension') {
+          state.globalDataLabels.dimension[state.globalDataLabels.dimension.length - 1].label = state.dimensionLabels[paras.index]
+        } else {
+          state.globalDataLabels[paras.component][state.globalDataLabels[paras.component].length - 1].label = undefined
+        }
       }
     },
     globalDataInit (state) {
@@ -298,6 +315,10 @@ var store = new Vuex.Store({
       }
       state.transFilterData = ans
       return ans
+    },
+    changeFunc (state, para) {
+      // para = 'Sum'
+      state.pickedFunc = para
     }
   }
 })

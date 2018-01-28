@@ -83,19 +83,19 @@ var bmapOption = {
       ]
     }
   },
-  // visualMap: {
-  //   // 视觉映射组件
-  //   type: 'continuous',
-  //   min: 0,
-  //   max: 100,
-  //   calculable: true,
-  //   // inRange: {
-  //   //   color: ['#32c2cb', '#ebde36', '#f13d51']
-  //   // },
-  //   textStyle: {
-  //     color: '#fff'
-  //   }
-  // },
+  visualMap: [
+    {
+      // 视觉映射组件
+      type: 'continuous',
+      // min: 0,
+      // max: 100,
+      calculable: true,
+      inRange: {},
+      textStyle: {
+        color: '#fff'
+      }
+    }
+  ],
   series: [
     {
       name: '指数',

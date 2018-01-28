@@ -13,7 +13,9 @@
       </div>
     </div>
     <div class="ui divider"></div>
-    <div class="ui label" v-for="label in dataLabels" :key="label.id"
+    <div class="ui label" v-for="(label, i) in dataLabels" :key="label.name"
+    draggable="true"
+    @dragstart="drag($event, i)"
     :class="{
       teal: label.type === 'string',
       blue: label.type === 'number'
@@ -38,6 +40,13 @@ export default {
     }
   },
   methods: {
+    drag (event, i) {
+      this.$store.commit('drag', {
+        event: event,
+        component: this.name,
+        label: i
+      })
+    },
     allowDrag (event) {
       event.preventDefault()
     },

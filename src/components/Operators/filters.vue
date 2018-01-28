@@ -93,6 +93,7 @@ export default {
 .ui.modal{
   top: 50%;
   transform: translateY(-50%);
+  opacity: 0.88;
 }
 #filter-content{
   max-height: 600px;
