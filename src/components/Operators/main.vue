@@ -47,10 +47,11 @@ export default {
   right: 0rem;
   top: 0rem;
   bottom: 0rem;
+  overflow-y: auto;
 }
 #right-tools{
-  height: 900px;
-  overflow-x: hidden;
+  height: 100%;
+  /*overflow-x: hidden;*/
   overflow-y: auto;
 }
 </style>
