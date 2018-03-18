@@ -1,31 +1,37 @@
 <template lang="html">
   <div class="ui segment">
     <h3 class="ui header">{{name}}</h3>
-    <div class="ui three item labeled icon menu">
-      <div class="item"
-      v-for="(dim, i) in dimensionLabels"
-      :key="dim.id"
-      @dragover="allowDrag"
-      @drop="drop($event ,i)"
-      >
-        <i class="ui big icon" :class="dim.style"></i>
-        {{dim.name}}
+    <i class="ui large angle link icon" id="dimension-hider"
+    :class="hider[hiderStatus]"
+    @click="changeHiderStatus"></i>
+    <div v-if="!hiderStatus">
+      <div class="ui three item labeled icon menu">
+        <div class="item"
+        v-for="(dim, i) in dimensionLabels"
+        :key="dim.id"
+        @dragover="allowDrag"
+        @drop="drop($event ,i)"
+        >
+          <i class="ui big icon" :class="dim.style"></i>
+          {{dim.name}}
+        </div>
+      </div>
+      <div class="ui divider"></div>
+      <div class="ui label" v-for="(label, i) in dataLabels" :key="label.name"
+      draggable="true"
+      @dragstart="drag($event, i)"
+      :class="{
+        teal: label.type === 'string',
+        blue: label.type === 'number'
+        }">
+        <i class="ui icon" :class="label.label.style">{{label.label.name}}</i>
+        {{label.name}}
+        <div class="detail">
+          {{label.type}}
+        </div>
       </div>
     </div>
-    <div class="ui divider"></div>
-    <div class="ui label" v-for="(label, i) in dataLabels" :key="label.name"
-    draggable="true"
-    @dragstart="drag($event, i)"
-    :class="{
-      teal: label.type === 'string',
-      blue: label.type === 'number'
-      }">
-      <i class="ui icon" :class="label.label.style">{{label.label.name}}</i>
-      {{label.name}}
-      <div class="detail">
-        {{label.type}}
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -35,11 +41,16 @@ export default {
   data () {
     return {
       name: 'dimension',
-      dimensionLabels: this.$store.state.dimensionLabels
+      dimensionLabels: this.$store.state.dimensionLabels,
+      hider: ['down', 'left'],
+      hiderStatus: 0
       // dataLabels: this.$store.state.globalDataLabels.dimension
     }
   },
   methods: {
+    changeHiderStatus () {
+      this.hiderStatus = (this.hiderStatus + 1) % 2
+    },
     drag (event, i) {
       this.$store.commit('drag', {
         event: event,
@@ -74,5 +85,10 @@ export default {
 }
 .ui.label{
   margin: 0.28rem;
+}
+#dimension-hider{
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 </style>

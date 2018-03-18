@@ -1,30 +1,35 @@
 <template lang="html">
   <div class="ui segment">
     <h3 class="ui header">{{name}}</h3>
-    <button type="button" class="ui teal tiny button" @click="showModal">check</button>
-    <div class="ui divider"></div>
-    <drag-area class="ui basic segment infilter" area-name="filter"></drag-area>
+    <i class="ui large angle link icon" id="filter-hider"
+    :class="filterHider[filterStatus]"
+    @click="changeFilterStatus"></i>
+    <div v-if="!filterStatus">
+      <div class="ui divider"></div>
+      <button type="button" class="ui teal tiny button" @click="showModal">check</button>
+      <drag-area class="ui basic segment infilter" area-name="filter"></drag-area>
 
-    <div class="ui active modal" v-if="modalStatus">
-      <div class="header">Header</div>
-      <div class="content" id="filter-content">
-        <div class="ui segment" v-for="(list, i) in uiCheckedList" :key="list.id">
-          <h5 class="ui header">{{list.dimension}}</h5>
-          <div v-if="list.type === 'string'">
-            <div class="ui toggle checkbox" v-for="(option, j) in list.value" :key="option.id">
-              <input type="checkbox" name="public" :value="uiCheckedList[i].value[j]" v-model="checkedList[i].value">
-              <label>{{option}}</label>
+      <div class="ui active modal" v-if="modalStatus">
+        <div class="header">Header</div>
+        <div class="content" id="filter-content">
+          <div class="ui segment" v-for="(list, i) in uiCheckedList" :key="list.id">
+            <h5 class="ui header">{{list.dimension}}</h5>
+            <div v-if="list.type === 'string'">
+              <div class="ui toggle checkbox" v-for="(option, j) in list.value" :key="option.id">
+                <input type="checkbox" name="public" :value="uiCheckedList[i].value[j]" v-model="checkedList[i].value">
+                <label>{{option}}</label>
+              </div>
             </div>
-          </div>
-          <div v-if="list.type === 'number'">
-            <range :fid="i" :extremum="getRange(i)"></range>
-          </div>
+            <div v-if="list.type === 'number'">
+              <range :fid="i" :extremum="getRange(i)"></range>
+            </div>
 
+          </div>
         </div>
-      </div>
-      <div class="actions">
-        <button class="ui green button" type="button" @click="runFilter">Submit</button>
-        <div class="ui red button" @click="hideModal">Cancel</div>
+        <div class="actions">
+          <button class="ui green button" type="button" @click="runFilter">Submit</button>
+          <div class="ui red button" @click="hideModal">Cancel</div>
+        </div>
       </div>
     </div>
   </div>
@@ -41,12 +46,17 @@ export default {
       modalStatus: false,
       dataLabels: this.$store.state.globalDataLabels.filter,
       checkedList: this.$store.state.filterStatistics,
-      uiCheckedList: this.$store.state.filterStatistics
+      uiCheckedList: this.$store.state.filterStatistics,
+      filterHider: ['down', 'left'],
+      filterStatus: 0
     }
   },
   methods: {
     getRange (i) {
       return this.uiCheckedList[i].value
+    },
+    changeFilterStatus () {
+      this.filterStatus = (this.filterStatus + 1) % 2
     },
     showModal () {
       var i, paras
@@ -98,5 +108,10 @@ export default {
 #filter-content{
   max-height: 600px;
   overflow-y: auto;
+}
+#filter-hider{
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 </style>
