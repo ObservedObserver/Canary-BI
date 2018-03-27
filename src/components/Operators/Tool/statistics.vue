@@ -29,7 +29,7 @@ export default {
     return {
       func: this.$store.state.func,
       hider: ['down', 'left'],
-      hiderStatus: 0
+      hiderStatus: 1
     }
   },
   methods: {

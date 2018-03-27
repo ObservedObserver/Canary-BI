@@ -59,6 +59,13 @@ export default {
         var option = {
           xAxis: {},
           yAxis: {},
+          toolbox: {
+            feature: {
+              magicType: {
+                type: ['bar', 'line', 'pie']
+              }
+            }
+          },
           series: []
         }
         if (this.xDataLabels[0].type === 'string') {

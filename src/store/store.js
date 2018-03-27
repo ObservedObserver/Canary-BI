@@ -39,6 +39,64 @@ var store = new Vuex.Store({
     filterCheckedList (state) {
       return state.filterCheckedList
     },
+    dataSet (state, getters) {
+      var keys, ans
+      // keys = Object.keys(state.globalData[0])
+      keys = getters.jsonDataSetDimension
+      ans = state.globalData.map((dataUnit) => {
+        return keys.map(val => dataUnit[val])
+      })
+      return ans
+    },
+    // 返回哪个轴是类别型坐标轴
+    gridIndex (state) {
+      var dims = []
+      dims = state.globalDataLabels.X.filter(val => val.type === 'string')
+      if (dims.length > 0) {
+        return {
+          categoryDim: 'x',
+          column: dims[0]
+        }
+      }
+      dims = state.globalDataLabels.Y.filter(val => val.type === 'string')
+      if (dims.length > 0) {
+        return {
+          categoryDim: 'y',
+          column: dims[0]
+        }
+      }
+      return false
+    },
+    jsonDataSetDimension (state) {
+      // if (state.globalData.length < 0) {
+      //   return []
+      // } else {
+      //   let keys = Object.keys(state.globalData[0])
+      //   let strs = []
+      //   let nums = []
+      //   keys.forEach((val) => {
+      //     if (typeof state.globalData[0][val] === 'string') {
+      //       strs.push(val)
+      //     } else if (typeof state.globalData[0][val] === 'number') {
+      //       nums.push(val)
+      //     }
+      //   })
+      //   return strs.concat(nums)
+      // }
+      if (state.globalDataLabels.X.length > 0 || state.globalDataLabels.Y.length > 0) {
+        let xKey, yKey, keys
+        xKey = state.globalDataLabels.X.map(val => val.name)
+        yKey = state.globalDataLabels.Y.map(val => val.name)
+        keys = []
+        keys = keys.concat(xKey, yKey)
+        return keys
+      } else {
+        return []
+      }
+    },
+    jsonDataSet (state) {
+      return state.globalData
+    },
     transData (state) {
       // paras === 'value'
       var _keys, _length, i, j, ans

@@ -16,6 +16,7 @@
     <pie-chart v-if="currentChart === 3"></pie-chart>
     <scatter-chart v-if="currentChart === 4"></scatter-chart>
     <map-scatter v-if="currentChart === 5"></map-scatter>
+    <magic-chart v-if="currentChart === 6"></magic-chart>
     <!-- <statistics/> -->
   </div>
 </template>
@@ -28,6 +29,7 @@ import pieChart from './Charts/piechart.vue'
 import scatterChart from './Charts/Scatter/scatter.vue'
 import mapScatter from './Charts/Scatter/mapScatter.vue'
 import statistics from './Tool/statistics.vue'
+import magicChart from './MagicChart/barchart.vue'
 export default {
   name: 'vizboard',
   data () {
@@ -56,6 +58,10 @@ export default {
         {
           name: '地图',
           child: '<map-scatter></map-scatter>'
+        },
+        {
+          name: 'magic',
+          child: '<magic-chart></magic-chart>'
         }
       ],
       currentChart: 0
@@ -73,7 +79,8 @@ export default {
     pieChart,
     scatterChart,
     mapScatter,
-    statistics
+    statistics,
+    magicChart
   }
 }
 </script>

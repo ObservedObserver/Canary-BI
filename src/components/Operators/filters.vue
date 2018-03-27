@@ -48,7 +48,7 @@ export default {
       checkedList: this.$store.state.filterStatistics,
       uiCheckedList: this.$store.state.filterStatistics,
       filterHider: ['down', 'left'],
-      filterStatus: 0
+      filterStatus: 1
     }
   },
   methods: {

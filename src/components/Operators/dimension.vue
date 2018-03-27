@@ -43,7 +43,7 @@ export default {
       name: 'dimension',
       dimensionLabels: this.$store.state.dimensionLabels,
       hider: ['down', 'left'],
-      hiderStatus: 0
+      hiderStatus: 1
       // dataLabels: this.$store.state.globalDataLabels.dimension
     }
   },
