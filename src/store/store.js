@@ -94,6 +94,16 @@ var store = new Vuex.Store({
         return []
       }
     },
+    jsonCoord (state) {
+      if (state.globalDataLabels.X.length > 0 && state.globalDataLabels.Y.length > 0) {
+        let xKey, yKey
+        xKey = state.globalDataLabels.X[0].name
+        yKey = state.globalDataLabels.Y[0].name
+        return `${yKey}*${xKey}`
+      } else {
+        return ''
+      }
+    },
     jsonDataSet (state) {
       return state.globalData
     },

@@ -14,7 +14,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@antv/data-set": "^0.8.6",
+    "@antv/g2": "^3.0.5-beta.6",
     "echarts": "^4.0.4",
+    "viser-vue": "^2.2.2",
     "vue": "^2.5.2",
     "vue-echarts": "^3.0.5",
     "vue-router": "^3.0.1",

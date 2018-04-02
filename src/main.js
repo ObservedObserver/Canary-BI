@@ -21,6 +21,8 @@ import 'echarts/lib/component/geo'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/visualMap'
+import viserVue from 'viser-vue'
+Vue.use(viserVue)
 
 Vue.component('chart', ECharts)
 Vue.config.productionTip = false
