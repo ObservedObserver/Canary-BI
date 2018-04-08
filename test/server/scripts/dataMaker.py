@@ -4,6 +4,7 @@ DATA_DIMS = ['X', 'Y', 'value']
 NAMES = ['Alice', 'Bob', 'Carl', 'Duke', 'Elsion']
 with open('globalData.json', 'w') as f:
     data = []
+    # for year in range ()
     for i in range(DATA_LENGTH):
         tmp = {}
         for key in DATA_DIMS:
