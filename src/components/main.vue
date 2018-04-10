@@ -13,6 +13,9 @@ export default {
   components: {
     OperatorsBoard,
     MenuBoard
+  },
+  mounted () {
+    this.$store.dispatch('getMainData')
   }
 }
 </script>

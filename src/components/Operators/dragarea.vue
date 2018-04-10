@@ -32,8 +32,13 @@ export default {
   },
   data () {
     return {
-      name: this.$props.areaName,
-      dataLabels: this.$store.state.globalDataLabels[this.$props.areaName]
+      // name: this.$props.areaName,
+      // dataLabels: this.$store.state.globalDataLabels[this.$props.areaName]
+    }
+  },
+  computed: {
+    dataLabels () {
+      return this.$store.state.globalDataLabels[this.$props.areaName]
     }
   },
   // mounted () {
@@ -45,7 +50,7 @@ export default {
     drag (event, i) {
       this.$store.commit('drag', {
         event: event,
-        component: this.name,
+        component: this.$props.areaName,
         label: i
       })
     },
@@ -55,7 +60,7 @@ export default {
     drop (event) {
       this.$store.commit('drop', {
         event: event,
-        component: this.name
+        component: this.$props.areaName
       })
     }
   }

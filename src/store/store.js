@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import globalData from './globalData.json'
+// import globalData from './globalData.json'
 import {sum, median, mean, count} from './statistic.func.js'
-import {sum as msum, median as mmedian, mean as mmean, count as mcount} from './statistic.magic.js'
-
+import {sum as msum} from './statistic.magic.js'
+import {API} from '@/store/API/api.js'
 Vue.use(Vuex)
 
 var store = new Vuex.Store({
   state: {
-    globalData: globalData,
+    globalData: [],
     localData: [],
     filterData: [],
     globalKeys: [],
@@ -226,20 +226,18 @@ var store = new Vuex.Store({
       }
     },
     globalDataInit (state) {
-      if (state.globalData.length !== 0) {
-        // console.log(state.globalData)
-        // let _keys = state.globalData[0].keys()
-        let _keys = Object.keys(state.globalData[0])
-        for (let i = 0; i < _keys.length; i++) {
-          let item = {
-            name: _keys[i],
-            type: typeof state.globalData[0][_keys[i]]
-          }
-          state.globalDataLabels.data.push(item)
-          state.constDataLabels.push(item)
-          state.globalKeys.push(item)
-        }
-      }
+      // if (state.globalData.length !== 0) {
+      //   let _keys = Object.keys(state.globalData[0])
+      //   for (let i = 0; i < _keys.length; i++) {
+      //     let item = {
+      //       name: _keys[i],
+      //       type: typeof state.globalData[0][_keys[i]]
+      //     }
+      //     state.globalDataLabels.data.push(item)
+      //     state.constDataLabels.push(item)
+      //     state.globalKeys.push(item)
+      //   }
+      // }
     },
     getLocalData (state, paras) {
       // paras = ['X', 'Y', 'value', ...]
@@ -384,6 +382,28 @@ var store = new Vuex.Store({
     changeFunc (state, para) {
       // para = 'Sum'
       state.pickedFunc = para
+    }
+  },
+  actions: {
+    getMainData (context) {
+      var state = context.state
+      API.getMainData((res) => {
+        state.globalData = res
+        if (state.globalData.length !== 0) {
+          // console.log(state.globalData)
+          // let _keys = state.globalData[0].keys()
+          let _keys = Object.keys(state.globalData[0])
+          for (let i = 0; i < _keys.length; i++) {
+            let item = {
+              name: _keys[i],
+              type: typeof state.globalData[0][_keys[i]]
+            }
+            state.globalDataLabels.data.push(item)
+            state.constDataLabels.push(item)
+            state.globalKeys.push(item)
+          }
+        }
+      })
     }
   }
 })

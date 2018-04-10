@@ -1,7 +1,12 @@
 <template lang="html">
-  <div >
+  <div>
     {{data}}
   </div>
+  <!-- <table class="ui table">
+    <thead>
+
+    </thead>
+  </table> -->
 </template>
 
 <script>
@@ -10,6 +15,9 @@ export default {
   computed: {
     data () {
       return JSON.stringify(this.$store.getters.jsonTransData)
+    },
+    datasets () {
+      return this.$store.getters.jsonTransData
     }
   }
 }
