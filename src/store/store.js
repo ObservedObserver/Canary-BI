@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import globalData from './globalData.json'
 import {sum, median, mean, count} from './statistic.func.js'
+import {sum as msum, median as mmedian, mean as mmean, count as mcount} from './statistic.magic.js'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ var store = new Vuex.Store({
       Y: [],
       dimension: []
     },
+    currentStatictic: 'sum',
     constDataLabels: [],
     currentLabel: {},
     dimensionLabels: [
@@ -68,21 +70,6 @@ var store = new Vuex.Store({
       return false
     },
     jsonDataSetDimension (state) {
-      // if (state.globalData.length < 0) {
-      //   return []
-      // } else {
-      //   let keys = Object.keys(state.globalData[0])
-      //   let strs = []
-      //   let nums = []
-      //   keys.forEach((val) => {
-      //     if (typeof state.globalData[0][val] === 'string') {
-      //       strs.push(val)
-      //     } else if (typeof state.globalData[0][val] === 'number') {
-      //       nums.push(val)
-      //     }
-      //   })
-      //   return strs.concat(nums)
-      // }
       if (state.globalDataLabels.X.length > 0 || state.globalDataLabels.Y.length > 0) {
         let xKey, yKey, keys
         xKey = state.globalDataLabels.X.map(val => val.name)
@@ -106,6 +93,16 @@ var store = new Vuex.Store({
     },
     jsonDataSet (state) {
       return state.globalData
+    },
+    jsonTransData (state, getters) {
+      if (state.globalDataLabels.X.length > 0 && state.globalDataLabels.Y.length > 0) {
+        let xKey, yKey
+        xKey = state.globalDataLabels.X.map(val => val.name)
+        yKey = state.globalDataLabels.Y.map(val => val.name)
+        return msum({keys: xKey, num: yKey, rawData: state.globalData})
+      } else {
+        return []
+      }
     },
     transData (state) {
       // paras === 'value'

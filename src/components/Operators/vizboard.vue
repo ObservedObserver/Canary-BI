@@ -10,7 +10,8 @@
         {{item.name}}
       </a>
     </div>
-    <table-chart v-if="currentChart === 0"></table-chart>
+    <!-- <table-chart v-if="currentChart === 0"></table-chart> -->
+    <better-table v-if="currentChart === 0" />
     <bar-chart v-if="currentChart === 1"></bar-chart>
     <line-chart v-if="currentChart === 2"></line-chart>
     <pie-chart v-if="currentChart === 3"></pie-chart>
@@ -27,6 +28,7 @@
 
 <script>
 import tableChart from './Charts/table.vue'
+import betterTable from './Charts/bettertable.vue'
 import barChart from './Charts/barchart.vue'
 import lineChart from './Charts/linechart.vue'
 import pieChart from './Charts/piechart.vue'
@@ -98,6 +100,7 @@ export default {
   },
   components: {
     tableChart,
+    betterTable,
     barChart,
     lineChart,
     pieChart,

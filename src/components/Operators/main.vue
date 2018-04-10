@@ -2,10 +2,13 @@
   <div class="main-operator">
     <xymenu></xymenu>
     <div class="ui grid">
-      <div class="ui eleven wide column">
+      <div class="ui ten wide column">
         <viz-board></viz-board>
       </div>
-      <div class="ui five wide column">
+      <div class="ui two wide column">
+          <charts-menu />
+      </div>
+      <div class="ui four wide column">
         <div class="ui basic segment" id="right-tools">
           <filters></filters>
           <!-- <pages></pages> -->
@@ -26,6 +29,7 @@ import xymenu from './xymenu.vue'
 import vizBoard from './vizboard.vue'
 import dimension from './dimension.vue'
 import statistics from './Tool/statistics.vue'
+import chartsMenu from './Charts/chartsmenu.vue'
 export default {
   name: 'main-operator',
   components: {
@@ -35,7 +39,8 @@ export default {
     xymenu,
     vizBoard,
     dimension,
-    statistics
+    statistics,
+    chartsMenu
   }
 }
 </script>
