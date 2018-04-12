@@ -1,13 +1,17 @@
 <template lang="html">
-  <chart :options="option"/>
+  <div>
+      <chart v-for="op in tmpOption" :key="op.id" :options="op"/>
+  </div>
 </template>
 
 <script>
+import deepcopy from 'deepcopy'
 export default {
   name: 'magicBar',
   data () {
     return {
       initOption: {
+        title: {},
         toolbox: {
           feature: {
             magicType: {
@@ -19,10 +23,10 @@ export default {
           type: 'plain'
         },
         dataset: {
-          dimensions: [],
+          // dimensions: [],
           source: []
         },
-        xAxis: {},
+        xAxis: {type: 'category'},
         yAxis: {},
         series: []
       }
@@ -86,6 +90,26 @@ export default {
       }
       console.log(op)
       return op
+    },
+    datasets () {
+      return this.$store.getters.jsonTransData
+    },
+    tmpOption () {
+      var op
+      var datasets = this.datasets
+      var ans = []
+      var tables = Object.keys(datasets)
+      for (let i = 0; i < tables.length; i++) {
+        op = deepcopy(this.initOption)
+        op.title.text = tables[i]
+        op.dataset.source = datasets[tables[i]]
+        for (let j = 0; j < op.dataset.source[0].length - 1 || 0; j++) {
+          op.series.push({type: 'bar'})
+        }
+        ans.push(op)
+      }
+      console.log(ans)
+      return ans
     }
   }
 }
