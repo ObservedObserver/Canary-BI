@@ -16,6 +16,7 @@
   "dependencies": {
     "@antv/data-set": "^0.8.6",
     "@antv/g2": "^3.0.5-beta.6",
+    "bi-dataset": "^0.1.2",
     "deepcopy": "^0.6.3",
     "echarts": "^4.0.4",
     "viser-vue": "^2.2.2",

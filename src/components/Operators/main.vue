@@ -5,10 +5,10 @@
       <div class="ui ten wide column">
         <viz-board></viz-board>
       </div>
-      <div class="ui two wide column">
+      <!-- <div class="ui two wide column">
           <charts-menu />
-      </div>
-      <div class="ui four wide column">
+      </div> -->
+      <div class="ui six wide column">
         <div class="ui basic segment" id="right-tools">
           <filters></filters>
           <!-- <pages></pages> -->

@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import {sum, median, mean, count} from './statistic.func.js'
 import {sum as msum} from './statistic.magic.js'
 import {API} from '@/store/API/api.js'
+import Core from './srctest/index.js'
 Vue.use(Vuex)
 
 var store = new Vuex.Store({
@@ -32,7 +33,8 @@ var store = new Vuex.Store({
     filterCheckedList: [],
     transFilterData: [],
     func: ['Sum', 'Mean', 'Median', 'Count'],
-    pickedFunc: 'Sum'
+    pickedFunc: 'Sum',
+    core: null
   },
   getters: {
     filterStatistics (state) {
@@ -199,6 +201,28 @@ var store = new Vuex.Store({
         }
       }
       return storage
+    },
+    biDataset (state) {
+      let xlabels = state.globalDataLabels.X
+      let ylabels = state.globalDataLabels.Y
+      let rawData = state.globalData
+      if (xlabels || ylabels || rawData) {
+        let core = new Core({rawData, xlabels, ylabels})
+        core.transLabel()
+        core.transDimension()
+        console.log('core', core)
+        core.transData()
+        return {
+          dataset: core.data,
+          dimensions: core.dimensions,
+          measures: core.measures,
+          stat: core.stat,
+          mixDim: core.mixDim,
+          lowerMixDim: core.lowerMixDim
+        }
+      } else {
+        return {}
+      }
     }
   },
   mutations: {
