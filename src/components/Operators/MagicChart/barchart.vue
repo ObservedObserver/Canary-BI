@@ -8,7 +8,7 @@
 <script>
 import deepcopy from 'deepcopy'
 export default {
-  name: 'magicBar',
+  name: 'magic-bar',
   data () {
     return {
       initOption: {
@@ -88,8 +88,9 @@ export default {
           for (let j = 0; j < measures.length || 0; j++) {
             op.series.push({
               type: 'bar',
+              name: measures[j],
               encode: {
-                y: measures,
+                y: measures[j],
                 x: [dimensions[0]]
               }
             })
@@ -103,8 +104,9 @@ export default {
         for (let j = 0; j < measures.length || 0; j++) {
           op.series.push({
             type: 'bar',
+            name: measures[j],
             encode: {
-              y: measures,
+              y: measures[j],
               x: [dimensions[0]]
             }
           })

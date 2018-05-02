@@ -38,8 +38,8 @@ var dimensionMultiply = (dimX, dimY) => {
 var dimensionMixer = ({rawData, dimensions, measures}) => {
   let stat = dimensionStatistic(rawData, dimensions)
   let result = stat[0]
-  let lowerstat = dimensionStatistic(rawData, dimensions.slice(1)) //[]
-  let lowerresult = lowerstat[0] //undefined
+  let lowerstat = dimensionStatistic(rawData, dimensions.slice(1))
+  let lowerresult = lowerstat[0]
   for (let i = 1; i < stat.length; i++) {
     result = dimensionMultiply(result, stat[i])
   }

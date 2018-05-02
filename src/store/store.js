@@ -206,9 +206,21 @@ var store = new Vuex.Store({
       let xlabels = state.globalDataLabels.X
       let ylabels = state.globalDataLabels.Y
       let rawData = state.globalData
-      if (xlabels || ylabels || rawData) {
+      if (((xlabels.length + ylabels.length > 0) && rawData.length > 0)) {
         let core = new Core({rawData, xlabels, ylabels})
         core.transLabel()
+        if (core.dimensions.length === 0) {
+          // 空数组的使用是因为bidataset的异常处理能力较差
+          // 该问题应尽快在bidataset中修复而非这里
+          return {
+            dataset: [],
+            dimensions: [],
+            measures: [],
+            stat: [],
+            mixDim: [],
+            lowerMixDim: []
+          }
+        }
         core.transDimension()
         console.log('core', core)
         core.transData()
