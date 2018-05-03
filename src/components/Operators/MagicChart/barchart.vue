@@ -1,7 +1,10 @@
 <template lang="html">
   <div>
+    <div class="ui slider checkbox">
+      <input type="checkbox" name="stack" v-model="stackMode">
+      <label>Stack</label>
+    </div>
     <chart v-for="op in testOption" :key="op.id" :options="op" />
-      <!-- <chart v-for="op in tmpOption" :key="op.id" :options="op"/> -->
   </div>
 </template>
 
@@ -11,6 +14,7 @@ export default {
   name: 'magic-bar',
   data () {
     return {
+      stackMode: false,
       initOption: {
         title: {},
         toolbox: {
@@ -89,6 +93,7 @@ export default {
             op.series.push({
               type: 'bar',
               name: measures[j],
+              stack: this.stackMode ? dimensions[0] : undefined,
               encode: {
                 y: measures[j],
                 x: [dimensions[0]]
@@ -105,6 +110,7 @@ export default {
           op.series.push({
             type: 'bar',
             name: measures[j],
+            stack: this.stackMode ? dimensions[0] : undefined,
             encode: {
               y: measures[j],
               x: [dimensions[0]]

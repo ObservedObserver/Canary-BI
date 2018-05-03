@@ -1,5 +1,13 @@
 <template lang="html">
   <div>
+    <div class="ui slider checkbox">
+      <input type="checkbox" name="stack" v-model="stackMode">
+      <label>Stack</label>
+    </div>
+    <div class="ui slider checkbox">
+      <input type="checkbox" name="area" v-model="areaMode">
+      <label>Area</label>
+    </div>
     <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
@@ -10,6 +18,8 @@ export default {
   name: 'magic-line',
   data () {
     return {
+      stackMode: false,
+      areaMode: false,
       initOption: {
         title: {},
         legend: {
@@ -53,6 +63,8 @@ export default {
             op.series.push({
               type: 'line',
               name: measures[j],
+              areaStyle: this.areaMode ? {} : undefined,
+              stack: this.stackMode ? dimensions[0] : undefined,
               encode: {
                 y: measures[j],
                 x: [dimensions[0]]
@@ -69,6 +81,8 @@ export default {
           op.series.push({
             type: 'line',
             name: measures[j],
+            areaStyle: this.areaMode ? {} : undefined,
+            stack: this.stackMode ? dimensions[0] : undefined,
             encode: {
               y: measures[j],
               x: [dimensions[0]]

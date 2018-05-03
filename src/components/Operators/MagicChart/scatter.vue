@@ -1,5 +1,9 @@
 <template lang="html">
   <div>
+    <div class="ui slider checkbox">
+      <input type="checkbox" name="space" v-model="spaceMode">
+      <label>3D</label>
+    </div>
     <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
@@ -10,6 +14,7 @@ export default {
   name: 'magic-scatter',
   data () {
     return {
+      spaceMode: false,
       initOption: {
         title: {},
         legend: {
@@ -19,6 +24,13 @@ export default {
           // dimensions: [],
           source: []
         },
+        // grid3D: {
+        //   width: '100%',
+        //   height: '100%'
+        // },
+        xAxis3D: {},
+        yAxis3D: {},
+        zAxis3D: {},
         xAxis: {},
         yAxis: {},
         series: []
@@ -52,12 +64,21 @@ export default {
           op.dataset.source = ds
           op.title.text = ''
           op.title.text = (ds[1].slice(1, dimensions.length)).toString()
-          for (let j = 0; j < measures.length - 1 || 0; j++) {
+          // op.grid3D = this.spaceMode && measures.length >= 3 ? {width: '100%', height: '100%'} : undefined
+          if (this.spaceMode && measures.length >= 3) {
+            op.grid3D = {width: '100%', height: '100%'}
+            // op.grid = {show: false}
+            op.xAxis.show = false
+            op.yAxis.show = false
+          }
+          for (let j = this.spaceMode && measures.length >= 3 ? 1 : 0; j < measures.length - 1 || 0; j++) {
             op.series.push({
-              type: 'scatter',
+              type: this.spaceMode && measures.length >= 3 ? 'scatter3D' : 'scatter',
+              name: this.spaceMode && measures.length >= 3 ? `${measures[0]}-${measures[1]}-${measures[j + 1]}` : `${measures[0]}-${measures[j + 1]}`,
               encode: {
-                y: measures[j],
-                x: measures[j + 1]
+                x: measures[0],
+                y: this.spaceMode && measures.length >= 3 ? measures[1] : measures[j + 1],
+                z: this.spaceMode && measures.length >= 3 ? measures[j + 1] : undefined
               }
             })
           }
@@ -67,12 +88,20 @@ export default {
       } else if (dimensions.length === 1) {
         let op = deepcopy(this.initOption)
         op.dataset.source = bidataset.dataset
-        for (let j = 0; j < measures.length - 1 || 0; j++) {
+        if (this.spaceMode && measures.length >= 3) {
+          op.grid3D = {width: '100%', height: '100%'}
+          op.xAxis.show = false
+          op.yAxis.show = false
+        }
+        // op.grid3D = this.spaceMode && measures.length >= 3 ? {width: '100%', height: '100%'} : undefined
+        for (let j = this.spaceMode && measures.length >= 3 ? 1 : 0; j < measures.length - 1 || 0; j++) {
           op.series.push({
-            type: 'scatter',
+            type: this.spaceMode && measures.length >= 3 ? 'scatter3D' : 'scatter',
+            name: this.spaceMode && measures.length >= 3 ? `${measures[0]}-${measures[1]}-${measures[j + 1]}` : `${measures[0]}-${measures[j + 1]}`,
             encode: {
-              y: measures[j],
-              x: measures[j + 1]
+              x: measures[0],
+              y: this.spaceMode && measures.length >= 3 ? measures[1] : measures[j + 1],
+              z: this.spaceMode && measures.length >= 3 ? measures[j + 1] : undefined
             }
           })
         }

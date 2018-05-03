@@ -21,6 +21,8 @@ import 'echarts/lib/component/geo'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/visualMap'
+
+import 'echarts-gl'
 import viserVue from 'viser-vue'
 Vue.use(viserVue)
 

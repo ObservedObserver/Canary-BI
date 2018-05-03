@@ -5,6 +5,9 @@ import {sum, median, mean, count} from './statistic.func.js'
 import {sum as msum} from './statistic.magic.js'
 import {API} from '@/store/API/api.js'
 import Core from './srctest/index.js'
+// import Core from 'bi-dataset'
+console.log('import Core', Core)
+// Core = window.Core
 Vue.use(Vuex)
 
 var store = new Vuex.Store({

@@ -1,5 +1,9 @@
 <template lang="html">
   <div>
+    <div class="ui slider checkbox">
+      <input type="checkbox" name="rose" v-model="roseMode">
+      <label>Rose</label>
+    </div>
     <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
@@ -10,6 +14,7 @@ export default {
   name: 'magic-pie',
   data () {
     return {
+      roseMode: false,
       initOption: {
         title: {},
         legend: {
@@ -51,8 +56,9 @@ export default {
           for (let j = 0; j < measures.length || 0; j++) {
             op.series.push({
               type: 'pie',
-              radius: [0, `${rad * 0.9}%`],
+              radius: [this.roseMode ? `${rad * 0.1}%` : 0, `${rad * 0.9}%`],
               center: [`${rad * (j + 0.5)}%`, '50%'],
+              roseType: this.roseMode ? 'radius' : undefined,
               encode: {
                 value: measures[j],
                 itemName: [dimensions[0]]
@@ -69,8 +75,9 @@ export default {
         for (let j = 0; j < measures.length || 0; j++) {
           op.series.push({
             type: 'pie',
-            radius: [0, `${rad * 0.9}%`],
+            radius: [this.roseMode ? `${rad * 0.1}%` : 0, `${rad * 0.9}%`],
             center: [`${rad * (j + 0.5)}%`, '50%'],
+            roseType: this.roseMode ? 'radius' : undefined,
             encode: {
               value: measures[j],
               itemName: [dimensions[0]]
