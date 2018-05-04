@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import betterTable from './Charts/bettertable.vue'
 import magicTable from './MagicChart/table.vue'
 import statistics from './Tool/statistics.vue'
 import magicBar from './MagicChart/barchart.vue'
