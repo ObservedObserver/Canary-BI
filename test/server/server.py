@@ -8,9 +8,10 @@ app = Flask(__name__)
 @app.route('/api/data', methods = ['GET', 'POST'])
 def main_data():
     DATA_LENGTH = 100
-    DATA_DIMS = ['X', 'Y', 'value']
+    DATA_DIMS = ['X', 'Y', 'value', 'score']
     NAMES = ['Alice', 'Bob', 'Carl', 'Duke', 'Elsion']
     CITIES = ['Beijing', 'Shanghai', 'Guangzhou']
+    JOBS = ['Worker', 'Famer', 'Doctor']
     data = []
     # for year in range ()
     for i in range(DATA_LENGTH):
@@ -19,6 +20,7 @@ def main_data():
             tmp[key] = int(random.random() * 100)
         tmp['name'] = NAMES[int(random.random() * 100) % len(NAMES)]
         tmp['city'] = CITIES[int(random.random() * 100) % len(CITIES)]
+        tmp['job'] = JOBS[int(random.random() * 100) % len(JOBS)]
         data.append(tmp)
 
     response = make_response(json.dumps(data))

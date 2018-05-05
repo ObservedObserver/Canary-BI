@@ -29,7 +29,7 @@ import xymenu from './xymenu.vue'
 import vizBoard from './vizboard.vue'
 import dimension from './dimension.vue'
 import statistics from './Tool/statistics.vue'
-import chartsMenu from './Charts/chartsmenu.vue'
+// import chartsMenu from './Charts/chartsmenu.vue'
 export default {
   name: 'main-operator',
   components: {
@@ -39,8 +39,8 @@ export default {
     xymenu,
     vizBoard,
     dimension,
-    statistics,
-    chartsMenu
+    statistics
+    // chartsMenu
   }
 }
 </script>
