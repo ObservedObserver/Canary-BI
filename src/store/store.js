@@ -3,13 +3,19 @@ import Vuex from 'vuex'
 // import globalData from './globalData.json'
 // import {sum, median, mean, count} from './statistic.func.js'
 // import {sum as msum} from './statistic.magic.js'
+import {sum, count, average, median} from './statistic.js'
 import {API} from '@/store/API/api.js'
-import Core from './srctest/index.js'
+import Core from '@/../../Bi-Dataset/main.js'
 // import Core from 'bi-dataset'
 console.log('import Core', Core)
 // Core = window.Core
 Vue.use(Vuex)
-
+const StatFuncs = {
+  'Sum': sum,
+  'Count': count,
+  'Mean': average,
+  'Median': median
+}
 var store = new Vuex.Store({
   state: {
     globalData: [],
@@ -61,7 +67,7 @@ var store = new Vuex.Store({
         }
         core.transDimension()
         console.log('core', core)
-        core.transData()
+        core.transData(StatFuncs[state.pickedFunc])
         return {
           dataset: core.data,
           dimensions: core.dimensions,

@@ -24,6 +24,9 @@ import 'echarts/lib/component/visualMap'
 
 import 'echarts-gl'
 import viserVue from 'viser-vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI)
 Vue.use(viserVue)
 
 Vue.component('chart', ECharts)
