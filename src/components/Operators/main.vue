@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import filters from './filters.vue'
+import filters from './Tool/filters/index.vue'
 import pages from './pages.vue'
 import dataBoard from './data.vue'
 import xymenu from './xymenu.vue'

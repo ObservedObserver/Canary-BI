@@ -38,6 +38,7 @@ var store = new Vuex.Store({
       {name: '大小', style: ['square']},
       {name: '颜色', style: ['circle', 'green']}
     ],
+    filters: [],
     filterStatistics: [],
     filterCheckedList: [],
     transFilterData: [],
@@ -67,7 +68,13 @@ var store = new Vuex.Store({
         }
         core.transDimension()
         console.log('core', core)
-        core.transData(StatFuncs[state.pickedFunc])
+        // let filters = [{
+        //   column: 'value',
+        //   type: 'equal',
+        //   value: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
+        // }]
+        let filters = state.filters
+        core.transData({statFunc: StatFuncs[state.pickedFunc], filters})
         return {
           dataset: core.data,
           dimensions: core.dimensions,
@@ -212,6 +219,9 @@ var store = new Vuex.Store({
     changeFilterRange (state, paras) {
       // paras = [i, 0 or 1, value]
       state.filterStatistics[paras[0]].value[paras[1]] = paras[2]
+    },
+    changeFilter (state, params) {
+      state.filters = params
     },
     transFilterData (state, _trans) {
       // 将globalData的转换形式-transData进行筛选，选出符合需要的值

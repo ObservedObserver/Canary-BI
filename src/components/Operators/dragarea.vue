@@ -1,5 +1,5 @@
 <template lang="html">
-  <div @dragover="allowDrag($event)" @drop="drop($event)">
+  <div class="drag-container" @dragover="allowDrag($event)" @drop="drop($event)">
     {{title}}
       <div class="ui label" draggable="true"
        v-for="(label, i) in dataLabels"
