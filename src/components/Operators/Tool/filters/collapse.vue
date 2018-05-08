@@ -4,7 +4,8 @@
     <el-collapse-item v-for="(filter, index) in filters" :key="filter.column"
     :title="filter.column" :name="index">
       <div>
-        <filter-silder :range="filter.range" :value="filter.value" :index="index" @filterChange="changeFilter" />
+        <filter-silder v-if="filter.type === 'range'" :range="filter.range" :value="filter.value" :index="index" @filterChange="changeFilter" />
+        <filterForm v-if="filter.type === 'equal'" :index="index" :column="filter.column" @filterChange="changeFilter" />
       </div>
     </el-collapse-item>
   </el-collapse>
@@ -12,6 +13,8 @@
 
 <script>
 import filterSilder from './silder.vue'
+import filterForm from './form.vue'
+import deepcopy from 'deepcopy'
 export default {
   name: 'filter-collapse',
   props: {
@@ -28,17 +31,36 @@ export default {
       filters: []
     }
   },
+  computed: {
+    copiedLabels () {
+      // deepcopy 实现对引用对象的oldvalue的记忆
+      return deepcopy(this.$props.labels)
+    }
+  },
   watch: {
-    labels (oldValue, newValue) {
-      this.filters = newValue.map((label) => {
-        // 临时方案
-        return {
-          column: label.name,
-          type: label.type === 'String' ? 'equal' : 'range',
-          range: label.type === 'String' ? [] : [0, 100],
-          value: label.type === 'String' ? [] : [0, 100]
+    copiedLabels (newVal, oldVal) {
+      let _filters = []
+      let [newValue, oldValue] = [newVal, oldVal]
+      console.log(newValue, oldValue)
+      // 将未改变的filter保留原始数据 (该部可以处理被删去的label)
+      oldValue.forEach((label1) => {
+        if (newValue.some(label2 => label2.name === label1.name)) {
+          console.log('find', label1)
+          _filters.push(this.filters.find((filter) => {return filter.column === label1.name}))
         }
       })
+      // 新建新添加的label
+      newValue.forEach((label2) => {
+        if (oldValue.length === 0 || oldValue.every(label1 => label2.name !== label1.name)) {
+          _filters.push({
+            column: label2.name,
+            type: label2.type === 'string' ? 'equal' : 'range',
+            range: label2.type === 'string' ? [] : [0, 100],
+            value: label2.type === 'string' ? [] : [0, 100]
+          })
+        }
+      })
+      this.filters = _filters
     }
   },
   methods: {
@@ -51,7 +73,8 @@ export default {
     }
   },
   components: {
-    filterSilder
+    filterSilder,
+    filterForm
   }
 }
 </script>

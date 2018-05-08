@@ -53,6 +53,8 @@ var store = new Vuex.Store({
       let rawData = state.globalData
       if (((xlabels.length + ylabels.length > 0) && rawData.length > 0)) {
         let core = new Core({rawData, xlabels, ylabels})
+        let filters = state.filters
+        core.filterData({filters})
         core.transLabel()
         if (core.dimensions.length === 0) {
           // 空数组的使用是因为bidataset的异常处理能力较差
@@ -73,8 +75,7 @@ var store = new Vuex.Store({
         //   type: 'equal',
         //   value: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
         // }]
-        let filters = state.filters
-        core.transData({statFunc: StatFuncs[state.pickedFunc], filters})
+        core.transData({statFunc: StatFuncs[state.pickedFunc]})
         return {
           dataset: core.data,
           dimensions: core.dimensions,
@@ -272,6 +273,17 @@ var store = new Vuex.Store({
     changeFunc (state, para) {
       // para = 'Sum'
       state.pickedFunc = para
+    },
+    getValueSet (state, params) {
+      // params = {column}
+      let dataset = state.globalData
+      let {column} = params
+      let set = new Set()
+      dataset.forEach((val) => {
+        set.add(val[column])
+      })
+      console.log('set', set)
+      return set
     }
   },
   actions: {
