@@ -38,13 +38,14 @@ var store = new Vuex.Store({
       {name: '大小', style: ['square']},
       {name: '颜色', style: ['circle', 'green']}
     ],
+    dataAggregation: true,
     filters: [],
     filterStatistics: [],
     filterCheckedList: [],
     transFilterData: [],
     func: ['Sum', 'Mean', 'Median', 'Count'],
     pickedFunc: 'Sum',
-    core: null
+    core: new Core({})
   },
   getters: {
     originDataset (state) {
@@ -57,12 +58,53 @@ var store = new Vuex.Store({
       }
       return dataset
     },
+    biLabels (state) {
+      // biDataset issue 不应设计为内部修改
+      let core = state.core
+      core.xlabels = state.globalDataLabels.X
+      core.ylabels = state.globalDataLabels.Y
+      core.rawData = state.globalData
+      core.transLabel()
+      // 请不要为了语法糖的使用而舍弃优秀的设计思想
+      return {
+        dimensions: core.dimensions,
+        measures: core.measures
+      }
+    },
+    biDimension (state) {
+      let core = state.core
+      core.xlabels = state.globalDataLabels.X
+      core.ylabels = state.globalDataLabels.Y
+      core.rawData = state.globalData
+      let filters = state.filters
+      core.transLabel()
+      if (core.dimensions.length === 0) {
+        return {
+          dimensions: [],
+          measures: [],
+          mixDim: [],
+          lowerMixDim: []
+        }
+      }
+      core.filterData({filters})
+      core.transDimension()
+      // 重复运算？安全运算？
+      //
+      // 是否需要安全条件
+      return {
+        dimensions: core.dimensions,
+        measures: core.measures,
+        mixDim: core.mixDim,
+        lowerMixDim: core.lowerMixDim
+      }
+    },
     biDataset (state) {
-      let xlabels = state.globalDataLabels.X
-      let ylabels = state.globalDataLabels.Y
-      let rawData = state.globalData
-      if (((xlabels.length + ylabels.length > 0) && rawData.length > 0)) {
-        let core = new Core({rawData, xlabels, ylabels})
+      let core = state.core
+      core.xlabels = state.globalDataLabels.X
+      core.ylabels = state.globalDataLabels.Y
+      core.rawData = state.globalData
+
+      if (((core.xlabels.length + core.ylabels.length > 0) && core.rawData.length > 0)) {
         let filters = state.filters
         core.filterData({filters})
         core.transLabel()
@@ -294,6 +336,9 @@ var store = new Vuex.Store({
       })
       console.log('set', set)
       return set
+    },
+    changeAggregation (state, status) {
+      state.dataAggregation = status
     }
   },
   actions: {

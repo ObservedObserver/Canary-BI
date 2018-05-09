@@ -4,7 +4,7 @@
       <input type="checkbox" name="space" v-model="spaceMode">
       <label>3D</label>
     </div>
-    <chart v-for="op in rawOption" :key="op.id" :options="op" />
+    <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
 
@@ -38,55 +38,58 @@ export default {
     }
   },
   computed: {
+    option () {
+      return this.$store.state.dataAggregation ? this.biOption : this.rawOption
+    },
     rawOption () {
-      let result = []
-      let bidataset = this.$store.getters.biDataset
+      let ops = []
+      // let {dimensions, measures, mixDim} = this.$store.state.core
+      // 这样无法监控到变量的变化
+      let {dimensions, measures} = this.$store.getters.biLabels
       let dataset = this.$store.getters.originDataset
-      let dimensions = bidataset.dimensions
-      let measures = bidataset.measures
-      let mixDim = bidataset.mixDim
       console.log('raw', measures, dataset)
       if (measures.length < 2) {
-        return []
-      } else if (measures.length === 2) {
+        return ops
+      } else {
         console.log(measures)
-        let op = deepcopy(this.initOption)
-        op.dataset.source = dataset
-        op.series.push({
-          type: 'scatter',
-          encode: {
-            x: measures[0],
-            y: measures[1]
+        let cases = []
+        for (let i = 0; i < measures.length - 1; i++) {
+          for (let j = i + 1; j < measures.length; j++) {
+            cases.push([measures[i], measures[j]])
           }
+        }
+        cases.forEach((axis) => {
+          let op = deepcopy(this.initOption)
+          op.dataset.source = dataset
+          op.xAxis.name = axis[0]
+          op.yAxis.name = axis[1]
+          op.series.push({
+            type: 'scatter',
+            encode: {
+              x: axis[0],
+              y: axis[1]
+            }
+          })
+          ops.push(op)
         })
-        result.push(op)
-        return result
+        return ops
       }
-      return []
-
     },
-    option () {
-      let bidataset = this.$store.getters.biDataset
-      let dimensions = bidataset.dimensions
-      let measures = bidataset.measures
-      let stat = bidataset.stat
-      let mixDim = bidataset.mixDim
-      let lowerMixDim = bidataset.lowerMixDim
+    biOption () {
+      let {dimensions, measures, stat, mixDim, lowerMixDim, dataset} = this.$store.getters.biDataset
       let ops = []
       if (measures.length < 2) {
         return []
       }
       if (dimensions.length > 1) {
-        console.log('dimensions.length > 1')
-        console.log(bidataset)
         for (let i = 0; i < (lowerMixDim.length - 1); i++) {
-          // let ds = bidataset.dataset.slice(i, i + (lowerMixDim.length - 1))
+          // let ds = dataset.slice(i, i + (lowerMixDim.length - 1))
           let ds = []
-          // let i = 1; i < bidataset.dataset.length; i+=(lowerMixDim.length - 1)
-          for (let j = 1; j < bidataset.dataset.length; j += (lowerMixDim.length - 1)) {
-            ds.push(bidataset.dataset[i + j])
+          // let i = 1; i < dataset.length; i+=(lowerMixDim.length - 1)
+          for (let j = 1; j < dataset.length; j += (lowerMixDim.length - 1)) {
+            ds.push(dataset[i + j])
           }
-          ds.unshift(bidataset.dataset[0])
+          ds.unshift(dataset[0])
           let op = deepcopy(this.initOption)
           op.dataset.source = ds
           op.title.text = ''
@@ -114,7 +117,7 @@ export default {
         }
       } else if (dimensions.length === 1) {
         let op = deepcopy(this.initOption)
-        op.dataset.source = bidataset.dataset
+        op.dataset.source = dataset
         if (this.spaceMode && measures.length >= 3) {
           op.grid3D = {width: '100%', height: '100%'}
           op.xAxis.show = false
