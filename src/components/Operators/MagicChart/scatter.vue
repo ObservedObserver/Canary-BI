@@ -4,7 +4,7 @@
       <input type="checkbox" name="space" v-model="spaceMode">
       <label>3D</label>
     </div>
-    <chart v-for="op in option" :key="op.id" :options="op" />
+    <chart v-for="op in rawOption" :key="op.id" :options="op" />
   </div>
 </template>
 
@@ -38,6 +38,33 @@ export default {
     }
   },
   computed: {
+    rawOption () {
+      let result = []
+      let bidataset = this.$store.getters.biDataset
+      let dataset = this.$store.getters.originDataset
+      let dimensions = bidataset.dimensions
+      let measures = bidataset.measures
+      let mixDim = bidataset.mixDim
+      console.log('raw', measures, dataset)
+      if (measures.length < 2) {
+        return []
+      } else if (measures.length === 2) {
+        console.log(measures)
+        let op = deepcopy(this.initOption)
+        op.dataset.source = dataset
+        op.series.push({
+          type: 'scatter',
+          encode: {
+            x: measures[0],
+            y: measures[1]
+          }
+        })
+        result.push(op)
+        return result
+      }
+      return []
+
+    },
     option () {
       let bidataset = this.$store.getters.biDataset
       let dimensions = bidataset.dimensions
@@ -56,7 +83,7 @@ export default {
           // let ds = bidataset.dataset.slice(i, i + (lowerMixDim.length - 1))
           let ds = []
           // let i = 1; i < bidataset.dataset.length; i+=(lowerMixDim.length - 1)
-          for (let j = 1; j < bidataset.dataset.length; j+=(lowerMixDim.length - 1)) {
+          for (let j = 1; j < bidataset.dataset.length; j += (lowerMixDim.length - 1)) {
             ds.push(bidataset.dataset[i + j])
           }
           ds.unshift(bidataset.dataset[0])

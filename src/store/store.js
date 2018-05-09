@@ -47,6 +47,16 @@ var store = new Vuex.Store({
     core: null
   },
   getters: {
+    originDataset (state) {
+      let dataset = []
+      if (typeof state.globalData !== 'undefined' && state.globalData.length > 0) {
+        dataset.push(Object.keys(state.globalData[0]))
+        state.globalData.forEach((item) => {
+          dataset.push(Object.values(item))
+        })
+      }
+      return dataset
+    },
     biDataset (state) {
       let xlabels = state.globalDataLabels.X
       let ylabels = state.globalDataLabels.Y
