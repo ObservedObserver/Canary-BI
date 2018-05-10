@@ -1,9 +1,6 @@
 <template lang="html">
   <div>
-    <div class="ui slider checkbox">
-      <input type="checkbox" name="rose" v-model="roseMode">
-      <label>Rose</label>
-    </div>
+    <el-checkbox v-model="roseMode" label="1" border size="medium">Rose</el-checkbox>
     <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
@@ -63,8 +60,6 @@ export default {
       let bidataset = this.$store.getters.biDataset
       let dimensions = bidataset.dimensions
       let measures = bidataset.measures
-      let stat = bidataset.stat
-      let mixDim = bidataset.mixDim
       let lowerMixDim = bidataset.lowerMixDim
       let ops = []
       if (dimensions.length > 1) {
@@ -74,7 +69,7 @@ export default {
           // let ds = bidataset.dataset.slice(i, i + (lowerMixDim.length - 1))
           let ds = []
           // let i = 1; i < bidataset.dataset.length; i+=(lowerMixDim.length - 1)
-          for (let j = 1; j < bidataset.dataset.length; j+=(lowerMixDim.length - 1)) {
+          for (let j = 1; j < bidataset.dataset.length; j += (lowerMixDim.length - 1)) {
             ds.push(bidataset.dataset[i + j])
           }
           ds.unshift(bidataset.dataset[0])

@@ -1,6 +1,6 @@
 import {median as arrayMedian} from './median.js'
 var sum = ({data, measures}) => {
-  console.log('data in sum is used', data)
+  // console.log('data in sum is used', data)
   if (typeof data !== 'undefined' && data.length > 0) {
     let result = {}
     measures.forEach((meas) => {
@@ -11,14 +11,14 @@ var sum = ({data, measures}) => {
         result[meas] += item[meas]
       })
     })
-    console.log('result in statictic.js[sum]', result)
+    // console.log('result in statictic.js[sum]', result)
     return result
   } else {
     return {}
   }
 }
 var count = ({data, measures}) => {
-  console.log('data in count is used', data)
+  // console.log('data in count is used', data)
   if (typeof data !== 'undefined' && data.length > 0) {
     let result = {}
     measures.forEach((meas) => {
@@ -29,14 +29,14 @@ var count = ({data, measures}) => {
         result[meas]++
       })
     })
-    console.log('result in statictic.js[count]', result)
+    // console.log('result in statictic.js[count]', result)
     return result
   } else {
     return {}
   }
 }
 var average = ({data, measures}) => {
-  console.log('data in average in used', data)
+  // console.log('data in average in used', data)
   if (typeof data !== 'undefined' && data.length > 0) {
     let result = {}
     measures.forEach((meas) => {
@@ -51,14 +51,14 @@ var average = ({data, measures}) => {
     measures.forEach((meas) => {
       result[meas] = result[meas][0] / result[meas][1]
     })
-    console.log('result in statictic.js[count]', result)
+    // console.log('result in statictic.js[count]', result)
     return result
   } else {
     return {}
   }
 }
 var median = ({data, measures}) => {
-  console.log('data in average in used', data)
+  // console.log('data in average in used', data)
   if (typeof data !== 'undefined' && data.length > 0) {
     let result = {}
     measures.forEach((meas) => {
@@ -72,7 +72,7 @@ var median = ({data, measures}) => {
     measures.forEach((meas) => {
       result[meas] = arrayMedian(result[meas])
     })
-    console.log('result in statictic.js[count]', result)
+    // console.log('result in statictic.js[count]', result)
     return result
   } else {
     return {}

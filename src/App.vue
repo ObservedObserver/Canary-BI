@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import 'semantic-ui-css/semantic.js'
 export default {
   name: 'App',
   mounted () {
@@ -13,7 +12,6 @@ export default {
   }
 }
 </script>
-<style src="../node_modules/semantic-ui-css/semantic.css"></style>
 <style>
 /*#app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

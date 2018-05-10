@@ -46,7 +46,7 @@ export default {
       oldValue.forEach((label1) => {
         if (newValue.some(label2 => label2.name === label1.name)) {
           console.log('find', label1)
-          _filters.push(this.filters.find((filter) => {return filter.column === label1.name}))
+          _filters.push(this.filters.find((filter) => { return filter.column === label1.name }))
         }
       })
       // 新建新添加的label

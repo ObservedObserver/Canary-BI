@@ -1,20 +1,15 @@
 <template lang="html">
   <div class="drag-container" @dragover="allowDrag($event)" @drop="drop($event)">
     {{title}}
-      <div class="ui label" draggable="true"
-       v-for="(label, i) in dataLabels"
-       :key="label.name"
-       :class="{
-         teal: label.type === 'string',
-         blue: label.type === 'number'
-         }"
-       @dragstart="drag($event, i)">
-        {{label.name}}
-        <div class="detail">
-          {{label.type}}
-        </div>
-      </div>
-
+    <span class="label-container"
+    v-for="(label, i) in dataLabels"
+    draggable="true"
+    @dragstart="drag($event, i)"
+    :key="label.name">
+      <el-tag :type=" label.type === 'string' ? undefined : 'success' ">
+        {{label.name}} | {{label.type}}
+      </el-tag>
+    </span>
   </div>
 </template>
 
@@ -41,13 +36,9 @@ export default {
       return this.$store.state.globalDataLabels[this.$props.areaName]
     }
   },
-  // mounted () {
-  //   if (this.name === 'data') {
-  //     this.dataLabels = this.$store.state.constDataLabels
-  //   }
-  // },
   methods: {
     drag (event, i) {
+      console.log('dargstart', i)
       this.$store.commit('drag', {
         event: event,
         component: this.$props.areaName,
@@ -68,7 +59,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.ui.label{
-  margin: 0.28rem;
+.label-container{
+  padding: 0.2rem;
 }
 </style>

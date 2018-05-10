@@ -52,10 +52,14 @@ var store = new Vuex.Store({
       let dataset = []
       if (typeof state.globalData !== 'undefined' && state.globalData.length > 0) {
         // dataset.push(Object.keys(state.globalData[0]))
+        if (state.globalDataLabels.data.length === 0) {
+          return dataset
+        }
         let core = state.core
         // core.xlabels = state.globalDataLabels.X
         // core.ylabels = state.globalDataLabels.Y
         core.xlabels = state.globalDataLabels.data
+        core.ylabels = []
         core.rawData = state.globalData
         core.transLabel()
         let _keys = core.dimensions.concat(core.measures)
@@ -165,7 +169,7 @@ var store = new Vuex.Store({
   },
   mutations: {
     drag (state, paras) {
-      // console.log(paras, state)
+      console.log('drag', paras)
       state.currentLabel = state.globalDataLabels[paras.component][paras.label]
       if (paras.component !== 'data') {
         state.globalDataLabels[paras.component].splice(paras.label, 1)

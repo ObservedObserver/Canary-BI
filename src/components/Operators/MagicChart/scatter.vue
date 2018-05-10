@@ -1,9 +1,6 @@
 <template lang="html">
   <div>
-    <div class="ui slider checkbox">
-      <input type="checkbox" name="space" v-model="spaceMode">
-      <label>3D</label>
-    </div>
+    <el-checkbox v-model="spaceMode" label="1" border size="medium">3D</el-checkbox>
     <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
@@ -48,7 +45,7 @@ export default {
       let ops = []
       // let {dimensions, measures, mixDim} = this.$store.state.core
       // 这样无法监控到变量的变化
-      let {dimensions, measures} = this.$store.getters.biLabels
+      let {measures} = this.$store.getters.biLabels
       let dataset = this.$store.getters.originDataset
       console.log('raw', measures, dataset)
       if (measures.length < 2) {
@@ -79,7 +76,7 @@ export default {
       }
     },
     biOption () {
-      let {dimensions, measures, stat, mixDim, lowerMixDim, dataset} = this.$store.getters.biDataset
+      let {dimensions, measures, lowerMixDim, dataset} = this.$store.getters.biDataset
       let ops = []
       if (measures.length < 2) {
         return []

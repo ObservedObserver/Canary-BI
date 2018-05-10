@@ -1,9 +1,6 @@
 <template lang="html">
-  <div>
-    <div class="ui slider checkbox">
-      <input type="checkbox" name="stack" v-model="stackMode">
-      <label>Stack</label>
-    </div>
+  <div style="width:100%">
+    <el-checkbox v-model="stackMode" label="1" border size="medium">Stack</el-checkbox>
     <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
@@ -32,40 +29,10 @@ export default {
     }
   },
   computed: {
-    columnIndex () {
-      var dims = []
-      dims = this.$store.state.globalDataLabels.X.filter(val => val.type === 'string')
-      if (dims.length > 0) {
-        return {
-          categoryDim: 'x',
-          column: dims[0]
-        }
-      }
-      dims = this.$store.state.globalDataLabels.Y.filter(val => val.type === 'string')
-      if (dims.length > 0) {
-        return {
-          categoryDim: 'y',
-          column: dims[0]
-        }
-      }
-      return false
-    },
-    xLabels () {
-      return this.$store.state.globalDataLabels.X.map((val) => {
-        return val.name
-      })
-    },
-    yLabels () {
-      return this.$store.state.globalDataLabels.Y.map((val) => {
-        return val.name
-      })
-    },
     biOption () {
       let bidataset = this.$store.getters.biDataset
       let dimensions = bidataset.dimensions
       let measures = bidataset.measures
-      let stat = bidataset.stat
-      let mixDim = bidataset.mixDim
       let lowerMixDim = bidataset.lowerMixDim
       let ops = []
       if (dimensions.length > 1) {
@@ -75,7 +42,7 @@ export default {
           // let ds = bidataset.dataset.slice(i, i + (lowerMixDim.length - 1))
           let ds = []
           // let i = 1; i < bidataset.dataset.length; i+=(lowerMixDim.length - 1)
-          for (let j = 1; j < bidataset.dataset.length; j+=(lowerMixDim.length - 1)) {
+          for (let j = 1; j < bidataset.dataset.length; j += (lowerMixDim.length - 1)) {
             ds.push(bidataset.dataset[i + j])
           }
           ds.unshift(bidataset.dataset[0])
@@ -144,26 +111,6 @@ export default {
     },
     option () {
       return this.$store.state.dataAggregation ? this.biOption : this.rawOption
-    },
-    datasets () {
-      return this.$store.getters.jsonTransData
-    },
-    tmpOption () {
-      var op
-      var datasets = this.datasets
-      var ans = []
-      var tables = Object.keys(datasets)
-      for (let i = 0; i < tables.length; i++) {
-        op = deepcopy(this.initOption)
-        op.title.text = tables[i]
-        op.dataset.source = datasets[tables[i]]
-        for (let j = 0; j < op.dataset.source[0].length - 1 || 0; j++) {
-          op.series.push({type: 'bar'})
-        }
-        ans.push(op)
-      }
-      console.log(ans)
-      return ans
     }
   }
 }

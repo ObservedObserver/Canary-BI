@@ -1,8 +1,16 @@
 <template lang="html">
-  <div class="vis-main-board">
+  <el-container class="vis-main-board" style="padding: 0px">
+    <el-aside width="146px">
+      <menu-board></menu-board>
+    </el-aside>
+    <el-main style="padding: 0px">
+      <operators-board></operators-board>
+    </el-main>
+  </el-container>
+  <!-- <div class="vis-main-board">
     <menu-board></menu-board>
     <operators-board></operators-board>
-  </div>
+  </div> -->
 </template>
 
 <script>

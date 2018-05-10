@@ -1,25 +1,15 @@
 <template lang="html">
-  <div class="ui segment">
-    <h3 class="ui header">Statistics</h3>
-    <i class="ui large angle link icon" id="statistics-hider"
-    :class="hider[hiderStatus]"
-    @click="changeHiderStatus"></i>
-    <div v-if="!hiderStatus">
-      <div class="ui divider"></div>
-      <div class="ui form">
-        <div class="grouped fields">
-          <label>functions available</label>
-          <div class="field" v-for="item in func" :key="item.id">
-            <div class="ui slider checkbox">
-              <input type="radio" :value="item" v-model="picked">
-              <label>{{item}}</label>
-            </div>
+  <el-card class="box-card">
+    <el-collapse>
+      <el-collapse-item title="Statistics">
+        <el-form>
+          <div v-for="item in func" :key="item.id" style="margin-top:0.4rem">
+            <el-radio v-model="picked" :label="item" border size="medium">{{item}}</el-radio>
           </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
+        </el-form>
+      </el-collapse-item>
+    </el-collapse>
+  </el-card>
 </template>
 
 <script>
@@ -27,14 +17,7 @@ export default {
   name: 'statistics',
   data () {
     return {
-      func: this.$store.state.func,
-      hider: ['down', 'left'],
-      hiderStatus: 1
-    }
-  },
-  methods: {
-    changeHiderStatus () {
-      this.hiderStatus = (this.hiderStatus + 1) % 2
+      func: this.$store.state.func
     }
   },
   computed: {
@@ -52,9 +35,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-#statistics-hider{
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.box-card{
+  margin: 0.6rem;
 }
 </style>

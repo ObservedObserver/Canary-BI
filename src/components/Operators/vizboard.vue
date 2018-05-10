@@ -1,20 +1,15 @@
 <template lang="html">
-  <div class="ui basic segment invizboard">
-    <!-- <table-chart></table-chart> -->
-    <div class="ui secondary pointing menu">
-      <a class="item"
-      v-for="(item, i) in menu"
-      :class="{active: currentChart === i}"
-      @click="changeChart(i)"
-      :key="item.id">
-        {{item.name}}
-      </a>
+  <div class="invizboard">
+    <el-menu :default-active="currentChart" mode="horizontal" @select="changeChart">
+      <el-menu-item v-for="(item, i) in menu" :key="item.name" :index="i.toString()">{{item.name}}</el-menu-item>
+    </el-menu>
+    <div class="charts-board">
+      <magic-table v-if="currentChart === '0'" />
+      <magic-bar v-if="currentChart === '1'" />
+      <magic-line v-if="currentChart === '2'" />
+      <magic-pie v-if="currentChart === '3'" />
+      <magic-scatter v-if="currentChart === '4'" />
     </div>
-    <magic-table v-if="currentChart === 0" />
-    <magic-bar v-if="currentChart === 1" />
-    <magic-line v-if="currentChart === 2" />
-    <magic-pie v-if="currentChart === 3" />
-    <magic-scatter v-if="currentChart === 4" />
     <!-- <statistics/> -->
   </div>
 </template>
@@ -52,12 +47,12 @@ export default {
           child: '<magic-scatter />'
         }
       ],
-      currentChart: 0
+      currentChart: '0'
     }
   },
   methods: {
-    changeChart (i) {
-      this.currentChart = i
+    changeChart (key, keypath) {
+      this.currentChart = key
     }
   },
   components: {
@@ -73,11 +68,15 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.ui.basic.segment.invizboard{
+.invizboard{
+  padding: 1rem;
   max-height: 56rem;
   overflow: auto;
 }
 .ui.secondary.pointing.menu{
   overflow-x: auto;
+}
+.charts-board{
+  margin-top: 1rem;
 }
 </style>

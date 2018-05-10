@@ -1,5 +1,16 @@
 <template lang="html">
-  <div class="ui segment">
+  <el-card class="box-card">
+    <el-collapse>
+      <el-collapse-item title="Filters">
+        <drag-area class="infilter" area-name="filter" />
+        <collapse :labels="labels" />
+      </el-collapse-item>
+    </el-collapse>
+    <!-- <div>
+      <drag-area class="ui basic segment indata" area-name="data"></drag-area>
+    </div> -->
+  </el-card>
+  <!-- <div class="ui segment">
     <h3 class="ui header">Filters</h3>
     <i class="ui large angle link icon" id="filter-hider"
     :class="filterHider[filterStatus]"
@@ -9,7 +20,7 @@
       <drag-area class="ui basic segment infilter" area-name="filter" />
       <collapse :labels="labels" />
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -23,15 +34,7 @@ export default {
     }
   },
   data () {
-    return {
-      filterHider: ['down', 'left'],
-      filterStatus: 1
-    }
-  },
-  methods: {
-    changeFilterStatus () {
-      this.filterStatus = (this.filterStatus + 1) % 2
-    },
+    return {}
   },
   components: {
     collapse,
@@ -41,12 +44,10 @@ export default {
 </script>
 
 <style lang="css">
-.ui.basic.segment.infilter{
+.infilter{
   height: 6rem;
 }
-#filter-hider{
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.box-card{
+  margin: 0.6rem;
 }
 </style>

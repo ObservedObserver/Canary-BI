@@ -1,44 +1,37 @@
 <template lang="html">
-  <div class="main-operator">
-    <xymenu></xymenu>
-    <div class="ui grid">
-      <div class="ui ten wide column">
+  <el-container class="clear-padding">
+    <el-header class="clear-padding">
+      <xymenu></xymenu>
+    </el-header>
+    <el-container>
+      <el-main class="clear-padding">
         <viz-board></viz-board>
-      </div>
-      <!-- <div class="ui two wide column">
-          <charts-menu />
-      </div> -->
-      <div class="ui six wide column">
-        <div class="ui basic segment" id="right-tools">
-          <filters></filters>
-          <!-- <pages></pages> -->
-          <statistics/>
-          <dimension></dimension>
-          <data-board></data-board>
-        </div>
-      </div>
-    </div>
-  </div>
+      </el-main>
+      <el-aside width="36%">
+        <filters></filters>
+        <statistics/>
+        <data-board></data-board>
+      </el-aside>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
 import filters from './Tool/filters/index.vue'
-import pages from './pages.vue'
 import dataBoard from './data.vue'
 import xymenu from './xymenu.vue'
 import vizBoard from './vizboard.vue'
-import dimension from './dimension.vue'
+// import dimension from './dimension.vue'
 import statistics from './Tool/statistics.vue'
 // import chartsMenu from './Charts/chartsmenu.vue'
 export default {
   name: 'main-operator',
   components: {
     filters,
-    pages,
     dataBoard,
     xymenu,
     vizBoard,
-    dimension,
+    // dimension,
     statistics
     // chartsMenu
   }
@@ -46,17 +39,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.main-operator{
-  position: fixed;
-  left: 6.2rem;
-  right: 0rem;
-  top: 0rem;
-  bottom: 0rem;
-  overflow-y: auto;
-}
-#right-tools{
-  height: 100%;
-  /*overflow-x: hidden;*/
-  overflow-y: auto;
+.clear-padding{
+  padding: 0px;
 }
 </style>

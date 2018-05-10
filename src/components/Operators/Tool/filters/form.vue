@@ -2,7 +2,7 @@
   <el-form ref="form" :model="form">
     <el-form-item label="match values">
       <el-checkbox-group v-model="form.values">
-        <el-checkbox v-for="(value, index) in form.fixedValues" :key="value.key"
+        <el-checkbox v-for="value in form.fixedValues" :key="value.key"
         :label="value" name="type" ></el-checkbox>
       </el-checkbox-group>
     </el-form-item>
