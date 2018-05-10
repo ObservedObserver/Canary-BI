@@ -18,7 +18,10 @@ export default {
       initOption: {
         title: {},
         legend: {
-          type: 'plain'
+          type: 'scroll'
+        },
+        tooltip: {
+          formatter: '{b}:{c}'
         },
         dataset: {
           // dimensions: [],

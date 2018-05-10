@@ -23,8 +23,9 @@ export default {
       initOption: {
         title: {},
         legend: {
-          type: 'plain'
+          type: 'scroll'
         },
+        tooltip: {},
         dataset: {
           // dimensions: [],
           source: []
@@ -37,6 +38,34 @@ export default {
   },
   computed: {
     option () {
+      return this.$store.state.dataAggregation ? this.biOption : this.rawOption
+    },
+    rawOption () {
+      let {dimensions} = this.$store.getters.originLabels
+      let {measures} = this.$store.getters.biLabels
+      let dataset = this.$store.getters.originDataset
+      if (dimensions.length === 0) {
+        return []
+      }
+      let ops = []
+      for (let j = 0; j < measures.length; j++) {
+        let op = deepcopy(this.initOption)
+        op.dataset.source = dataset.map((row) => {
+          return [row.slice(0, dimensions.length).toString()].concat(row.slice(dimensions.length))
+        })
+        op.series.push({
+          type: 'line',
+          name: measures[j],
+          encode: {
+            y: measures[j],
+            x: dataset[0].slice(0, dimensions.length).toString()
+          }
+        })
+        ops.push(op)
+      }
+      return ops
+    },
+    biOption () {
       let bidataset = this.$store.getters.biDataset
       let dimensions = bidataset.dimensions
       let measures = bidataset.measures

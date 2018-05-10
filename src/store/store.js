@@ -51,12 +51,34 @@ var store = new Vuex.Store({
     originDataset (state) {
       let dataset = []
       if (typeof state.globalData !== 'undefined' && state.globalData.length > 0) {
-        dataset.push(Object.keys(state.globalData[0]))
-        state.globalData.forEach((item) => {
-          dataset.push(Object.values(item))
+        // dataset.push(Object.keys(state.globalData[0]))
+        let core = state.core
+        // core.xlabels = state.globalDataLabels.X
+        // core.ylabels = state.globalDataLabels.Y
+        core.xlabels = state.globalDataLabels.data
+        core.rawData = state.globalData
+        core.transLabel()
+        let _keys = core.dimensions.concat(core.measures)
+        dataset.push(_keys)
+        state.globalData.forEach((item, index) => {
+          // dataset.push(Object.values(item))
+          dataset.push([])
+          _keys.forEach((key) => {
+            dataset[index + 1].push(item[key])
+          })
         })
       }
       return dataset
+    },
+    originLabels (state) {
+      let core = state.core
+      core.xlabels = state.globalDataLabels.data
+      core.rawData = state.globalData
+      core.transLabel()
+      return {
+        dimensions: core.dimensions,
+        measures: core.measures
+      }
     },
     biLabels (state) {
       // biDataset issue 不应设计为内部修改

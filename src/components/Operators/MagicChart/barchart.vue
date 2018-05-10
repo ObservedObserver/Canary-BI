@@ -4,7 +4,7 @@
       <input type="checkbox" name="stack" v-model="stackMode">
       <label>Stack</label>
     </div>
-    <chart v-for="op in testOption" :key="op.id" :options="op" />
+    <chart v-for="op in option" :key="op.id" :options="op" />
   </div>
 </template>
 
@@ -17,16 +17,10 @@ export default {
       stackMode: false,
       initOption: {
         title: {},
-        toolbox: {
-          feature: {
-            magicType: {
-              type: ['bar', 'line', 'pie']
-            }
-          }
-        },
         legend: {
-          type: 'plain'
+          type: 'scroll'
         },
+        tooltip: {},
         dataset: {
           // dimensions: [],
           source: []
@@ -66,7 +60,7 @@ export default {
         return val.name
       })
     },
-    testOption () {
+    biOption () {
       let bidataset = this.$store.getters.biDataset
       let dimensions = bidataset.dimensions
       let measures = bidataset.measures
@@ -123,35 +117,33 @@ export default {
       // op.xAxis = {type: 'category'}
       return ops
     },
-    option () {
-      var op = this.initOption
-      op.dataset.source = this.$store.getters.jsonDataSet
-      op.dataset.dimensions = this.$store.getters.jsonDataSetDimension
-      op.series = []
-      for (let i = 0; i < op.dataset.dimensions.length - 1; i++) {
-        op.series.push({type: 'bar'})
+    rawOption () {
+      let {dimensions} = this.$store.getters.originLabels
+      let {measures} = this.$store.getters.biLabels
+      let dataset = this.$store.getters.originDataset
+      if (dimensions.length === 0) {
+        return []
       }
-      if (this.columnIndex !== false) {
-        // op[`${this.columnIndex.categoryDim}Axis`] = {
-        //   type: 'category',
-        // }
-        if (this.columnIndex.categoryDim === 'x') {
-          op.xAxis = {type: 'category'}
-          op.yAxis = {}
-        } else {
-          op.xAxis = {}
-          op.yAxis = {type: 'category'}
-        }
-        op.series.forEach((val, index, arr) => {
-          val.encode = {
-            x: this.xLabels[index % this.xLabels.length],
-            y: this.yLabels[index % this.yLabels.length]
-          }
-          // console.log(index, this.xLabels.lenth)
+      let ops = []
+      for (let j = 0; j < measures.length; j++) {
+        let op = deepcopy(this.initOption)
+        op.dataset.source = dataset.map((row) => {
+          return [row.slice(0, dimensions.length).toString()].concat(row.slice(dimensions.length))
         })
+        op.series.push({
+          type: 'bar',
+          name: measures[j],
+          encode: {
+            y: measures[j],
+            x: dataset[0].slice(0, dimensions.length).toString()
+          }
+        })
+        ops.push(op)
       }
-      console.log(op)
-      return op
+      return ops
+    },
+    option () {
+      return this.$store.state.dataAggregation ? this.biOption : this.rawOption
     },
     datasets () {
       return this.$store.getters.jsonTransData

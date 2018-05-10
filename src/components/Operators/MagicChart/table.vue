@@ -35,7 +35,7 @@ export default {
       if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.X.length === 0) {
         return []
       }
-      let {dimensions, measures} = this.$store.getters.biDataset
+      let {dimensions, measures} = this.$store.getters.biLabels
       if (typeof dimensions !== 'undefined' && dimensions.length > 0) {
         return dimensions.concat(measures)
       } else {
