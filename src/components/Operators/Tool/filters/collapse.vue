@@ -41,11 +41,12 @@ export default {
     copiedLabels (newVal, oldVal) {
       let _filters = []
       let [newValue, oldValue] = [newVal, oldVal]
-      console.log(newValue, oldValue)
+      // console.log(newValue, oldValue)
+      console.log('oldfilters', this.filters)
       // 将未改变的filter保留原始数据 (该部可以处理被删去的label)
       oldValue.forEach((label1) => {
         if (newValue.some(label2 => label2.name === label1.name)) {
-          console.log('find', label1)
+          // console.log('find', label1)
           _filters.push(this.filters.find((filter) => { return filter.column === label1.name }))
         }
       })
@@ -61,6 +62,8 @@ export default {
         }
       })
       this.filters = _filters
+      this.$store.commit('changeFilter', this.filters)
+      console.log('newfilters', this.filters)
     }
   },
   methods: {

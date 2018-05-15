@@ -45,6 +45,7 @@ export default {
     // this.form.fixedValues = [...this.form.values]
     console.log(this.form)
     this.form.fixedValues = [...set]
+    this.$emit('filterChange', {index: this.$props.index, value: this.form.values})
   },
   methods: {
     createItem () {

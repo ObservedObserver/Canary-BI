@@ -76,7 +76,9 @@ export default {
       }
     },
     biOption () {
-      let {dimensions, measures, lowerMixDim, dataset} = this.$store.getters.biDataset
+      let {dimensions, measures} = this.$store.getters.biLabels
+      let {lowerMixDim} = this.$store.getters.biDimension
+      let dataset = this.$store.getters.biDataset
       let ops = []
       if (measures.length < 2) {
         return []

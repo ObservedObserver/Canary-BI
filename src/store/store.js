@@ -5,9 +5,9 @@ import Vuex from 'vuex'
 // import {sum as msum} from './statistic.magic.js'
 import {sum, count, average, median} from './statistic.js'
 import {API} from '@/store/API/api.js'
-import Core from '@/../../Bi-Dataset/main.js'
+import {filterData, transLabel, transDimension, transData} from '@/../../Bi-Dataset/main.js'
 // import Core from 'bi-dataset'
-console.log('import Core', Core)
+// console.log('import Core', Core)
 // Core = window.Core
 Vue.use(Vuex)
 const StatFuncs = {
@@ -44,28 +44,20 @@ var store = new Vuex.Store({
     filterCheckedList: [],
     transFilterData: [],
     func: ['Sum', 'Mean', 'Median', 'Count'],
-    pickedFunc: 'Sum',
-    core: new Core({})
+    pickedFunc: 'Sum'
   },
   getters: {
-    originDataset (state) {
+    originDataset (state, getters) {
       let dataset = []
       if (typeof state.globalData !== 'undefined' && state.globalData.length > 0) {
         // dataset.push(Object.keys(state.globalData[0]))
         if (state.globalDataLabels.data.length === 0) {
           return dataset
         }
-        let core = state.core
-        // core.xlabels = state.globalDataLabels.X
-        // core.ylabels = state.globalDataLabels.Y
-        core.xlabels = state.globalDataLabels.data
-        core.ylabels = []
-        core.rawData = state.globalData
-        core.transLabel()
-        let _keys = core.dimensions.concat(core.measures)
+        let {dimensions, measures} = getters.originLabels
+        let _keys = dimensions.concat(measures)
         dataset.push(_keys)
         state.globalData.forEach((item, index) => {
-          // dataset.push(Object.values(item))
           dataset.push([])
           _keys.forEach((key) => {
             dataset[index + 1].push(item[key])
@@ -75,95 +67,41 @@ var store = new Vuex.Store({
       return dataset
     },
     originLabels (state) {
-      let core = state.core
-      core.xlabels = state.globalDataLabels.data
-      core.rawData = state.globalData
-      core.transLabel()
-      return {
-        dimensions: core.dimensions,
-        measures: core.measures
-      }
+      let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.data})
+      return {dimensions, measures}
     },
     biLabels (state) {
-      // biDataset issue 不应设计为内部修改
-      let core = state.core
-      core.xlabels = state.globalDataLabels.X
-      core.ylabels = state.globalDataLabels.Y
-      core.rawData = state.globalData
-      core.transLabel()
-      // 请不要为了语法糖的使用而舍弃优秀的设计思想
+      let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.X, ylabels: state.globalDataLabels.Y})
+      return {dimensions, measures}
+    },
+    viewData (state) {
+      let viewData = []
+      viewData = filterData({filters: state.filters, rawData: state.globalData})
+      return viewData
+    },
+    biDimension (state, getters) {
+      let rawData = getters.viewData
+      let {dimensions} = getters.biLabels
+      let {mixDim, lowerMixDim} = transDimension({dimensions, rawData})
       return {
-        dimensions: core.dimensions,
-        measures: core.measures
+        mixDim,
+        lowerMixDim
       }
     },
-    biDimension (state) {
-      let core = state.core
-      core.xlabels = state.globalDataLabels.X
-      core.ylabels = state.globalDataLabels.Y
-      core.rawData = state.globalData
-      let filters = state.filters
-      core.transLabel()
-      if (core.dimensions.length === 0) {
-        return {
-          dimensions: [],
-          measures: [],
-          mixDim: [],
-          lowerMixDim: []
-        }
-      }
-      core.filterData({filters})
-      core.transDimension()
-      // 重复运算？安全运算？
-      //
-      // 是否需要安全条件
-      return {
-        dimensions: core.dimensions,
-        measures: core.measures,
-        mixDim: core.mixDim,
-        lowerMixDim: core.lowerMixDim
-      }
-    },
-    biDataset (state) {
-      let core = state.core
-      core.xlabels = state.globalDataLabels.X
-      core.ylabels = state.globalDataLabels.Y
-      core.rawData = state.globalData
-
-      if (((core.xlabels.length + core.ylabels.length > 0) && core.rawData.length > 0)) {
-        let filters = state.filters
-        core.filterData({filters})
-        core.transLabel()
-        if (core.dimensions.length === 0) {
-          // 空数组的使用是因为bidataset的异常处理能力较差
-          // 该问题应尽快在bidataset中修复而非这里
-          return {
-            dataset: [],
-            dimensions: [],
-            measures: [],
-            stat: [],
-            mixDim: [],
-            lowerMixDim: []
-          }
-        }
-        core.transDimension()
-        console.log('core', core)
+    biDataset (state, getters) {
+      let {dimensions, measures} = getters.biLabels
+      if (((dimensions.length + measures.length > 0) && state.globalData.length > 0)) {
+        let rawData = getters.viewData
+        let {mixDim} = getters.biDimension
         // let filters = [{
         //   column: 'value',
         //   type: 'equal',
         //   value: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
         // }]
-        core.transData({statFunc: StatFuncs[state.pickedFunc]})
-        return {
-          dataset: core.data,
-          dimensions: core.dimensions,
-          measures: core.measures,
-          stat: core.stat,
-          mixDim: core.mixDim,
-          lowerMixDim: core.lowerMixDim
-        }
+        console.log('today', {rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
+        return transData({rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
       } else {
-        return {}
+        return []
       }
     }
   },

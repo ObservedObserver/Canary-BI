@@ -23,7 +23,8 @@ export default {
       if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.X.length === 0) {
         return [[]]
       }
-      let {dataset, dimensions} = this.$store.getters.biDataset
+      let dataset = this.$store.getters.biDataset
+      let {dimensions} = this.$store.getters.biLabels
       if (typeof dimensions !== 'undefined' && typeof dataset !== 'undefined' &&
         dimensions.length > 0 && dataset.length > 0) {
         return dataset.slice(1)

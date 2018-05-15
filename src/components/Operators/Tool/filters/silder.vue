@@ -41,9 +41,12 @@ export default {
       val: [...this.$props.value]
     }
   },
+  mounted () {
+    this.$emit('filterChange', {value: this.val, index: this.$props.index})
+  },
   methods: {
     submitChange () {
-      this.$emit('filterChange', {value: this.val, index: this.index})
+      this.$emit('filterChange', {value: this.val, index: this.$props.index})
     },
     cancelChange () {
       this.val = [...this.$props.value]
