@@ -21,6 +21,9 @@ export default {
     },
     column: {
       type: String
+    },
+    values: {
+      type: Array
     }
   },
   data () {
@@ -34,18 +37,17 @@ export default {
   },
   mounted () {
     // if (this.$props.column)
-    let dataset = this.$store.state.globalData
-    let column = this.$props.column
-    let set = new Set()
-    dataset.forEach((val) => {
-      set.add(val[column])
-    })
-
-    this.form.values = [...set]
-    // this.form.fixedValues = [...this.form.values]
-    console.log(this.form)
-    this.form.fixedValues = [...set]
-    this.$emit('filterChange', {index: this.$props.index, value: this.form.values})
+    // let dataset = this.$store.state.globalData
+    // let column = this.$props.column
+    // let set = new Set()
+    // dataset.forEach((val) => {
+    //   set.add(val[column])
+    // })
+    let valueSet = this.$props.values
+    this.form.values = [...valueSet]
+    // console.log(this.form)
+    this.form.fixedValues = [...valueSet]
+    // this.$emit('filterChange', {index: this.$props.index, value: this.form.values})
   },
   methods: {
     createItem () {

@@ -99,7 +99,7 @@ export default {
           name: measures[j],
           encode: {
             y: measures[j],
-            x: dataset[0].slice(0, dimensions.length).toString()
+            x: dataset[0].slice(0, dimensions.length)
           }
         })
         ops.push(op)

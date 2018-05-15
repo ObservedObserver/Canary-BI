@@ -5,7 +5,7 @@
     :title="filter.column" :name="index">
       <div>
         <filter-silder v-if="filter.type === 'range'" :range="filter.range" :value="filter.value" :index="index" @filterChange="changeFilter" />
-        <filterForm v-if="filter.type === 'equal'" :index="index" :column="filter.column" @filterChange="changeFilter" />
+        <filterForm v-if="filter.type === 'equal'" :index="index" :column="filter.column" :values="filter.range" @filterChange="changeFilter" />
       </div>
     </el-collapse-item>
   </el-collapse>
@@ -53,11 +53,12 @@ export default {
       // 新建新添加的label
       newValue.forEach((label2) => {
         if (oldValue.length === 0 || oldValue.every(label1 => label2.name !== label1.name)) {
+          let values = [...this.$store.state.valueSet[label2.name]]
           _filters.push({
             column: label2.name,
             type: label2.type === 'string' ? 'equal' : 'range',
-            range: label2.type === 'string' ? [] : [0, 100],
-            value: label2.type === 'string' ? [] : [0, 100]
+            range: label2.type === 'string' ? values : [Math.min(...values), Math.max(...values)],
+            value: label2.type === 'string' ? values : [Math.min(...values), Math.max(...values)]
           })
         }
       })
