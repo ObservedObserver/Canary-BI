@@ -7,21 +7,41 @@ app = Flask(__name__)
 
 @app.route('/api/data', methods = ['GET', 'POST'])
 def main_data():
-    DATA_LENGTH = 100
+    DATA_LENGTH = 50
     DATA_DIMS = ['X', 'Y', 'value', 'score']
     NAMES = ['Alice', 'Bob', 'Carl', 'Duke', 'Elsion']
     CITIES = ['Beijing', 'Shanghai', 'Guangzhou']
     JOBS = ['Worker', 'Famer', 'Doctor']
     data = []
     # for year in range ()
-    for i in range(DATA_LENGTH):
-        tmp = {}
-        for key in DATA_DIMS:
-            tmp[key] = int(random.random() * 100)
-        tmp['name'] = NAMES[int(random.random() * 100) % len(NAMES)]
-        tmp['city'] = CITIES[int(random.random() * 100) % len(CITIES)]
-        tmp['job'] = JOBS[int(random.random() * 100) % len(JOBS)]
-        data.append(tmp)
+    YEAR = [str(i) for i in range(2015, 2018)]
+    MONTH = [str(i) for i in range(1, 6)]
+    DAY = [str(i) for i in range(1, 10)]
+    for y in YEAR:
+        for m in MONTH:
+            for d in DAY:
+                # for i in range(DATA_LENGTH):
+                tmp = {}
+                for key in DATA_DIMS:
+                    tmp[key] = int(random.random() * 100)
+                tmp['name'] = NAMES[int(random.random() * 100) % len(NAMES)]
+                tmp['city'] = CITIES[int(random.random() * 100) % len(CITIES)]
+                tmp['job'] = JOBS[int(random.random() * 100) % len(JOBS)]
+                tmp['year'] = y
+                tmp['month'] = m
+                tmp['day'] = d
+                data.append(tmp)
+    # for i in range(DATA_LENGTH):
+    #     tmp = {}
+    #     for key in DATA_DIMS:
+    #         tmp[key] = int(random.random() * 100)
+    #     tmp['name'] = NAMES[int(random.random() * 100) % len(NAMES)]
+    #     tmp['city'] = CITIES[int(random.random() * 100) % len(CITIES)]
+    #     tmp['job'] = JOBS[int(random.random() * 100) % len(JOBS)]
+    #     tmp['year'] = str(random.randint(2012, 2017))
+    #     tmp['month'] = str(random.randint(1, 12))
+    #     tmp['day'] = str(random.randint(1, 31))
+    #     data.append(tmp)
 
     response = make_response(json.dumps(data))
     # response = make_response(json.dumps(data))

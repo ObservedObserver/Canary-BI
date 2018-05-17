@@ -5,21 +5,7 @@
         <drag-area class="indata" area-name="data"></drag-area>
       </el-collapse-item>
     </el-collapse>
-    <!-- <div>
-      <drag-area class="ui basic segment indata" area-name="data"></drag-area>
-    </div> -->
   </el-card>
-  <!-- <div class="ui segment">
-
-    <h3 class="ui header">{{name}}</h3>
-    <i class="ui large angle link icon" id="data-hider"
-    :class="hider[hiderStatus]"
-    @click="changeHiderStatus"></i>
-    <div v-if="!hiderStatus">
-      <div class="ui divider"></div>
-      <drag-area class="ui basic segment indata" area-name="data"></drag-area>
-    </div>
-  </div> -->
 </template>
 
 <script>

@@ -16,18 +16,12 @@ var store = new Vuex.Store({
     globalData: [],
     globalDataLabels: {
       filter: [],
-      page: [],
       data: [],
       X: [],
       Y: [],
       dimension: []
     },
     currentLabel: {},
-    dimensionLabels: [
-      {name: '形状', style: ['circle', 'thin']},
-      {name: '大小', style: ['square']},
-      {name: '颜色', style: ['circle', 'green']}
-    ],
     dataAggregation: true,
     filters: [],
     func: ['Sum', 'Mean', 'Median', 'Count'],

@@ -2,7 +2,7 @@
 
 A Web BI Application(Tableau like).
 
-Webpack + Vue + Vuex | vue-router + echart + vue-echarts + semnatic-ui
+Webpack + Vue + Vuex + echart4+ + vue-echarts + element-ui
 
 > A Vue.js project
 
@@ -20,113 +20,100 @@ npm run build
 
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-
 ## 结构说明
 
 ```bash
 .
-├── App.vue
-├── assets
-│   └── logo.png
-├── components
+├── Menu
+│   └── menu.vue (左侧菜单栏)
+├── Operators
+│   ├── MagicChart
+│   │   ├── barchart.vue (柱状图)
+│   │   ├── linechart.vue (折线图插件)
+│   │   ├── piechart.vue (饼图插件)
+│   │   ├── scatter.vue (散点图插件)
+│   │   └── table.vue (表格)
+│   ├── Tool
+│   │   ├── filters
+│   │   │   ├── collapse.vue
+│   │   │   ├── form.vue
+│   │   │   ├── index.vue
+│   │   │   └── silder.vue
+│   │   ├── range.vue
+│   │   └── statistics.vue
+│   ├── data.vue (放置数据标签的模块)
+│   ├── dimension.vue
+│   ├── dragarea.vue (所有存放可拖拽标签的)
 │   ├── main.vue
-│   ├── Menu
-│   │   └── menu.vue
-│   └── Operators
-│       ├── Charts
-│       │   ├── barchart.vue
-│       │   ├── linechart.vue
-│       │   ├── piechart.vue
-│       │   ├── Scatter
-│       │   │   ├── map.js
-│       │   │   ├── mapScatter.vue
-│       │   │   ├── scatter.config.js
-│       │   │   └── scatter.vue
-│       │   └── table.vue
-│       ├── data.vue
-│       ├── dimension.vue
-│       ├── dragarea.vue
-│       ├── filters.vue
-│       ├── main.vue
-│       ├── pages.vue
-│       ├── Tool
-│       │   ├── range.vue
-│       │   └── statistics.vue
-│       ├── vizboard.vue
-│       └── xymenu.vue
-├── main.js
-├── router
-│   └── index.js
-└── store
-    ├── globalData.json
-    ├── median.js
-    ├── statistic.func.js
-    └── store.js
+│   ├── vizboard.vue (存放数据可视化图表的面板)
+│   └── xymenu.vue (存放xAxis与yAxis中所有的数据标签)
+└── main.vue
 ```
 
 
 ### 组件说明
-`components/main.vue`为主组件（根组件），由主组件引用其它组件构成整个应用。
-主组件直接引用的组件为
-+ `./filters.vue` 为数据筛选器组件，作用是为当前数据增设筛选条件，只将当前满足筛选条件的数据展示出来。筛选器目前支持`String`类型与`Number`类型的筛选，`String`类型筛选时，应用会自动统计该字段所有的 **unique value** 并制作一个选项列表，使用户可以选取自己所需的值作为过滤条件。`Number`类型筛选时，会给出一个区间设置器，使得用户可以选取自己所需的数值区间作为过滤条件。
-  + `./dragarea.vue` 可拖拽区域组件
-  + `./Tool/range.vue` 数值区间组件
-+ `./pages.vue` 暂未开发该组件，预计借助该组件可以实现数据可视化的动画播放功能。
-  + `./Tool/range.vue` 数值区间组件
-+ `./data.vue` 数据模块组件，展示当前系统中导入的数据，提供数据标签的拖拽。
-  + `./Tool/range.vue` 数值区间组件
-+ `./xymenu.vue` X-Y轴组件，数据必须拉扯到该区域中才会被展示到可视化面板上，相当于需要通过将标签拖入定义对应的横纵轴为何。
-  + `./Tool/range.vue` 数值区间组件
-+ `./vizboard.vue` 可视化面板组件，会生成对应的可视化结果。同时该组件还包含可视化形式的切换菜单。
-  + `./Charts/table.vue` 表格组件，用于展示原始数据
-  + `./Charts/barchart.vue` 柱状图组件，一个维度必须为`String`类型
-  + `./Charts/linechart.vue` 折线图组件，一个维度必须为`String`类型
-  + `./Charts/piechart.vue` 饼图组件，一个维度必须为`String`类型
-  + `./Charts/Scatter/scatter.vue` 散点图组件，两个维度必须均为`Number`类型
-  + `./Charts/Scatter/mapScatter.vue` 地图散点图组件，两个维度必须均为`Number`类型
-+ `./dimension.vue` 维度组件，目前该组件仅对散点图类型的可视化生效。相当于增设数据的维度，并将该维度用大小/颜色展示出来。
-+ `./Tool/statistics.vue` 统计组件，用于提供数据的计数规则，如"总和", "平均值", "中位数"等。
 
 ### 数据管理
 #### state
 ```js
 state: {
-  globalData: globalData,
-  localData: [],
-  filterData: [],
-  globalKeys: [],
-  globalDataLabels: {
-    filter: [],
-    page: [],
+  globalData: [], // 全局的源数据
+  globalDataLabels: { // 全局数据标签
+    filter: [], // 可与filters合并
+    page: [], // 未使用
     data: [],
     X: [],
     Y: [],
-    dimension: []
+    dimension: [] // 未使用
   },
-  constDataLabels: [],
-  currentLabel: {},
-  dimensionLabels: [
+  currentLabel: {}, // 当前拖拽/操作的标签
+  dimensionLabels: [ // 未使用
     {name: '形状', style: ['circle', 'thin']},
     {name: '大小', style: ['square']},
     {name: '颜色', style: ['circle', 'green']}
   ],
-  filterStatistics: [],
-  filterCheckedList: [],
-  transFilterData: [],
-  func: ['Sum', 'Mean', 'Median', 'Count'],
-  pickedFunc: 'Sum'
-}
+  dataAggregation: true, // 数据聚合模式
+  filters: [], // 过滤器
+  func: ['Sum', 'Mean', 'Median', 'Count'], // 统计函数
+  pickedFunc: 'Sum', // 当前使用的统计函数
+  valueSet: {} // 所有维度与度量的所有值的集合
+},
 ```
-+ `globalData` 为全局数据，即导入的可用于做数据可视化的所有数据。
-+ `localData` 旧有的组件调用数据机制，仅供表格组件展示使用。功能是根据指定的XY轴数据从globalData中抽取所需的数据。
-+ `filterData` 旧有的组件调用数据机制，仅供表格组件展示使用。功能是根据filter中指定的过滤条件从localData？中抽取所需的数据。
-+ `globalKeys` 暂不发挥作用。
-+ `globalDataLabels` 全局的标签管理器。存储各个可被拖拽区域的标签显示。这里会对data部分做特殊的照顾，以确保data部分的label被拖拽走后不会消失。
-+ `constDataLabels` 暂不发挥作用。
-+ `currentLabel` 表示当前被拖拽标签的信息，暂不发挥作用。
-+ `dimensionLabels` dimension模块的可选维度类型，不会被改变。
-+ `filterStatistics` 过滤统计器。若存在`String`类型的filter，则会进行unique value的统计。？？
+### getters
++ `originDataset` 将源数据转换为二维数组格式(类csv)
++ `originLabels` 将所有的data标签进行分类(分为维度与度量)
++ `biLabels` 将用户选择的(位于X标签区域与Y标签区域中)标签进行分类
++ `viewData` 经过过滤后的视图数据
++ `biDimension` 获取所选所有维度所有取值的排列组合矩阵
++ `biDataset`获取最终用于图表生成的矩阵
+
+### 主数据结构
+```js
+// dimensions
+['name', 'city']
+// measures
+['value']
+// biDiemnsion
+[
+  ['name', 'city'],
+  ['Alice', 'Shanghai'],
+  ['Alice', 'Beijing'],
+  ['Alice', 'Hangzhou'],
+  ['Bob', 'Shanghai'],
+  ['Bob', 'Beijing'],
+  ['Bob', 'Hangzhou']
+]
+// biDataset
+[
+  ['name', 'city', 'value'],
+  ['Alice', 'Shanghai', 40],
+  ['Alice', 'Beijing', 28],
+  ['Alice', 'Hangzhou', 69],
+  ['Bob', 'Shanghai', 12],
+  ['Bob', 'Beijing', 20],
+  ['Bob', 'Hangzhou', 60]
+]
+```
 
 ## Record
 

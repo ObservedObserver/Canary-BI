@@ -17,7 +17,7 @@
 <script>
 import magicTable from './MagicChart/table.vue'
 import statistics from './Tool/statistics.vue'
-import magicBar from './MagicChart/barchart.vue'
+import magicBar from './MagicChart/barchart/index.vue'
 import magicLine from './MagicChart/linechart.vue'
 import magicPie from './MagicChart/piechart.vue'
 import magicScatter from './MagicChart/scatter.vue'
