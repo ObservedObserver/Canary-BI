@@ -85,6 +85,14 @@ var store = new Vuex.Store({
       } else {
         return []
       }
+    },
+    valueSet (state, getters) {
+      let {dimensions, measures} = getters.biLabels
+      let valueSet = dimensionValueSet({
+        rawData: getters.viewData,
+        dimensions: dimensions.concat(measures)
+      })
+      return valueSet
     }
   },
   mutations: {

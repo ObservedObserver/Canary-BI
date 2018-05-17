@@ -1,16 +1,14 @@
 <template lang="html">
   <div class="info-box">
     {{node.text}}
-    <chart v-if="node.next.length === 0" :options="node.option" />
-    <bar-chart v-if="node.next.length > 0" v-for="son in node.next" :key="son.text" :node="son" />
+    <chart class="bar-chart" v-if="node.next.length === 0" :options="node.option" />
+    <super-chart v-if="node.next.length > 0" v-for="son in node.next" :key="son.text" :node="son" />
   </div>
 </template>
 
 <script>
-import deepcopy from 'deepcopy'
-
 export default {
-  name: 'bar-chart',
+  name: 'super-chart',
   props: ['node'],
   data () {
     return {

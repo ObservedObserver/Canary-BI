@@ -5,10 +5,13 @@
     </el-menu>
     <div class="charts-board">
       <magic-table v-if="currentChart === '0'" />
-      <magic-bar v-if="currentChart === '1'" />
-      <magic-line v-if="currentChart === '2'" />
+      <magic-chart type="bar" v-if="currentChart === '1'" />
+      <magic-chart type="line" v-if="currentChart === '2'" />
+      <magic-chart type="pie" v-if="currentChart === '3'" />
+      <magic-chart type="scatter" v-if="currentChart === '4'" />
+      <!-- <magic-line v-if="currentChart === '2'" />
       <magic-pie v-if="currentChart === '3'" />
-      <magic-scatter v-if="currentChart === '4'" />
+      <magic-scatter v-if="currentChart === '4'" /> -->
     </div>
     <!-- <statistics/> -->
   </div>
@@ -17,7 +20,7 @@
 <script>
 import magicTable from './MagicChart/table.vue'
 import statistics from './Tool/statistics.vue'
-import magicBar from './MagicChart/barchart/index.vue'
+import magicChart from './MagicChart/superchart/index.vue'
 import magicLine from './MagicChart/linechart.vue'
 import magicPie from './MagicChart/piechart.vue'
 import magicScatter from './MagicChart/scatter.vue'
@@ -58,7 +61,7 @@ export default {
   components: {
     // betterTable,
     statistics,
-    magicBar,
+    magicChart,
     magicLine,
     magicPie,
     magicScatter,
