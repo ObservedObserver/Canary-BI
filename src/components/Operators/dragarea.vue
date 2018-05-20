@@ -40,7 +40,6 @@ export default {
     drag (event, i) {
       console.log('dargstart', i)
       this.$store.commit('drag', {
-        event: event,
         component: this.$props.areaName,
         label: i
       })
@@ -50,7 +49,7 @@ export default {
     },
     drop (event) {
       this.$store.commit('drop', {
-        event: event,
+        ev: event,
         component: this.$props.areaName
       })
     }

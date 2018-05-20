@@ -96,27 +96,20 @@ var store = new Vuex.Store({
     }
   },
   mutations: {
-    drag (state, paras) {
-      console.log('drag', paras)
-      state.currentLabel = state.globalDataLabels[paras.component][paras.label]
-      if (paras.component !== 'data') {
-        state.globalDataLabels[paras.component].splice(paras.label, 1)
+    drag (state, {component, label}) {
+      state.currentLabel = state.globalDataLabels[component][label]
+      if (component !== 'data') {
+        state.globalDataLabels[component].splice(label, 1)
       }
     },
-    drop (state, paras) {
-      paras.event.preventDefault()
-      if (paras.component !== 'data') {
-        state.globalDataLabels[paras.component].push({
+    drop (state, {ev, component}) {
+      ev.preventDefault()
+      if (component !== 'data') {
+        state.globalDataLabels[component].push({
           name: state.currentLabel.name,
           type: state.currentLabel.type
         })
-        // deepcopy
         state.currentLabel = {}
-        if (paras.component === 'dimension') {
-          state.globalDataLabels.dimension[state.globalDataLabels.dimension.length - 1].label = state.dimensionLabels[paras.index]
-        } else {
-          state.globalDataLabels[paras.component][state.globalDataLabels[paras.component].length - 1].label = undefined
-        }
       }
     },
     changeFilter (state, params) {
@@ -136,8 +129,6 @@ var store = new Vuex.Store({
       API.getMainData((res) => {
         state.globalData = res
         if (state.globalData.length !== 0) {
-          // console.log(state.globalData)
-          // let _keys = state.globalData[0].keys()
           let _keys = Object.keys(state.globalData[0])
           for (let i = 0; i < _keys.length; i++) {
             let item = {
@@ -145,8 +136,6 @@ var store = new Vuex.Store({
               type: typeof state.globalData[0][_keys[i]]
             }
             state.globalDataLabels.data.push(item)
-            // state.constDataLabels.push(item)
-            // state.globalKeys.push(item)
           }
         }
         let {dimensions, measures} = context.getters.originLabels

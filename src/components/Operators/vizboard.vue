@@ -5,13 +5,11 @@
     </el-menu>
     <div class="charts-board">
       <magic-table v-if="currentChart === '0'" />
-      <magic-chart type="bar" v-if="currentChart === '1'" />
+      <!-- <magic-chart type="bar" v-if="currentChart === '1'" />
       <magic-chart type="line" v-if="currentChart === '2'" />
       <magic-chart type="pie" v-if="currentChart === '3'" />
-      <magic-chart type="scatter" v-if="currentChart === '4'" />
-      <!-- <magic-line v-if="currentChart === '2'" />
-      <magic-pie v-if="currentChart === '3'" />
-      <magic-scatter v-if="currentChart === '4'" /> -->
+      <magic-chart type="scatter" v-if="currentChart === '4'" /> -->
+      <magic-chart v-if="currentChart !== '0'" :type="menu[currentChart].name" />
     </div>
     <!-- <statistics/> -->
   </div>
