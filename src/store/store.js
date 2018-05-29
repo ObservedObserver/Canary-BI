@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {sum, count, average, median} from './statistic.js'
 import {API} from '@/store/API/api.js'
-import {filterData, transLabel, transDimension, transData, dimensionValueSet} from '@/../../Bi-Dataset/main.js'
+import {filterData, transLabel, transDimension, transData, dimensionValueSet, dataTree} from 'bi-dataset/main.js'
 // import Core from 'bi-dataset'
 Vue.use(Vuex)
 const StatFuncs = {
@@ -64,28 +64,38 @@ var store = new Vuex.Store({
     biDimension (state, getters) {
       let rawData = getters.viewData
       let {dimensions} = getters.biLabels
-      let {mixDim, lowerMixDim} = transDimension({dimensions, rawData})
+      console.log('current labels', dimensions)
+      let {mixDim} = transDimension({dimensions, rawData})
       return {
-        mixDim,
-        lowerMixDim
+        mixDim
       }
     },
     biDataset (state, getters) {
       let {dimensions, measures} = getters.biLabels
       if (((dimensions.length + measures.length > 0) && state.globalData.length > 0)) {
         let rawData = getters.viewData
+        console.log('before dimension')
         let {mixDim} = getters.biDimension
+        console.log('end dimension')
         // let filters = [{
         //   column: 'value',
         //   type: 'equal',
         //   value: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
         // }]
-        console.log('today', {rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
-        return transData({rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
+        console.log('today', mixDim)
+        let result = transData({rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
+        console.log('got data')
+        return result
       } else {
         return []
       }
     },
+    // biTree (state, getters) {
+    //   let {dimensions, measures} = getters.biLabels
+    //   // if (dimension.length > 0) {
+    //   //
+    //   // }
+    // },
     valueSet (state, getters) {
       let {dimensions, measures} = getters.biLabels
       let valueSet = dimensionValueSet({
@@ -128,6 +138,9 @@ var store = new Vuex.Store({
       var state = context.state
       API.getMainData((res) => {
         state.globalData = res
+        state.globalData.forEach((item, index, arr) => {
+          arr[index]['_bi_count'] = 1
+        })
         if (state.globalData.length !== 0) {
           let _keys = Object.keys(state.globalData[0])
           for (let i = 0; i < _keys.length; i++) {

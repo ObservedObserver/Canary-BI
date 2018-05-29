@@ -2,6 +2,7 @@
   <el-card class="box-card">
     <el-collapse>
       <el-collapse-item :title="name">
+        Total Rows: {{totalRowNumber}}
         <drag-area class="indata" area-name="data"></drag-area>
       </el-collapse-item>
     </el-collapse>
@@ -16,6 +17,11 @@ export default {
   data () {
     return {
       name: 'data'
+    }
+  },
+  computed: {
+    totalRowNumber () {
+      return this.$store.state.globalData.length
     }
   },
   components: {

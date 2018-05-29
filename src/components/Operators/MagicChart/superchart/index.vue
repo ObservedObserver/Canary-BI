@@ -67,7 +67,8 @@ var getOption = ({dimensions, measures, start, end, initOption, dataset, self}) 
   let op = deepcopy(initOption)
   op.dataset.source = ds
   op.title.text = ''
-  op.title.text = (ds[0].slice(0, dimensions.length - 1)).toString() + '=' + (ds[1].slice(0, dimensions.length - 1)).toString()
+  // (ds[0].slice(0, dimensions.length - 1)).toString() + '=' + (ds[1].slice(0, dimensions.length - 1)).toString() +
+  op.title.text = ds[0].slice(dimensions.length - 1, dimensions.length)
   if (self.$props.type === 'bar') {
     for (let j = 0; j < measures.length || 0; j++) {
       op.series.push({

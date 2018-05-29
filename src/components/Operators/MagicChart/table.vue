@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+    <h5>TOTAL ROW: {{tableData.length}}</h5>
     <table class="ui-table">
       <thead>
         <tr>
@@ -20,20 +21,27 @@ export default {
   name: 'magic-table',
   computed: {
     tableData () {
-      if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.X.length === 0) {
+      if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.Y.length === 0) {
         return [[]]
       }
       let dataset = this.$store.getters.biDataset
       let {dimensions} = this.$store.getters.biLabels
+      // console.log('start slice')
       if (typeof dimensions !== 'undefined' && typeof dataset !== 'undefined' &&
         dimensions.length > 0 && dataset.length > 0) {
-        return dataset.slice(1)
+        let result = dataset.slice(1).map((row) => {
+          return row.map((cell) => {
+            return typeof cell === 'undefined' ? 'undefined' : cell
+          })
+        })
+        // console.log('result for dataTable', result.slice(0, 10))
+        return result
       } else {
         return [[]]
       }
     },
     tableHeader () {
-      if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.X.length === 0) {
+      if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.Y.length === 0) {
         return []
       }
       let {dimensions, measures} = this.$store.getters.biLabels
