@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <h5>TOTAL ROW: {{tableData.length}}</h5>
+    <h5>TOTAL ROW: {{tableData.length}} / {{dataLength}}</h5>
     <table class="ui-table">
       <thead>
         <tr>
@@ -20,22 +20,29 @@
 export default {
   name: 'magic-table',
   computed: {
+    dataLength () {
+      let dataset = this.$store.getters.biTree
+      // let num = dataset.map(row => row.length)
+      // console.log(num)
+      return dataset.length
+    },
     tableData () {
       if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.Y.length === 0) {
         return [[]]
       }
-      let dataset = this.$store.getters.biDataset
+      // let dataset = this.$store.getters.biDataset
+      let dataset = this.$store.getters.biTree
       let {dimensions} = this.$store.getters.biLabels
       // console.log('start slice')
       if (typeof dimensions !== 'undefined' && typeof dataset !== 'undefined' &&
         dimensions.length > 0 && dataset.length > 0) {
-        let result = dataset.slice(1).map((row) => {
+        let result = dataset.map((row) => {
           return row.map((cell) => {
             return typeof cell === 'undefined' ? 'undefined' : cell
           })
         })
         // console.log('result for dataTable', result.slice(0, 10))
-        return result
+        return result.slice(0, Math.min(result.length, 1000))
       } else {
         return [[]]
       }
@@ -46,7 +53,8 @@ export default {
       }
       let {dimensions, measures} = this.$store.getters.biLabels
       if (typeof dimensions !== 'undefined' && dimensions.length > 0) {
-        return dimensions.concat(measures)
+        // return dimensions.concat(measures)
+        return dimensions.concat('Count')
       } else {
         return []
       }

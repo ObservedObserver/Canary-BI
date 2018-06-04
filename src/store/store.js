@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {sum, count, average, median} from './statistic.js'
 import {API} from '@/store/API/api.js'
-import {filterData, transLabel, transDimension, transData, dimensionValueSet, dataTree} from 'bi-dataset/main.js'
+import {filterData, transLabel, transDimension, transData, dimensionValueSet, dataTree, tree2Matrix} from '@/../../Bi-Dataset/main.js'
 // import Core from 'bi-dataset'
 Vue.use(Vuex)
 const StatFuncs = {
@@ -90,12 +90,16 @@ var store = new Vuex.Store({
         return []
       }
     },
-    // biTree (state, getters) {
-    //   let {dimensions, measures} = getters.biLabels
-    //   // if (dimension.length > 0) {
-    //   //
-    //   // }
-    // },
+    biTree (state, getters) {
+      let {dimensions, measures} = getters.biLabels
+      // 检查度量
+      // 没有度量则默认为计数
+      // console.log('import check', dataTree, tree2Matrix)
+      let tree = dataTree({rawData: getters.viewData, dimensions})
+      let ans = tree2Matrix({tree})
+      // ans.unshift(dimensions.concats)
+      return ans
+    },
     valueSet (state, getters) {
       let {dimensions, measures} = getters.biLabels
       let valueSet = dimensionValueSet({
