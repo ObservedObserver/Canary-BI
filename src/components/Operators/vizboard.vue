@@ -9,7 +9,7 @@
       <magic-chart type="line" v-if="currentChart === '2'" />
       <magic-chart type="pie" v-if="currentChart === '3'" />
       <magic-chart type="scatter" v-if="currentChart === '4'" /> -->
-      <magic-chart v-if="currentChart !== '0'" :type="menu[currentChart].name" />
+      <!-- <magic-chart v-if="currentChart !== '0'" :type="menu[currentChart].name" /> -->
     </div>
     <!-- <statistics/> -->
   </div>

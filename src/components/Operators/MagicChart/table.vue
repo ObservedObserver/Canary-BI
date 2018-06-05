@@ -1,6 +1,13 @@
 <template lang="html">
   <div>
-    <h5>TOTAL ROW: {{tableData.length}} / {{dataLength}}</h5>
+    <h5>TOTAL ROW: {{page + 1}} + {{tableData.length}} / {{dataLength}}</h5>
+    <el-button-group>
+      <el-button @click="page --"
+      type="primary"
+      icon="el-icon-arrow-left">上一页</el-button>
+      <el-button @click="page ++"
+      type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+    </el-button-group>
     <table class="ui-table">
       <thead>
         <tr>
@@ -17,8 +24,23 @@
 </template>
 
 <script>
+const PAGE_ROWS = 200
 export default {
   name: 'magic-table',
+  data () {
+    return {
+      page: 0
+    }
+  },
+  methods: {
+    addPage () {
+      let maxPage = parseInt(this.dataLength / PAGE_ROWS)
+      this.page = Math.min(this.page + 1, maxPage)
+    },
+    minusPage () {
+      this.page = Math.max(this.page - 1, 0)
+    }
+  },
   computed: {
     dataLength () {
       let dataset = this.$store.getters.biTree
@@ -42,7 +64,7 @@ export default {
           })
         })
         // console.log('result for dataTable', result.slice(0, 10))
-        return result.slice(0, Math.min(result.length, 1000))
+        return result.slice(this.page * PAGE_ROWS, (this.page + 1) * PAGE_ROWS)
       } else {
         return [[]]
       }
@@ -54,7 +76,7 @@ export default {
       let {dimensions, measures} = this.$store.getters.biLabels
       if (typeof dimensions !== 'undefined' && dimensions.length > 0) {
         // return dimensions.concat(measures)
-        return dimensions.concat('Count')
+        return dimensions.concat(measures)
       } else {
         return []
       }

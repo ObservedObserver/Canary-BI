@@ -61,42 +61,45 @@ var store = new Vuex.Store({
       viewData = filterData({filters: state.filters, rawData: state.globalData})
       return viewData
     },
-    biDimension (state, getters) {
-      let rawData = getters.viewData
-      let {dimensions} = getters.biLabels
-      console.log('current labels', dimensions)
-      let {mixDim} = transDimension({dimensions, rawData})
-      return {
-        mixDim
-      }
-    },
-    biDataset (state, getters) {
-      let {dimensions, measures} = getters.biLabels
-      if (((dimensions.length + measures.length > 0) && state.globalData.length > 0)) {
-        let rawData = getters.viewData
-        console.log('before dimension')
-        let {mixDim} = getters.biDimension
-        console.log('end dimension')
-        // let filters = [{
-        //   column: 'value',
-        //   type: 'equal',
-        //   value: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
-        // }]
-        console.log('today', mixDim)
-        let result = transData({rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
-        console.log('got data')
-        return result
-      } else {
-        return []
-      }
-    },
+    // biDimension (state, getters) {
+    //   let rawData = getters.viewData
+    //   let {dimensions} = getters.biLabels
+    //   console.log('current labels', dimensions)
+    //   let {mixDim} = transDimension({dimensions, rawData})
+    //   return {
+    //     mixDim
+    //   }
+    // },
+    // biDataset (state, getters) {
+    //   let {dimensions, measures} = getters.biLabels
+    //   if (((dimensions.length + measures.length > 0) && state.globalData.length > 0)) {
+    //     let rawData = getters.viewData
+    //     console.log('before dimension')
+    //     let {mixDim} = getters.biDimension
+    //     console.log('end dimension')
+    //     // let filters = [{
+    //     //   column: 'value',
+    //     //   type: 'equal',
+    //     //   value: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
+    //     // }]
+    //     console.log('today', mixDim)
+    //     let result = transData({rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
+    //     console.log('got data')
+    //     return result
+    //   } else {
+    //     return []
+    //   }
+    // },
     biTree (state, getters) {
       let {dimensions, measures} = getters.biLabels
       // 检查度量
       // 没有度量则默认为计数
       // console.log('import check', dataTree, tree2Matrix)
-      let tree = dataTree({rawData: getters.viewData, dimensions})
+      console.log('tree start')
+      let tree = dataTree({rawData: getters.viewData, dimensions, measures})
+      console.log('tree build')
       let ans = tree2Matrix({tree})
+      console.log('tree2matrix')
       // ans.unshift(dimensions.concats)
       return ans
     },
