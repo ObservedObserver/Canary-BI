@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     dataLength () {
-      let dataset = this.$store.getters.biTree
+      let dataset = this.$store.getters.biMatrix
       // let num = dataset.map(row => row.length)
       // console.log(num)
       return dataset.length
@@ -53,7 +53,7 @@ export default {
         return [[]]
       }
       // let dataset = this.$store.getters.biDataset
-      let dataset = this.$store.getters.biTree
+      let dataset = this.$store.getters.biMatrix
       let {dimensions} = this.$store.getters.biLabels
       // console.log('start slice')
       if (typeof dimensions !== 'undefined' && typeof dataset !== 'undefined' &&
