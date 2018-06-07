@@ -4,7 +4,7 @@
       <el-menu-item v-for="(item, i) in menu" :key="item.name" :index="i.toString()">{{item.name}}</el-menu-item>
     </el-menu>
     <div class="charts-board">
-      <test-chart />
+      <cube />
       <magic-table v-if="currentChart === '0'" />
       <!-- <magic-chart type="bar" v-if="currentChart === '1'" />
       <magic-chart type="line" v-if="currentChart === '2'" />
@@ -23,7 +23,7 @@ import magicChart from './MagicChart/superchart/index.vue'
 import magicLine from './MagicChart/linechart.vue'
 import magicPie from './MagicChart/piechart.vue'
 import magicScatter from './MagicChart/scatter.vue'
-import testChart from './MagicChart/testchart.vue'
+import cube from './Cube/index.vue'
 export default {
   name: 'vizboard',
   data () {
@@ -66,7 +66,7 @@ export default {
     magicPie,
     magicScatter,
     magicTable,
-    testChart
+    cube
   }
 }
 </script>

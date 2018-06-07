@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {sum, count, average, median} from './statistic.js'
 import {API} from '@/store/API/api.js'
-import {filterData, transLabel, transDimension, transData, dimensionValueSet, dataTree, tree2Matrix, transTree} from '@/../../Bi-Dataset/main.js'
+import {filterData, transLabel, transDimension, transData, dimensionValueSet, dataTree, tree2Matrix, transTree, transTreeDFS} from '@/../../Bi-Dataset/main.js'
 // import Core from 'bi-dataset'
 Vue.use(Vuex)
 const StatFuncs = {
@@ -98,7 +98,11 @@ var store = new Vuex.Store({
     },
     labelTree (state, getters) {
       let btree = getters.biTree
-      let ans = transTree(btree)
+      // let ans = transTree(btree)
+      let {measures} = getters.biLabels
+      console.log('measures', measures)
+
+      let ans = transTreeDFS(['root', btree], {label: 'root', children: []}, measures)
       return ans
     },
     biMatrix (state, getters) {
