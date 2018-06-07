@@ -102,7 +102,12 @@ var store = new Vuex.Store({
       let {measures} = getters.biLabels
       console.log('measures', measures)
 
-      let ans = transTreeDFS(['root', btree], {label: 'root', children: []}, measures)
+      let ans = transTreeDFS({
+        bnode: ['root', btree],
+        lnode: {label: 'root', children: []},
+        measures,
+        level: 0
+      })
       return ans
     },
     biMatrix (state, getters) {

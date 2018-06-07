@@ -30,11 +30,19 @@ export default {
       default () {
         return []
       }
+    },
+    level: {
+      type: Number,
+      default () {
+        return 0
+      }
     }
   },
   computed: {
     dataset () {
-      let nodes = this.$props.nodes
+      let nodes = this.$props.nodes.filter((item) => {
+        return item.level === this.$props.level
+      })
       console.log('nodes', nodes)
       let {dimensions, measures} = this.$store.getters.biLabels
       let ans = nodes.map((node, index) => {
