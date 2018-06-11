@@ -4,7 +4,7 @@
       <el-menu-item v-for="(item, i) in menu" :key="item.name" :index="i.toString()">{{item.name}}</el-menu-item>
     </el-menu>
     <div class="charts-board">
-      <cube />
+      <cube :cid="parseInt(currentChart)" v-if="currentChart !== '0'" />
       <magic-table v-if="currentChart === '0'" />
       <!-- <magic-chart type="bar" v-if="currentChart === '1'" />
       <magic-chart type="line" v-if="currentChart === '2'" />

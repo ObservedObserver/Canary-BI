@@ -1,16 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {sum, count, average, median} from './statistic.js'
+// import {sum, count, average, median} from './statistic.js'
 import {API} from '@/store/API/api.js'
-import {filterData, transLabel, transDimension, transData, dimensionValueSet, dataTree, tree2Matrix, transTree, transTreeDFS} from '@/../../Bi-Dataset/main.js'
+import {
+  filterData,
+  transLabel,
+  // transDimension,
+  // transData,
+  dimensionValueSet,
+  dataTree,
+  tree2Matrix,
+  // transTree,
+  transTreeDFS
+} from '@/../../Bi-Dataset/main.js'
 // import Core from 'bi-dataset'
 Vue.use(Vuex)
-const StatFuncs = {
-  'Sum': sum,
-  'Count': count,
-  'Mean': average,
-  'Median': median
-}
+// const StatFuncs = {
+//   'Sum': sum,
+//   'Count': count,
+//   'Mean': average,
+//   'Median': median
+// }
 var store = new Vuex.Store({
   state: {
     globalData: [],
@@ -26,28 +36,11 @@ var store = new Vuex.Store({
     filters: [],
     func: ['Sum', 'Mean', 'Median', 'Count'],
     pickedFunc: 'Sum',
-    valueSet: {}
+    valueSet: {},
+    dashBoard: [],
+    page: 'Main'
   },
   getters: {
-    originDataset (state, getters) {
-      let dataset = []
-      if (typeof state.globalData !== 'undefined' && state.globalData.length > 0) {
-        // dataset.push(Object.keys(state.globalData[0]))
-        if (state.globalDataLabels.data.length === 0) {
-          return dataset
-        }
-        let {dimensions, measures} = getters.originLabels
-        let _keys = dimensions.concat(measures)
-        dataset.push(_keys)
-        state.globalData.forEach((item, index) => {
-          dataset.push([])
-          _keys.forEach((key) => {
-            dataset[index + 1].push(item[key])
-          })
-        })
-      }
-      return dataset
-    },
     originLabels (state) {
       let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.data})
       return {dimensions, measures}
@@ -61,35 +54,6 @@ var store = new Vuex.Store({
       viewData = filterData({filters: state.filters, rawData: state.globalData})
       return viewData
     },
-    // biDimension (state, getters) {
-    //   let rawData = getters.viewData
-    //   let {dimensions} = getters.biLabels
-    //   console.log('current labels', dimensions)
-    //   let {mixDim} = transDimension({dimensions, rawData})
-    //   return {
-    //     mixDim
-    //   }
-    // },
-    // biDataset (state, getters) {
-    //   let {dimensions, measures} = getters.biLabels
-    //   if (((dimensions.length + measures.length > 0) && state.globalData.length > 0)) {
-    //     let rawData = getters.viewData
-    //     console.log('before dimension')
-    //     let {mixDim} = getters.biDimension
-    //     console.log('end dimension')
-    //     // let filters = [{
-    //     //   column: 'value',
-    //     //   type: 'equal',
-    //     //   value: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
-    //     // }]
-    //     console.log('today', mixDim)
-    //     let result = transData({rawData, measures, mixDim, statFunc: StatFuncs[state.pickedFunc]})
-    //     console.log('got data')
-    //     return result
-    //   } else {
-    //     return []
-    //   }
-    // },
     biTree (state, getters) {
       let {dimensions, measures} = getters.biLabels
 
@@ -150,6 +114,12 @@ var store = new Vuex.Store({
     },
     changeAggregation (state, status) {
       state.dataAggregation = status
+    },
+    saveChart (state, option) {
+      state.dashBoard.push(option)
+    },
+    gotoPage (state, page) {
+      state.page = page
     }
   },
   actions: {
@@ -159,6 +129,7 @@ var store = new Vuex.Store({
         state.globalData = res
         state.globalData.forEach((item, index, arr) => {
           arr[index]['_bi_count'] = 1
+          arr[index]['score'] = parseInt(Math.random() * 10)
         })
         if (state.globalData.length !== 0) {
           let _keys = Object.keys(state.globalData[0])

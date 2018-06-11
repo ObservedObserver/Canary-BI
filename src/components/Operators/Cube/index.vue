@@ -13,7 +13,13 @@
           <el-button @click="addLevel"
           size="mini" type="success">下钻<i class="el-icon-arrow-down el-icon--right"></i></el-button>
         </el-button-group>
-        <bar-chart :nodes="nodes" :level="level" />
+        <bar-chart v-if="cid === 1" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <pie-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <scatter-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <el-row>
+          <el-button type="warning" @click="saveChart">保存</el-button>
+        </el-row>
       </el-main>
     </el-container>
   </el-card>
@@ -22,14 +28,27 @@
 <script>
 import menuTree from './menutree.vue'
 import barChart from './Charts/barcharts.vue'
+import lineChart from './Charts/linecharts.vue'
+import pieChart from './Charts/pieCharts.vue'
+import scatterChart from './Charts/scatter.vue'
+import heatMap from './Charts/heatmap.vue'
 const PAGE_ROWS = 100
 export default {
   name: 'cube-card',
+  props: {
+    cid: {
+      type: Number,
+      default () {
+        return 0
+      }
+    }
+  },
   data () {
     return {
       page: 0,
       nodes: [],
-      level: 0
+      level: 0,
+      save: false
     }
   },
   methods: {
@@ -52,6 +71,17 @@ export default {
     },
     minusLevel () {
       this.level = Math.max(this.level - 1, 0)
+    },
+    saveChart () {
+      this.save = true
+    },
+    submitSave (option) {
+      // console.log('save', {
+      //   name: 'tmp',
+      //   option
+      // })
+      this.$store.commit('saveChart', option)
+      this.save = false
     }
   },
   computed: {
@@ -61,7 +91,11 @@ export default {
   },
   components: {
     menuTree,
-    barChart
+    barChart,
+    lineChart,
+    pieChart,
+    scatterChart,
+    heatMap
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template lang="html">
-  <chart @saveOption="console.log('saveOption')" class="barcharts" :options="option" />
+  <chart class="barcharts" :options="option" />
 </template>
 
 <script>
 import deepcopy from 'deepcopy'
 export default {
-  name: 'bar-chart',
+  name: 'heat-map',
   data () {
     return {
       initOption: {
@@ -18,8 +18,18 @@ export default {
           // dimensions: [],
           source: []
         },
-        xAxis: {type: 'category'},
-        yAxis: {},
+        xAxis: {
+          type: 'category',
+          splitArea: {
+            show: true
+          }
+        },
+        yAxis: {
+          type: 'category',
+          splitArea: {
+            show: true
+          }
+        },
         series: []
       }
     }
@@ -36,16 +46,11 @@ export default {
       default () {
         return 0
       }
-    },
-    save: {
-      type: Boolean,
-      default () {
-        return false
-      }
     }
   },
   computed: {
     dataset () {
+      // let level = this.$props.level
       let nodes = this.$props.nodes.filter((item) => {
         return item.level === this.$props.level
       })
@@ -60,20 +65,23 @@ export default {
     option () {
       let op = deepcopy(this.initOption)
       op.dataset.source = this.dataset
-      let {measures} = this.$store.getters.biLabels
+      let {dimensions, measures} = this.$store.getters.biLabels
       measures.forEach((mea) => {
+        console.log({
+          x: dimensions[0],
+          y: dimensions[1],
+          z: measures[0]
+        })
         op.series.push({
-          type: 'bar'
+          type: 'heatmap',
+          encode: {
+            x: dimensions[0],
+            y: dimensions[1],
+            z: measures[0]
+          }
         })
       })
       return op
-    }
-  },
-  watch: {
-    save (newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.$emit('processSave', deepcopy(this.option))
-      }
     }
   }
 }

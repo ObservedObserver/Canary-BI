@@ -1,11 +1,11 @@
 <template lang="html">
-  <chart @saveOption="console.log('saveOption')" class="barcharts" :options="option" />
+  <chart class="barcharts" :options="option" />
 </template>
 
 <script>
 import deepcopy from 'deepcopy'
 export default {
-  name: 'bar-chart',
+  name: 'scatter-chart',
   data () {
     return {
       initOption: {
@@ -44,6 +44,13 @@ export default {
       }
     }
   },
+  watch: {
+    save (newValue, oldValue) {
+      if (newValue && !oldValue) {
+        this.$emit('processSave', deepcopy(this.option))
+      }
+    }
+  },
   computed: {
     dataset () {
       let nodes = this.$props.nodes.filter((item) => {
@@ -63,17 +70,14 @@ export default {
       let {measures} = this.$store.getters.biLabels
       measures.forEach((mea) => {
         op.series.push({
-          type: 'bar'
+          type: 'scatter',
+          encode: {
+            x: measures[0],
+            y: measures[1]
+          }
         })
       })
       return op
-    }
-  },
-  watch: {
-    save (newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.$emit('processSave', deepcopy(this.option))
-      }
     }
   }
 }

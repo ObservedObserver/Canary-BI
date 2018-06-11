@@ -1,11 +1,11 @@
 <template lang="html">
-  <chart @saveOption="console.log('saveOption')" class="barcharts" :options="option" />
+  <chart class="barcharts" :options="option" />
 </template>
 
 <script>
 import deepcopy from 'deepcopy'
 export default {
-  name: 'bar-chart',
+  name: 'pie-chart',
   data () {
     return {
       initOption: {
@@ -18,8 +18,6 @@ export default {
           // dimensions: [],
           source: []
         },
-        xAxis: {type: 'category'},
-        yAxis: {},
         series: []
       }
     }
@@ -44,6 +42,13 @@ export default {
       }
     }
   },
+  watch: {
+    save (newValue, oldValue) {
+      if (newValue && !oldValue) {
+        this.$emit('processSave', deepcopy(this.option))
+      }
+    }
+  },
   computed: {
     dataset () {
       let nodes = this.$props.nodes.filter((item) => {
@@ -60,20 +65,17 @@ export default {
     option () {
       let op = deepcopy(this.initOption)
       op.dataset.source = this.dataset
-      let {measures} = this.$store.getters.biLabels
-      measures.forEach((mea) => {
+      let {measures = []} = this.$store.getters.biLabels
+      let rad = parseInt(100 / measures.length)
+      console.log('rad', rad)
+      measures.forEach((mea, index) => {
         op.series.push({
-          type: 'bar'
+          type: 'pie',
+          radius: [0, `${rad * 0.9}%`],
+          center: [`${rad * (index + 0.5)}%`, '50%']
         })
       })
       return op
-    }
-  },
-  watch: {
-    save (newValue, oldValue) {
-      if (newValue && !oldValue) {
-        this.$emit('processSave', deepcopy(this.option))
-      }
     }
   }
 }
