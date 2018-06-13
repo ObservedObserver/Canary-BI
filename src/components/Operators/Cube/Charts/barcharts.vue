@@ -1,5 +1,5 @@
 <template lang="html">
-  <chart @saveOption="console.log('saveOption')" class="barcharts" :options="option" />
+  <chart @saveOption="console.log('saveOption')" class="barcharts" :options="option" style="width:100%;height: 400px" />
 </template>
 
 <script>
@@ -18,7 +18,7 @@ export default {
           // dimensions: [],
           source: []
         },
-        xAxis: {type: 'category'},
+        xAxis: {},
         yAxis: {},
         series: []
       }
@@ -42,6 +42,10 @@ export default {
       default () {
         return false
       }
+    },
+    transposition: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -61,6 +65,7 @@ export default {
       let op = deepcopy(this.initOption)
       op.dataset.source = this.dataset
       let {measures} = this.$store.getters.biLabels
+      this.$props.transposition ? op.yAxis.type = 'category' : op.xAxis.type = 'category'
       measures.forEach((mea) => {
         op.series.push({
           type: 'bar'

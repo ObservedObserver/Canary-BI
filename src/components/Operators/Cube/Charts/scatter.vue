@@ -1,5 +1,5 @@
 <template lang="html">
-  <chart class="barcharts" :options="option" />
+  <chart class="barcharts" :options="option" style="width:100%;height: 400px" />
 </template>
 
 <script>

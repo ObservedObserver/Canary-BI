@@ -6,8 +6,8 @@
     draggable="true"
     @dragstart="drag($event, i)"
     :key="label.name">
-      <el-tag :type=" label.type === 'string' ? undefined : 'success' ">
-        {{label.name}} | {{label.type}}
+      <el-tag :type="labelColor(label)">
+        {{label.name}} | {{labelType(label)}}
       </el-tag>
     </span>
   </div>
@@ -52,6 +52,22 @@ export default {
         ev: event,
         component: this.$props.areaName
       })
+    },
+    labelColor (label) {
+      let typeDict = {
+        string: undefined,
+        number: 'success',
+        time: 'warning'
+      }
+      return typeDict[label.type]
+    },
+    labelType (label) {
+      let typeDict = {
+        string: '维度',
+        number: '度量',
+        time: '时间维度'
+      }
+      return typeDict[label.type]
     }
   }
 }

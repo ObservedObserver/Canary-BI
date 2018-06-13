@@ -13,8 +13,9 @@
           <el-button @click="addLevel"
           size="mini" type="success">下钻<i class="el-icon-arrow-down el-icon--right"></i></el-button>
         </el-button-group>
-        <bar-chart v-if="cid === 1" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
-        <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <el-button size="mini" @click="transpose">转置</el-button>
+        <bar-chart v-if="cid === 1" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" :transposition="transposition" />
+        <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" :transposition="transposition" />
         <pie-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <scatter-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <el-row>
@@ -48,7 +49,8 @@ export default {
       page: 0,
       nodes: [],
       level: 0,
-      save: false
+      save: false,
+      transposition: false
     }
   },
   methods: {
@@ -82,6 +84,9 @@ export default {
       // })
       this.$store.commit('saveChart', option)
       this.save = false
+    },
+    transpose () {
+      this.transposition = !this.transposition
     }
   },
   computed: {

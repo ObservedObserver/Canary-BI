@@ -13,6 +13,7 @@ import {
   // transTree,
   transTreeDFS
 } from '@/../../Bi-Dataset/main.js'
+import timeLabel from './util/timelabel.js'
 // import Core from 'bi-dataset'
 Vue.use(Vuex)
 // const StatFuncs = {
@@ -29,7 +30,9 @@ var store = new Vuex.Store({
       data: [],
       X: [],
       Y: [],
-      dimension: []
+      dimensions: [],
+      measures: [],
+      time: []
     },
     currentLabel: {},
     dataAggregation: true,
@@ -91,19 +94,39 @@ var store = new Vuex.Store({
   mutations: {
     drag (state, {component, label}) {
       state.currentLabel = state.globalDataLabels[component][label]
-      if (component !== 'data') {
+      if (component !== 'dimensions' && component !== 'measures' && component !== 'time') {
         state.globalDataLabels[component].splice(label, 1)
       }
     },
     drop (state, {ev, component}) {
       ev.preventDefault()
-      if (component !== 'data') {
+      if (component === 'dimensions' && state.currentLabel.type === 'number') {
+        state.globalDataLabels[component].push({
+          name: state.currentLabel.name,
+          type: 'string'
+        })
+      } else if (component === 'measures' && state.currentLabel.type === 'string') {
+        state.globalDataLabels[component].push({
+          name: state.currentLabel.name,
+          type: 'number'
+        })
+      } else if (component === 'time' && state.currentLabel.type === 'string') {
+        // 临时判断机制，正式版应支持任意数据格式饿转化
+        if (typeof state.globalData[0][state.currentLabel.name] === 'string' && state.globalData[0][state.currentLabel.name].split('-').length > 1) {
+          state.globalDataLabels[component].push({
+            name: state.currentLabel.name,
+            type: 'time'
+          })
+          // 这里globaldata不受计算属性获得label可以保证新创建的year, month不会被展示
+          state.globalData = timeLabel({rawData: state.globalData, timeDimension: state.currentLabel.name})
+        }
+      } else if (component !== 'measures' && component !== 'dimensions' && component !== 'time') {
         state.globalDataLabels[component].push({
           name: state.currentLabel.name,
           type: state.currentLabel.type
         })
-        state.currentLabel = {}
       }
+      state.currentLabel = {}
     },
     changeFilter (state, params) {
       state.filters = params
@@ -143,6 +166,18 @@ var store = new Vuex.Store({
         }
         let {dimensions, measures} = context.getters.originLabels
         state.valueSet = dimensionValueSet({rawData: res, dimensions: dimensions.concat(measures)})
+        dimensions.forEach((dim) => {
+          state.globalDataLabels.dimensions.push({
+            name: dim,
+            type: 'string'
+          })
+        })
+        measures.forEach((mea) => {
+          state.globalDataLabels.measures.push({
+            name: mea,
+            type: 'number'
+          })
+        })
       })
     }
   }

@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="dash-board">
-    <el-card class="sub-chart" v-for="option in dashBoards" :key="option.id" width="100%">
-      <chart :options="option" />
+    <el-card class="sub-chart" v-for="option in dashBoards" :key="option.id">
+      <chart :options="option" style="width:100%;height: 400px" />
     </el-card>
   </div>
 </template>
