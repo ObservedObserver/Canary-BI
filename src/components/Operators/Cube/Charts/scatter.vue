@@ -1,5 +1,13 @@
 <template lang="html">
-  <chart class="barcharts" :options="option" style="width:100%;height: 400px" />
+  <div class="chart-container">
+    <el-button size="mini" @click="transposition++">转置</el-button>
+    <el-switch
+      v-model="spaceMode"
+      active-text="3D(开启)"
+      inactive-text="3D(关闭)">
+    </el-switch>
+    <chart class="barcharts" :options="option" style="width:100%;height: 400px" />
+  </div>
 </template>
 
 <script>
@@ -8,6 +16,8 @@ export default {
   name: 'scatter-chart',
   data () {
     return {
+      transposition: 0,
+      spaceMode: false,
       initOption: {
         title: {},
         legend: {
@@ -18,8 +28,11 @@ export default {
           // dimensions: [],
           source: []
         },
-        xAxis: {type: 'category'},
+        xAxis: {},
         yAxis: {},
+        xAxis3D: {},
+        yAxis3D: {},
+        zAxis3D: {},
         series: []
       }
     }
@@ -68,12 +81,20 @@ export default {
       let op = deepcopy(this.initOption)
       op.dataset.source = this.dataset
       let {measures} = this.$store.getters.biLabels
+      let usedMeasures = 2
+      if (this.spaceMode && measures.length >= 3) {
+        op.grid3D = {width: '100%', height: '100%'}
+        op.xAxis.show = false
+        op.yAxis.show = false
+        usedMeasures = 3
+      }
       measures.forEach((mea) => {
         op.series.push({
-          type: 'scatter',
+          type: this.spaceMode ? 'scatter3D' : 'scatter',
           encode: {
-            x: measures[0],
-            y: measures[1]
+            x: measures[this.transposition % usedMeasures],
+            y: measures[(this.transposition + 1) % usedMeasures],
+            z: measures[(this.transposition + 2) % usedMeasures]
           }
         })
       })
@@ -87,5 +108,8 @@ export default {
 .barchart{
   width: 100%;
   min-width: 0px;
+}
+.chart-container{
+  padding-top: 0.36rem;
 }
 </style>

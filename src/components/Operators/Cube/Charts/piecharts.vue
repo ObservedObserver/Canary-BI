@@ -1,5 +1,12 @@
 <template lang="html">
-  <chart class="barcharts" :options="option" style="width:100%;height: 400px"  />
+  <div class="chart-container">
+    <el-switch
+      v-model="roseMode"
+      active-text="玫瑰模式(开启)"
+      inactive-text="玫瑰模式(关闭)">
+    </el-switch>
+    <chart class="barcharts" :options="option" style="width:100%;height: 400px"  />
+  </div>
 </template>
 
 <script>
@@ -8,6 +15,7 @@ export default {
   name: 'pie-chart',
   data () {
     return {
+      roseMode: false,
       initOption: {
         title: {},
         legend: {
@@ -71,7 +79,8 @@ export default {
       measures.forEach((mea, index) => {
         op.series.push({
           type: 'pie',
-          radius: [0, `${rad * 0.9}%`],
+          radius: [this.roseMode ? `${rad * 0.1}%` : 0, `${rad * 0.9}%`],
+          roseType: this.roseMode ? 'radius' : undefined,
           center: [`${rad * (index + 0.5)}%`, '50%']
         })
       })
@@ -85,5 +94,8 @@ export default {
 .barchart{
   width: 100%;
   min-width: 0px;
+}
+.chart-container{
+  padding-top: 0.36rem;
 }
 </style>

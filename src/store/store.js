@@ -143,6 +143,9 @@ var store = new Vuex.Store({
     },
     gotoPage (state, page) {
       state.page = page
+    },
+    updateList (state, list) {
+      state.dashBoard = list
     }
   },
   actions: {

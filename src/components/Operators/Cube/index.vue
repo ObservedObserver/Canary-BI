@@ -4,7 +4,11 @@
       <el-aside width="160px" class="menu-tree">
         <i class="el-icon-arrow-left" @click="addPage"></i>
         <i class="el-icon-arrow-right" @click="minusPage"></i>
-        <menu-tree :page="page" @get-nodes="changeNodes" />
+        <el-button-group>
+          <el-button size="mini" @click="chooseAllNodes">全选</el-button>
+          <el-button size="mini" @click="clearAllNodes">反选</el-button>
+        </el-button-group>
+        <menu-tree ref="menuTree" :page="page" @get-nodes="changeNodes" />
       </el-aside>
       <el-main class="menu-board">
         <el-button-group>
@@ -13,9 +17,8 @@
           <el-button @click="addLevel"
           size="mini" type="success">下钻<i class="el-icon-arrow-down el-icon--right"></i></el-button>
         </el-button-group>
-        <el-button size="mini" @click="transpose">转置</el-button>
-        <bar-chart v-if="cid === 1" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" :transposition="transposition" />
-        <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" :transposition="transposition" />
+        <bar-chart v-if="cid === 1" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <pie-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <scatter-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <el-row>
@@ -54,6 +57,12 @@ export default {
     }
   },
   methods: {
+    chooseAllNodes () {
+      this.$refs.menuTree.chooseAllNodes()
+    },
+    clearAllNodes () {
+      this.$refs.menuTree.clearAllNodes()
+    },
     addPage () {
       let maxPage = parseInt(this.dataLength / PAGE_ROWS)
       this.page = Math.min(this.page + 1, maxPage)
@@ -82,11 +91,24 @@ export default {
       //   name: 'tmp',
       //   option
       // })
-      this.$store.commit('saveChart', option)
+      this.$prompt('请输入标题', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputErrorMessage: '邮箱格式不正确'
+      }).then(({ value }) => {
+        this.$message({
+          type: 'success',
+          message: value + '图表成功生成'
+        })
+        option.title.text = value
+        this.$store.commit('saveChart', option)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消生成图表'
+        })
+      })
       this.save = false
-    },
-    transpose () {
-      this.transposition = !this.transposition
     }
   },
   computed: {

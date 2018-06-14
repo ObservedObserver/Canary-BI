@@ -1,5 +1,22 @@
 <template lang="html">
-  <chart class="barcharts" :options="option" style="width:100%;height: 400px" />
+  <div class="chart-container">
+    <el-switch
+      v-model="stackMode"
+      active-text="堆叠(开启)"
+      inactive-text="堆叠(关闭)">
+    </el-switch>
+    <el-switch
+      v-model="transposition"
+      active-text="转置(开启)"
+      inactive-text="转置(关闭)">
+    </el-switch>
+    <el-switch
+      v-model="areaMode"
+      active-text="区域(开启)"
+      inactive-text="区域(关闭)">
+    </el-switch>
+    <chart class="barcharts" :options="option" style="width:100%;height: 400px" />
+  </div>
 </template>
 
 <script>
@@ -8,6 +25,9 @@ export default {
   name: 'line-chart',
   data () {
     return {
+      stackMode: false,
+      transposition: false,
+      areaMode: false,
       initOption: {
         title: {},
         legend: {
@@ -42,10 +62,6 @@ export default {
       default () {
         return false
       }
-    },
-    transposition: {
-      type: Boolean,
-      default: false
     }
   },
   watch: {
@@ -72,10 +88,12 @@ export default {
       let op = deepcopy(this.initOption)
       op.dataset.source = this.dataset
       let {measures} = this.$store.getters.biLabels
-      this.$props.transposition ? op.yAxis.type = 'category' : op.xAxis.type = 'category'
+      this.transposition ? op.yAxis.type = 'category' : op.xAxis.type = 'category'
       measures.forEach((mea) => {
         op.series.push({
-          type: 'line'
+          type: 'line',
+          stack: this.stackMode ? 'stack' : undefined,
+          areaStyle: this.areaMode ? {} : undefined
         })
       })
       return op
@@ -88,5 +106,8 @@ export default {
 .barchart{
   width: 100%;
   min-width: 0px;
+}
+.chart-container{
+  padding-top: 0.36rem;
 }
 </style>

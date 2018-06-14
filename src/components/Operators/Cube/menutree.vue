@@ -1,6 +1,7 @@
 <template lang="html">
   <el-tree ref="node" :data="tree"
   @check-change="handleCheckChange"
+  node-key="label"
   show-checkbox></el-tree>
 </template>
 
@@ -24,6 +25,13 @@ export default {
       // console.log(data)
       // console.log(this.$refs.node.getCheckedNodes())
       this.$emit('get-nodes', this.$refs.node.getCheckedNodes())
+    },
+    chooseAllNodes () {
+      let nodes = this.tree
+      this.$refs.node.setCheckedNodes(nodes)
+    },
+    clearAllNodes () {
+      this.$refs.node.setCheckedNodes([])
     }
   },
   computed: {
