@@ -3,11 +3,11 @@
     background-color="#2f3538"
     text-color="#fff">
     <el-menu-item index="0" @click="gotoPage('Main')">
-      <i class="el-icon-document"></i>
+      <i class="el-icon-picture-outline"></i>
       <span slot="title">Sheet</span>
     </el-menu-item>
     <el-menu-item index="1" @click="gotoPage('Dash')">
-      <i class="el-icon-document"></i>
+      <i class="el-icon-menu"></i>
       <span slot="title">DashBoard</span>
     </el-menu-item>
   </el-menu>
