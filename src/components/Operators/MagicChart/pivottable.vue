@@ -1,12 +1,19 @@
 <template lang="html">
   <div>
-    <h5>TOTAL ROW: {{page + 1}} + {{tableData.length}} / {{dataLength}}</h5>
+    <h5>TOTAL ROW: {{page}} + {{tableData.length}} / {{dataLength}}</h5>
     <el-button-group>
-      <el-button @click="page --"
+      <el-button @click="minusPage('height')"
       type="primary"
-      icon="el-icon-arrow-left">上一页</el-button>
-      <el-button @click="page ++"
-      type="primary">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+      icon="el-icon-arrow-left">上一页(上下)</el-button>
+      <el-button @click="addPage('height')"
+      type="primary">下一页(上下)<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+    </el-button-group>
+    <el-button-group>
+      <el-button @click="minusPage('width')"
+      type="primary"
+      icon="el-icon-arrow-left">上一页(左右)</el-button>
+      <el-button @click="addPage('width')"
+      type="primary">下一页(左右)<i class="el-icon-arrow-right el-icon--right"></i></el-button>
     </el-button-group>
     <table class="ui-table">
       <tbody>
@@ -19,29 +26,35 @@
 </template>
 
 <script>
-const PAGE_ROWS = 200
+const PAGE_ROWS = 100
 export default {
   name: 'magic-table',
   data () {
     return {
-      page: 0
+      page: {
+        width: 0,
+        height: 0
+      }
     }
   },
   methods: {
-    addPage () {
-      let maxPage = parseInt(this.dataLength / PAGE_ROWS)
-      this.page = Math.min(this.page + 1, maxPage)
+    addPage (axis) {
+      let maxPage = parseInt(this.dataLength[axis] / PAGE_ROWS)
+      this.page[axis] = Math.min(this.page[axis] + 1, maxPage)
     },
-    minusPage () {
-      this.page = Math.max(this.page - 1, 0)
+    minusPage (axis) {
+      this.page[axis] = Math.max(this.page[axis] - 1, 0)
     }
   },
   computed: {
     dataLength () {
-      let dataset = this.$store.getters.biMatrix
+      let dataset = this.$store.getters.pivotTable
+      // let dataset = this.$store.getters.biDataset
+      let width = dataset[0].length
+      let height = dataset.length
       // let num = dataset.map(row => row.length)
       // console.log(num)
-      return dataset.length
+      return {width, height}
     },
     tableData () {
       if (this.$store.state.globalDataLabels.X.length + this.$store.state.globalDataLabels.Y.length === 0) {
@@ -49,7 +62,9 @@ export default {
       }
       // let dataset = this.$store.getters.biDataset
       let pivotTable = this.$store.getters.pivotTable
-      return pivotTable
+      return pivotTable.slice(this.page.height * PAGE_ROWS, (this.page.height + 1) * PAGE_ROWS).map((row) => {
+        return row.slice(this.page.width * PAGE_ROWS, (this.page.width + 1) * PAGE_ROWS)
+      })
     }
   }
 }

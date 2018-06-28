@@ -10,10 +10,10 @@
 // })
 
 var getValue = (node, index, dimensions) => {
-  if (index === dimensions.length - 1) {
-    return (node.get(dimensions[index]) || '').toString()
-  } else if (typeof node === 'undefined') {
+  if (typeof node === 'undefined') {
     return ''
+  } else if (index === dimensions.length - 1) {
+    return (node.get(dimensions[index]) || '').toString()
   } else {
     return getValue(node.get(dimensions[index]), index + 1, dimensions)
   }
