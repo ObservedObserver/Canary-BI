@@ -3,7 +3,7 @@
     <el-header class="clear-padding">
       <xymenu></xymenu>
     </el-header>
-    <el-container>
+    <el-container style="margin-top: 4rem">
       <el-main class="clear-padding">
         <viz-board></viz-board>
       </el-main>

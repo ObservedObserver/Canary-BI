@@ -14,6 +14,9 @@ import {
   transTreeDFS
 } from 'bi-dataset/main.js'
 import {dataDrop} from './util/drop.js'
+import transpose from './util/transposition.js'
+import createMatrix from './util/initMatrix.js'
+import getValue from './util/getvalue.js'
 // import Core from 'bi-dataset'
 Vue.use(Vuex)
 // const StatFuncs = {
@@ -30,6 +33,7 @@ var store = new Vuex.Store({
       data: [],
       X: [],
       Y: [],
+      value: [],
       dimensions: [],
       measures: [],
       time: []
@@ -49,7 +53,11 @@ var store = new Vuex.Store({
       return {dimensions, measures}
     },
     biLabels (state) {
-      let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.X, ylabels: state.globalDataLabels.Y})
+      // let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.X, ylabels: state.globalDataLabels.Y})
+      let rows = state.globalDataLabels.X.map(val => val.name)
+      let columns = state.globalDataLabels.Y.map(val => val.name)
+      let measures = state.globalDataLabels.value.map(val => val.name)
+      let dimensions = rows.concat(columns)
       return {dimensions, measures}
     },
     viewData (state) {
@@ -90,6 +98,42 @@ var store = new Vuex.Store({
         dimensions: dimensions.concat(measures)
       })
       return valueSet
+    },
+    pivotTable (state, getters) {
+      let rows = state.globalDataLabels.X.map(val => val.name)
+      let columns = state.globalDataLabels.Y.map(val => val.name)
+      let measures = state.globalDataLabels.value.map(val => val.name)
+      let ans = [[]]
+      if ((rows.length > 0) ^ (columns.length > 0)) {
+        return getters.biMatrix
+      } else if ((rows.length > 0) && (columns.length > 0)) {
+        // let values = state.globalDataLabels.value
+        ans = []
+        let rowTree = dataTree({rawData: getters.viewData, dimensions: rows})
+        let columnTree = dataTree({rawData: getters.viewData, dimensions: columns})
+        // console.log(columnTree, tree2Matrix({tree: columnTree}))
+        let valueTree = dataTree({rawData: getters.viewData, dimensions: rows.concat(columns), measures, statFunc: state.pickedFunc})
+        // console.log(valueTree)
+        let rowMatrix = tree2Matrix({tree: rowTree})
+        let originColumnMatrix = tree2Matrix({tree: columnTree})
+        let columnMatrix = transpose(originColumnMatrix)
+        // console.log(rowMatrix, columnMatrix)
+        let emptyMatrix = createMatrix(rowMatrix[0].length, columnMatrix.length, () => '')
+        let valueMatrix = createMatrix(columnMatrix[0].length, rowMatrix.length, (r, c) => {
+          // console.log(rowMatrix[r].concat(transpose(columnMatrix[c])))
+          return getValue(valueTree, 0, rowMatrix[r].concat(originColumnMatrix[c]))
+        })
+        // console.info(emptyMatrix, valueMatrix, rowMatrix, columnMatrix)
+        columnMatrix.forEach((row, index, arr) => {
+          // console.log('emptyMatrix', emptyMatrix[index])
+          ans.push(emptyMatrix[index].concat(row || []))
+        })
+        // console.log("ans", ans)
+        rowMatrix.forEach((row, index, arr) => {
+          ans.push(row.concat(valueMatrix[index] || []))
+        })
+      }
+      return ans
     }
   },
   mutations: {

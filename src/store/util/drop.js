@@ -20,6 +20,20 @@ function dataDrop (state, component) {
       // 这里globaldata不受计算属性获得label可以保证新创建的year, month不会被展示
       state.globalData = timeLabel({rawData: state.globalData, timeDimension: state.currentLabel.name})
     }
+  } else if (component === 'X' || component === 'Y') {
+    if (state.currentLabel.type === 'string' || state.currentLabel.type === 'time') {
+      state.globalDataLabels[component].push({
+        name: state.currentLabel.name,
+        type: state.currentLabel.type
+      })
+    }
+  } else if (component === 'value') {
+    if (state.currentLabel.type === 'number') {
+      state.globalDataLabels[component].push({
+        name: state.currentLabel.name,
+        type: state.currentLabel.type
+      })
+    }
   } else if (component !== 'measures' && component !== 'dimensions' && component !== 'time') {
     state.globalDataLabels[component].push({
       name: state.currentLabel.name,

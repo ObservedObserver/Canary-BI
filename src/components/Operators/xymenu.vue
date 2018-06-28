@@ -1,12 +1,19 @@
 <template lang="html">
-  <el-row>
-    <el-col :span="12" class="xymenu">
-      <drag-area area-name="X" title="X" class="inxy"></drag-area>
-    </el-col>
-    <el-col :span="12" class="xymenu">
-      <drag-area area-name="Y" title="Y" class="inxy"></drag-area>
-    </el-col>
-  </el-row>
+  <div>
+    <el-row>
+      <el-col :span="12" class="xymenu">
+        <drag-area area-name="X" title="X" class="inxy"></drag-area>
+      </el-col>
+      <el-col :span="12" class="xymenu">
+        <drag-area area-name="Y" title="Y" class="inxy"></drag-area>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="24" class="xymenu">
+        <drag-area area-name="value" title="value" class="inxy"></drag-area>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>

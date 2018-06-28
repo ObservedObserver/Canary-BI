@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import magicTable from './MagicChart/table.vue'
+import magicTable from './MagicChart/pivottable.vue'
 import statistics from './Tool/statistics.vue'
 import magicChart from './MagicChart/superchart/index.vue'
 import magicLine from './MagicChart/linechart.vue'
@@ -74,6 +74,7 @@ export default {
 <style lang="css" scoped>
 .invizboard{
   padding: 1rem;
+  /* margin-top: 10rem; */
   max-height: 56rem;
   overflow: auto;
 }
