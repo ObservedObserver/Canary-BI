@@ -21,6 +21,7 @@
         <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <pie-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <scatter-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <heat-map v-if="cid === 5"></heat-map>
         <el-row>
           <el-button type="warning" @click="saveChart">保存</el-button>
         </el-row>

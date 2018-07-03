@@ -1,37 +1,51 @@
 <template lang="html">
-  <chart class="barcharts" :options="option" style="width:100%;height: 400px" />
+    <div id="heatmap"></div>
 </template>
 
 <script>
-import deepcopy from 'deepcopy'
+import G2 from '@antv/g2'
+const renderChart = (value, chart) => {
+  chart.source(value, {
+    row: {type: 'cat'},
+    column: {type: 'cat'}
+  })
+  chart.axis('row', {
+    tickLine: null,
+    grid: {
+      align: 'center',
+      lineStyle: {
+        lineWidth: 1,
+        lineDash: null,
+        stroke: '#f0f0f0'
+      }
+    }
+  })
+  chart.axis('column', {
+    tickLine: null,
+    grid: {
+      align: 'center',
+      lineStyle: {
+        lineWidth: 1,
+        lineDash: null,
+        stroke: '#f0f0f0'
+      }
+    }
+  })
+  chart.polygon().position('column*row').color('value', '#BAE7FF-#1890FF-#0050B3').label('value', {
+    offset: -2,
+    textStyle: {
+      fill: '#fff',
+      shadowBlur: 2,
+      shadowColor: 'rgba(0, 0, 0, .45)'
+    }
+  })
+  chart.render()
+}
 export default {
   name: 'heat-map',
   data () {
     return {
-      initOption: {
-        title: {},
-        legend: {
-          type: 'scroll'
-        },
-        tooltip: {},
-        dataset: {
-          // dimensions: [],
-          source: []
-        },
-        xAxis: {
-          type: 'category',
-          splitArea: {
-            show: true
-          }
-        },
-        yAxis: {
-          type: 'category',
-          splitArea: {
-            show: true
-          }
-        },
-        series: []
-      }
+      chart: null
     }
   },
   props: {
@@ -48,40 +62,28 @@ export default {
       }
     }
   },
+  mounted () {
+    console.log('heat map is mounted')
+    this.chart = new G2.Chart({
+      container: 'heatmap', // 指定图表容器 ID
+      forceFit: true,
+      width: 400, // 指定图表宽度
+      height: 300 // 指定图表高度
+    })
+    renderChart(this.dataset, this.chart)
+  },
+  beforeDestroy () {
+    console.log('heatMap is being destroyed')
+    this.chart = null
+  },
   computed: {
     dataset () {
-      // let level = this.$props.level
-      let nodes = this.$props.nodes.filter((item) => {
-        return item.level === this.$props.level
-      })
-      console.log('nodes', nodes)
-      let {dimensions, measures} = this.$store.getters.biLabels
-      let ans = nodes.map((node, index) => {
-        return [node.label, ...node.value]
-      })
-      ans.unshift([dimensions[dimensions.length - 1], ...measures])
-      return ans
-    },
-    option () {
-      let op = deepcopy(this.initOption)
-      op.dataset.source = this.dataset
-      let {dimensions, measures} = this.$store.getters.biLabels
-      measures.forEach((mea) => {
-        console.log({
-          x: dimensions[0],
-          y: dimensions[1],
-          z: measures[0]
-        })
-        op.series.push({
-          type: 'heatmap',
-          encode: {
-            x: dimensions[0],
-            y: dimensions[1],
-            z: measures[0]
-          }
-        })
-      })
-      return op
+      return this.$store.getters.pivotData
+    }
+  },
+  watch: {
+    dataset (newVal) {
+      renderChart(newVal, this.chart)
     }
   }
 }

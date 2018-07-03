@@ -48,6 +48,9 @@ export default {
         {
           name: 'scatter',
           child: '<magic-scatter />'
+        },
+        {
+          name: 'heatmap'
         }
       ],
       currentChart: '0'

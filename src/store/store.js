@@ -99,6 +99,33 @@ var store = new Vuex.Store({
       })
       return valueSet
     },
+    pivotData (state, getters) {
+      let rows = state.globalDataLabels.X.map(val => val.name)
+      let columns = state.globalDataLabels.Y.map(val => val.name)
+      let measures = state.globalDataLabels.value.map(val => val.name)
+      let ans = []
+      if ((rows.length > 0) && (columns.length > 0)) {
+        let rowTree = dataTree({rawData: getters.viewData, dimensions: rows})
+        let columnTree = dataTree({rawData: getters.viewData, dimensions: columns})
+        // console.log(columnTree, tree2Matrix({tree: columnTree}))
+        let valueTree = dataTree({rawData: getters.viewData, dimensions: rows.concat(columns), measures, statFunc: state.pickedFunc})
+        // console.log(valueTree)
+        let rowMatrix = tree2Matrix({tree: rowTree})
+        let originColumnMatrix = tree2Matrix({tree: columnTree})
+        for (let rarr of rowMatrix) {
+          for (let carr of originColumnMatrix) {
+            let r = rarr.toString()
+            let c = carr.toString()
+            ans.push({
+              row: r,
+              column: c,
+              value: parseFloat(getValue(valueTree, 0, rarr.concat(carr))) || 0
+            })
+          }
+        }
+      }
+      return ans
+    },
     pivotTable (state, getters) {
       let rows = state.globalDataLabels.X.map(val => val.name)
       let columns = state.globalDataLabels.Y.map(val => val.name)
