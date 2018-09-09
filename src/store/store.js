@@ -25,8 +25,9 @@ Vue.use(Vuex)
 //   'Mean': average,
 //   'Median': median
 // }
-var store = new Vuex.Store({
-  state: {
+function getInitState (oldState = []) {
+  let newState = {
+    currentAPI: 'http://localhost:2018/api/data/titanic',
     globalData: [],
     globalDataLabels: {
       filter: [],
@@ -46,7 +47,14 @@ var store = new Vuex.Store({
     valueSet: {},
     dashBoard: [],
     page: 'Main'
-  },
+  }
+  oldState.forEach((key) => {
+    delete newState[key]
+  })
+  return newState
+}
+var store = new Vuex.Store({
+  state: getInitState(),
   getters: {
     originLabels (state) {
       let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.data})
@@ -164,6 +172,14 @@ var store = new Vuex.Store({
     }
   },
   mutations: {
+    initState (state, keptKeys) {
+      let newState = getInitState(keptKeys)
+      for (let key in state) {
+        if (typeof newState[key] !== 'undefined') {
+          state[key] = newState[key]
+        }
+      }
+    },
     drag (state, {component, label}) {
       state.currentLabel = state.globalDataLabels[component][label]
       if (component !== 'dimensions' && component !== 'measures' && component !== 'time') {
@@ -193,12 +209,15 @@ var store = new Vuex.Store({
     },
     updateList (state, list) {
       state.dashBoard = list
+    },
+    setCurrentAPI (state, api) {
+      state.currentAPI = api
     }
   },
   actions: {
     getMainData (context) {
       var state = context.state
-      API.getMainData((res) => {
+      API.getMainData(state.currentAPI, (res) => {
         state.globalData = res
         state.globalData.forEach((item, index, arr) => {
           arr[index]['_bi_count'] = 1

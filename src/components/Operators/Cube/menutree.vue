@@ -28,7 +28,9 @@ export default {
     },
     chooseAllNodes () {
       let nodes = this.tree
-      this.$refs.node.setCheckedNodes(nodes)
+      setTimeout(() => {
+        this.$refs.node.setCheckedNodes(nodes)
+      }, 0)
     },
     clearAllNodes () {
       this.$refs.node.setCheckedNodes([])

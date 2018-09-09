@@ -21,7 +21,6 @@
         <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <pie-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <scatter-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
-        <heat-map v-if="cid === 5"></heat-map>
         <el-row>
           <el-button type="warning" @click="saveChart">保存</el-button>
         </el-row>
@@ -36,7 +35,7 @@ import barChart from './Charts/barcharts.vue'
 import lineChart from './Charts/linecharts.vue'
 import pieChart from './Charts/piecharts.vue'
 import scatterChart from './Charts/scatter.vue'
-import heatMap from './Charts/heatmap.vue'
+import deepcopy from 'deepcopy'
 const PAGE_ROWS = 100
 export default {
   name: 'cube-card',
@@ -52,13 +51,18 @@ export default {
     return {
       page: 0,
       nodes: [],
-      level: 0,
+      level: 1,
       save: false,
-      transposition: false
+      transposition: false,
+      preLabels: {
+        dimensions: [],
+        measures: []
+      }
     }
   },
   methods: {
     chooseAllNodes () {
+      console.log('choose all nodes')
       this.$refs.menuTree.chooseAllNodes()
     },
     clearAllNodes () {
@@ -72,8 +76,8 @@ export default {
       this.page = Math.max(this.page - 1, 0)
     },
     changeNodes (nodes) {
-      let {dimensions} = this.$store.getters.biLabels
-      this.level = dimensions.length
+      // let {dimensions} = this.$store.getters.biLabels
+      // this.level = dimensions.length
       this.nodes = nodes
     },
     addLevel () {
@@ -115,15 +119,47 @@ export default {
   computed: {
     dataLength () {
       return this.$store.getters.labelTree.children.length
+    },
+    biLabels () {
+      return this.$store.getters.biLabels
     }
+  },
+  watch: {
+    biLabels () {
+      console.log('bilabels change caught', this.preLabels, this.biLabels)
+      let same = true
+      let {dimensions, measures} = this.biLabels
+      if (dimensions.length !== this.biLabels.dimensions || measures.length !== this.biLabels.measures) {
+        same = false
+      } else {
+        dimensions.forEach((dim, index) => {
+          if (this.preLabels.dimesions[index] !== dim) {
+            same = false
+          }
+        })
+        measures.forEach((mea, index) => {
+          if (this.preLabels.measures[index] !== mea) {
+            same = false
+          }
+        })
+      }
+      console.log('same', same)
+      if (!same) {
+        this.chooseAllNodes()
+      }
+
+      this.preLabels = deepcopy(this.biLabels)
+    }
+  },
+  mounted () {
+    this.chooseAllNodes()
   },
   components: {
     menuTree,
     barChart,
     lineChart,
     pieChart,
-    scatterChart,
-    heatMap
+    scatterChart
   }
 }
 </script>

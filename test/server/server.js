@@ -16,11 +16,11 @@ app.all('*',function (req, res, next) {
 });
 app.get('/api/data', function (req, res) {
   console.log('receive')
-    var data = fs.readFileSync('evaluate.json');
+    var data = fs.readFileSync('train.json');
     res.send(data);
 })
 
-var server = app.listen(1996, function () {
+var server = app.listen(1995, function () {
 
   var host = server.address().address
   var port = server.address().port

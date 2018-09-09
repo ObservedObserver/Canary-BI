@@ -4,7 +4,8 @@
       <el-menu-item v-for="(item, i) in menu" :key="item.name" :index="i.toString()">{{item.name}}</el-menu-item>
     </el-menu>
     <div class="charts-board">
-      <cube :cid="parseInt(currentChart)" v-if="currentChart !== '0'" />
+      <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) >= 1 && parseInt(currentChart) <= 4"/>
+      <pivot :cid="parseInt(currentChart)" v-if="parseInt(currentChart) >= 5 " />
       <magic-table v-if="currentChart === '0'" />
       <!-- <magic-chart type="bar" v-if="currentChart === '1'" />
       <magic-chart type="line" v-if="currentChart === '2'" />
@@ -24,34 +25,19 @@ import magicLine from './MagicChart/linechart.vue'
 import magicPie from './MagicChart/piechart.vue'
 import magicScatter from './MagicChart/scatter.vue'
 import cube from './Cube/index.vue'
+import pivot from './Pivot/index.vue'
 export default {
   name: 'vizboard',
   data () {
     return {
       menu: [
-        {
-          name: '表格',
-          child: '<table-chart></table-chart>'
-        },
-        {
-          name: 'bar',
-          child: '<magic-bar />'
-        },
-        {
-          name: 'line',
-          child: '<magic-line />'
-        },
-        {
-          name: 'pie',
-          child: '<magic-pie />'
-        },
-        {
-          name: 'scatter',
-          child: '<magic-scatter />'
-        },
-        {
-          name: 'heatmap'
-        }
+        { name: '表格' },
+        { name: 'bar' },
+        { name: 'line' },
+        { name: 'pie' },
+        { name: 'scatter' },
+        { name: 'heatmap' },
+        { name: 'g2-bar' }
       ],
       currentChart: '0'
     }
@@ -69,7 +55,8 @@ export default {
     magicPie,
     magicScatter,
     magicTable,
-    cube
+    cube,
+    pivot
   }
 }
 </script>

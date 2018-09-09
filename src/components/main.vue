@@ -4,8 +4,9 @@
       <menu-board></menu-board>
     </el-aside>
     <el-main style="padding: 0px">
-      <operators-board v-if="currentPage === 'Main'" />
-      <dash-board v-if="currentPage === 'Dash'"/>
+      <operators-board v-show="currentPage === 'Main'" />
+      <dash-board v-show="currentPage === 'Dash'"/>
+      <data-source v-show="currentPage === 'Data' " />
     </el-main>
   </el-container>
   <!-- <div class="vis-main-board">
@@ -18,15 +19,17 @@
 import OperatorsBoard from '@/components/Operators/main.vue'
 import MenuBoard from '@/components/Menu/menu.vue'
 import DashBoard from '@/components/DashBoard/index.vue'
+import DataSource from '@/components/DataSource/index.vue'
 export default {
   name: 'main-board',
   components: {
     OperatorsBoard,
     MenuBoard,
-    DashBoard
+    DashBoard,
+    DataSource
   },
   mounted () {
-    this.$store.dispatch('getMainData')
+    // this.$store.dispatch('getMainData')
   },
   computed: {
     currentPage () {

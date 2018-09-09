@@ -1,6 +1,7 @@
 <template lang="html">
   <div>
-    <h5>TOTAL ROW: {{page}} + {{tableData.length}} / {{dataLength}}</h5>
+    <h5>width: {{page.width}}  / {{dataLength.width}}</h5>
+    <h5>height {{page.height}} + {{dataLength.height}}</h5>
     <el-button-group>
       <el-button @click="minusPage('height')"
       type="primary"

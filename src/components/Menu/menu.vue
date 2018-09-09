@@ -2,11 +2,15 @@
   <el-menu class="el-menu-vertical-demo"
     background-color="#2f3538"
     text-color="#fff">
-    <el-menu-item index="0" @click="gotoPage('Main')">
+    <el-menu-item index="0" @click="gotoPage('Data')">
+      <i class="el-icon-picture-outline"></i>
+      <span slot="title">数据源</span>
+    </el-menu-item>
+    <el-menu-item index="1" @click="gotoPage('Main')">
       <i class="el-icon-picture-outline"></i>
       <span slot="title">Sheet</span>
     </el-menu-item>
-    <el-menu-item index="1" @click="gotoPage('Dash')">
+    <el-menu-item index="2" @click="gotoPage('Dash')">
       <i class="el-icon-menu"></i>
       <span slot="title">DashBoard</span>
     </el-menu-item>
@@ -21,7 +25,7 @@ export default {
   },
   methods: {
     gotoPage (page) {
-      // page = 'Dash' or 'Main'
+      // page = 'Dash' || 'Main' || 'DataSource'
       this.$store.commit('gotoPage', page)
     }
   }
