@@ -14,6 +14,10 @@
       <i class="el-icon-menu"></i>
       <span slot="title">DashBoard</span>
     </el-menu-item>
+    <el-menu-item index="3" @click="goHome">
+      <i class="el-icon-menu"></i>
+      <span slot="title">返回主页</span>
+    </el-menu-item>
   </el-menu>
 </template>
 
@@ -27,6 +31,9 @@ export default {
     gotoPage (page) {
       // page = 'Dash' || 'Main' || 'DataSource'
       this.$store.commit('gotoPage', page)
+    },
+    goHome () {
+      this.$router.push('/')
     }
   }
 }

@@ -10,7 +10,7 @@
           <h1>Phantom BI</h1>
           <p>服务于工业大数据自主分析，基于自由和开放的交互理念，让分析师更专注于数据背后的故事。</p>
           <div>
-            <el-button type="primary" round>开始使用</el-button>
+            <el-button type="primary" round @click="goAnalysis">开始使用</el-button>
           </div>
         </div>
       </el-main>
@@ -27,6 +27,11 @@ export default {
   data () {
     return {
       menuItems: ['基本介绍', '教程文档', '设计理念']
+    }
+  },
+  methods: {
+    goAnalysis () {
+      this.$router.push('/analysis')
     }
   }
 }
@@ -81,7 +86,6 @@ html body{
   .banner-intro{
     margin-top: 100px;
     background: linear-gradient(72deg, #096dd9, #1890ff);
-    
     min-height: 400px;
   }
 </style>
