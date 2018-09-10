@@ -6,7 +6,7 @@ var API = {
     }).then((res) => {
       return res.json()
     }).then((res) => {
-      return callback(res.dataSource)
+      return callback(res)
     })
   }
 }

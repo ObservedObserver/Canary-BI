@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 // import {sum, count, average, median} from './statistic.js'
-import {API} from '@/store/API/api.js'
+import { API } from '@/store/API/api.js'
 import {
   filterData,
   transLabel,
@@ -13,7 +13,7 @@ import {
   // transTree,
   transTreeDFS
 } from 'bi-dataset/main.js'
-import {dataDrop} from './util/drop.js'
+import { dataDrop } from './util/drop.js'
 import transpose from './util/transposition.js'
 import createMatrix from './util/initMatrix.js'
 import getValue from './util/getvalue.js'
@@ -29,6 +29,10 @@ function getInitState (oldState = []) {
   let newState = {
     currentAPI: 'http://localhost:2018/api/data/titanic',
     globalData: [],
+    dataConfig: {
+      dimensions: [],
+      measures: []
+    },
     globalDataLabels: {
       filter: [],
       data: [],
@@ -57,8 +61,8 @@ var store = new Vuex.Store({
   state: getInitState(),
   getters: {
     originLabels (state) {
-      let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.data})
-      return {dimensions, measures}
+      let { dimensions, measures } = transLabel({ xlabels: state.globalDataLabels.data })
+      return { dimensions, measures }
     },
     biLabels (state) {
       // let {dimensions, measures} = transLabel({xlabels: state.globalDataLabels.X, ylabels: state.globalDataLabels.Y})
@@ -66,28 +70,28 @@ var store = new Vuex.Store({
       let columns = state.globalDataLabels.Y.map(val => val.name)
       let measures = state.globalDataLabels.value.map(val => val.name)
       let dimensions = rows.concat(columns)
-      return {dimensions, measures}
+      return { dimensions, measures }
     },
     viewData (state) {
       let viewData = []
-      viewData = filterData({filters: state.filters, rawData: state.globalData})
+      viewData = filterData({ filters: state.filters, rawData: state.globalData })
       return viewData
     },
     biTree (state, getters) {
-      let {dimensions, measures} = getters.biLabels
+      let { dimensions, measures } = getters.biLabels
       let statFunc = state.pickedFunc
-      let tree = dataTree({rawData: getters.viewData, dimensions, measures, statFunc})
+      let tree = dataTree({ rawData: getters.viewData, dimensions, measures, statFunc })
       return tree
     },
     labelTree (state, getters) {
-      let {measures} = getters.biLabels
+      let { measures } = getters.biLabels
       let btree = getters.biTree
       // let btree = dataTree({rawData: getters.viewData, dimensions, measures})
       console.log('measures', measures)
 
       let ans = transTreeDFS({
         bnode: ['root', btree],
-        lnode: {label: 'root', children: []},
+        lnode: { label: 'root', children: [] },
         measures,
         level: 0
       })
@@ -96,11 +100,11 @@ var store = new Vuex.Store({
     biMatrix (state, getters) {
       let tree = getters.biTree
       // console.log(tree)
-      let ans = tree2Matrix({tree})
+      let ans = tree2Matrix({ tree })
       return ans
     },
     valueSet (state, getters) {
-      let {dimensions, measures} = getters.biLabels
+      let { dimensions, measures } = getters.biLabels
       let valueSet = dimensionValueSet({
         rawData: getters.viewData,
         dimensions: dimensions.concat(measures)
@@ -113,13 +117,13 @@ var store = new Vuex.Store({
       let measures = state.globalDataLabels.value.map(val => val.name)
       let ans = []
       if ((rows.length > 0) && (columns.length > 0)) {
-        let rowTree = dataTree({rawData: getters.viewData, dimensions: rows})
-        let columnTree = dataTree({rawData: getters.viewData, dimensions: columns})
+        let rowTree = dataTree({ rawData: getters.viewData, dimensions: rows })
+        let columnTree = dataTree({ rawData: getters.viewData, dimensions: columns })
         // console.log(columnTree, tree2Matrix({tree: columnTree}))
-        let valueTree = dataTree({rawData: getters.viewData, dimensions: rows.concat(columns), measures, statFunc: state.pickedFunc})
+        let valueTree = dataTree({ rawData: getters.viewData, dimensions: rows.concat(columns), measures, statFunc: state.pickedFunc })
         // console.log(valueTree)
-        let rowMatrix = tree2Matrix({tree: rowTree})
-        let originColumnMatrix = tree2Matrix({tree: columnTree})
+        let rowMatrix = tree2Matrix({ tree: rowTree })
+        let originColumnMatrix = tree2Matrix({ tree: columnTree })
         for (let rarr of rowMatrix) {
           for (let carr of originColumnMatrix) {
             let r = rarr.toString()
@@ -144,13 +148,13 @@ var store = new Vuex.Store({
       } else if ((rows.length > 0) && (columns.length > 0)) {
         // let values = state.globalDataLabels.value
         ans = []
-        let rowTree = dataTree({rawData: getters.viewData, dimensions: rows})
-        let columnTree = dataTree({rawData: getters.viewData, dimensions: columns})
+        let rowTree = dataTree({ rawData: getters.viewData, dimensions: rows })
+        let columnTree = dataTree({ rawData: getters.viewData, dimensions: columns })
         // console.log(columnTree, tree2Matrix({tree: columnTree}))
-        let valueTree = dataTree({rawData: getters.viewData, dimensions: rows.concat(columns), measures, statFunc: state.pickedFunc})
+        let valueTree = dataTree({ rawData: getters.viewData, dimensions: rows.concat(columns), measures, statFunc: state.pickedFunc })
         // console.log(valueTree)
-        let rowMatrix = tree2Matrix({tree: rowTree})
-        let originColumnMatrix = tree2Matrix({tree: columnTree})
+        let rowMatrix = tree2Matrix({ tree: rowTree })
+        let originColumnMatrix = tree2Matrix({ tree: columnTree })
         let columnMatrix = transpose(originColumnMatrix)
         // console.log(rowMatrix, columnMatrix)
         let emptyMatrix = createMatrix(rowMatrix[0].length, columnMatrix.length, () => '')
@@ -180,13 +184,13 @@ var store = new Vuex.Store({
         }
       }
     },
-    drag (state, {component, label}) {
+    drag (state, { component, label }) {
       state.currentLabel = state.globalDataLabels[component][label]
       if (component !== 'dimensions' && component !== 'measures' && component !== 'time') {
         state.globalDataLabels[component].splice(label, 1)
       }
     },
-    drop (state, {ev, component}) {
+    drop (state, { ev, component }) {
       ev.preventDefault()
       dataDrop(state, component)
       state.currentLabel = {}
@@ -212,44 +216,55 @@ var store = new Vuex.Store({
     },
     setCurrentAPI (state, api) {
       state.currentAPI = api
+    },
+    setFieldsType (state, val) {
+      state.globalDataLabels.data = val
+      let dimensions = []
+      let measures = []
+      state.valueSet = dimensionValueSet({ rawData: state.globalData, dimensions: dimensions.concat(measures) })
+      state.globalDataLabels.data.forEach(item => {
+        if (item.type === 'string') {
+          dimensions.push(item)
+          state.globalData.forEach(record => {
+            try {
+              record[item.name] = record[item.name].toString()
+            } catch (error) {
+              record[item.name] = ''
+            }
+          })
+        } else if (item.type === 'number') {
+          measures.push(item)
+          state.globalData.forEach(record => {
+            record[item.name] = Number(record[item.name]) || 0
+          })
+        }
+      })
+      state.globalDataLabels.dimensions = dimensions
+      state.globalDataLabels.measures = measures
     }
   },
   actions: {
     getMainData (context) {
       var state = context.state
       API.getMainData(state.currentAPI, (res) => {
-        state.globalData = res
-        state.globalData.forEach((item, index, arr) => {
-          arr[index]['_bi_count'] = 1
-          arr[index]['score'] = parseInt(Math.random() * 10)
-        })
-        if (state.globalData.length !== 0) {
-          let _keys = Object.keys(state.globalData[0])
-          for (let i = 0; i < _keys.length; i++) {
-            let item = {
-              name: _keys[i],
-              type: typeof state.globalData[0][_keys[i]]
-            }
-            state.globalDataLabels.data.push(item)
-          }
-        }
-        let {dimensions, measures} = context.getters.originLabels
-        state.valueSet = dimensionValueSet({rawData: res, dimensions: dimensions.concat(measures)})
-        dimensions.forEach((dim) => {
-          state.globalDataLabels.dimensions.push({
-            name: dim,
+        state.globalData = res.dataSource
+        state.dataConfig.dimensions = res.config.Dimensions
+        state.dataConfig.measures = res.config.Measures
+        state.globalDataLabels.data = res.config.Dimensions.map((val) => {
+          return {
+            name: val,
             type: 'string'
-          })
+          }
         })
-        measures.forEach((mea) => {
-          state.globalDataLabels.measures.push({
-            name: mea,
+        state.globalDataLabels.data = state.globalDataLabels.data.concat(res.config.Measures.map((val) => {
+          return {
+            name: val,
             type: 'number'
-          })
-        })
+          }
+        }))
       })
     }
   }
 })
 
-export {store}
+export { store }
