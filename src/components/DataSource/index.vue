@@ -16,8 +16,21 @@
                   <el-input v-model="api.service" placeholder="service" />
               </el-col>
             </el-row>
+            <el-row style="margin-top: 1rem;">
+              <el-button @click="requestData">请求数据服务</el-button> 或 <el-button @click="dropbox.show=true">上传数据集</el-button>
+            </el-row>
             <el-row>
-              <el-button @click="requestData">Get Data</el-button>
+              <el-dialog width="30%" title="dropbox" :visible.sync="dropbox.show">
+                <div class="drop-area"
+                @dragenter="dragenter"
+                @dragover="dragover"
+                @drop="drop">{{dropbox.content}}</div>
+                <el-row v-for="file in dropbox.files" :key="file.name">
+                  <el-col :span="12">{{file.name}}</el-col>
+                  <el-col :span="12">{{file.size/1024}}KB</el-col>
+                </el-row>
+                <el-button @click="saveDataSource">Confirm</el-button>
+              </el-dialog>
             </el-row>
           </el-header>
           <el-container style="margin-top: 10px">
@@ -82,6 +95,12 @@ export default {
         port: '2018',
         service: '/api/data/titanic'
       },
+      showDropBox: false,
+      dropbox: {
+        show: false,
+        content: 'Drop your file here',
+        files: []
+      },
       currentPage: 0,
       typeOptions: [
         {value: 'string', label: '维度'},
@@ -136,6 +155,28 @@ export default {
     fieldClass ({row, column, rowIndex, columnIndex}) {
       console.log({row, column, rowIndex, columnIndex})
       return 'dim-field'
+    },
+    dragover (e) {
+      e.stopPropagation()
+      e.preventDefault()
+    },
+    dragenter (e) {
+      e.stopPropagation()
+      e.preventDefault()
+    },
+    drop (e) {
+      e.stopPropagation()
+      e.preventDefault()
+      let dt = e.dataTransfer
+      this.dropbox.files = dt.files
+      console.log(dt.files)
+    },
+    saveDataSource () {
+      let reader = new FileReader()
+      reader.readAsText(this.dropbox.files[0])
+      reader.onload = (ev) => {
+        console.log(ev.target.result)
+      }
     }
   }
 }
@@ -151,5 +192,13 @@ export default {
 }
 .mea-field {
   color: green!important;
+}
+.drop-area{
+  width: 260px;
+  height: 160px;
+  border-radius: 16px;
+  border: 1px dashed grey;
+  text-align: center;
+  line-height: 160px;
 }
 </style>
