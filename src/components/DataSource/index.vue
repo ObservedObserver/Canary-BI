@@ -172,11 +172,9 @@ export default {
       console.log(dt.files)
     },
     saveDataSource () {
-      let reader = new FileReader()
-      reader.readAsText(this.dropbox.files[0])
-      reader.onload = (ev) => {
-        console.log(ev.target.result)
-      }
+      this.$store.commit('initState', ['currentAPI', 'page'])
+      this.$store.dispatch('importUploadData', {file: this.dropbox.files[0]})
+      this.dropbox.show = false
     }
   }
 }
@@ -192,6 +190,9 @@ export default {
 }
 .mea-field {
   color: green!important;
+}
+.fileover{
+  background-color: #87e8de;
 }
 .drop-area{
   width: 260px;

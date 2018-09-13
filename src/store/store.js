@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import CSV from 'comma-separated-values'
 // import {sum, count, average, median} from './statistic.js'
 import { API } from '@/store/API/api.js'
 import {
@@ -263,6 +264,40 @@ var store = new Vuex.Store({
           }
         }))
       })
+    },
+    importUploadData (context, {file}) {
+      let reader = new FileReader()
+      reader.readAsText(file)
+      let fileNameArr = file.name.split('.')
+      let fileType = fileNameArr[fileNameArr.length - 1]
+      reader.onload = (ev) => {
+        let dataSource
+        switch (fileType) {
+          case 'json':
+            dataSource = JSON.parse(ev.target.result)
+            context.state.globalData = dataSource
+            break
+          case 'csv':
+            dataSource = new CSV(ev.target.result, { header: true }).parse()
+            context.state.globalData = dataSource
+            break
+        }
+        if (dataSource.length > 0) {
+          let keys = Object.keys(dataSource[0])
+          context.state.globalDataLabels.data = keys.map((key) => {
+            return {
+              type: typeof dataSource[0][key],
+              name: key
+            }
+          })
+          context.state.globalDataLabels.dimensions = context.state.globalDataLabels.data.filter(label => {
+            return label.type === 'string'
+          })
+          context.state.globalDataLabels.measures = context.state.globalDataLabels.data.filter(label => {
+            return label.type === 'number'
+          })
+        }
+      }
     }
   }
 })
