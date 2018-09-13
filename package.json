@@ -14,8 +14,6 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@antv/data-set": "^0.8.6",
-    "@antv/g2": "^3.1.2",
     "bi-dataset": "^2.2.0",
     "comma-separated-values": "^3.6.4",
     "deepcopy": "^0.6.3",
@@ -23,8 +21,6 @@
     "echarts": "^4.1.0",
     "echarts-gl": "^1.0.1",
     "element-ui": "^2.3.7",
-    "g2-vue": "^1.0.1",
-    "viser-vue": "^2.2.2",
     "vue": "^2.5.2",
     "vue-echarts": "^3.0.7",
     "vue-router": "^3.0.1",
@@ -78,7 +74,6 @@
     "postcss-url": "^7.2.1",
     "rimraf": "^2.6.0",
     "selenium-server": "^3.0.1",
-    "semantic-ui-css": "^2.2.12",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",
