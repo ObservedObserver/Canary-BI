@@ -28,9 +28,9 @@ export default {
     },
     chooseAllNodes () {
       let nodes = this.tree
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.$refs.node.setCheckedNodes(nodes)
-      }, 0)
+      })
     },
     clearAllNodes () {
       this.$refs.node.setCheckedNodes([])

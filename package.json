@@ -21,6 +21,7 @@
     "echarts": "^4.1.0",
     "echarts-gl": "^1.0.1",
     "element-ui": "^2.3.7",
+    "js-cookie": "^2.2.0",
     "vue": "^2.5.2",
     "vue-echarts": "^3.0.7",
     "vue-router": "^3.0.1",
