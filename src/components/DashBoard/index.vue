@@ -26,9 +26,9 @@
         :w="item.w"
         :h="item.h"
         :i="item.i">
-          <el-card class="sub-chart">
-            <chart :auto-resize="true" :options="item.option" style="width:100%;height:236px" />
-          </el-card>
+          <div class="chart-container">
+              <chart class="auto-size-chart" :auto-resize="true" :options="item.option" />
+          </div>
       </grid-item>
     </grid-layout>
   </div>
@@ -61,7 +61,34 @@ export default {
 .dash-board {
   padding: 1rem;
 }
+.chart-container{
+  padding: 1rem 1rem;
+  margin: 1rem 1rem;
+  height: 82%;
+  width: 98%%;
+  border: 1px solid #f5f5f5;
+  border-radius: 3px;
+  box-shadow: 0px 1px 3px 3px #f5f5f5;
+}
 .sub-chart {
-  margin: 1rem;
+  height: 100%;
+  width: 100%;
+  min-width: 100px;
+  min-height: 50px;
+}
+.el-card.sub-chart.is-always-shadow .el-card__body{
+  height: 92%;
+  padding-bottom: 4%;
+  padding-top: 4%;
+}
+.auto-size-chart{
+  width: 100%;
+  height: 100%;
+  min-height: 50px;
+}
+.echarts {
+  width: 100%;
+  height: 100%;
+  min-height: 50px;
 }
 </style>
