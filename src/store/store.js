@@ -207,7 +207,18 @@ var store = new Vuex.Store({
       state.dataAggregation = status
     },
     saveChart (state, option) {
-      state.dashBoard.push(option)
+      let defaultY = Math.max(...state.dashBoard.map(item => item.y), 0) + 1
+      let defaultX = 0
+      let defaultW = 12
+      let defaultH = 1
+      state.dashBoard.push({
+        x: defaultX,
+        y: defaultY,
+        w: defaultW,
+        h: defaultH,
+        i: (state.dashBoard.length + 1).toString(),
+        option
+      })
     },
     gotoPage (state, page) {
       state.page = page

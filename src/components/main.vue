@@ -5,7 +5,7 @@
     </el-aside>
     <el-main style="padding: 0px">
       <operators-board v-show="currentPage === 'Main'" />
-      <dash-board v-show="currentPage === 'Dash'"/>
+      <dash-board v-if="currentPage === 'Dash'"/>
       <data-source v-show="currentPage === 'Data' " />
     </el-main>
   </el-container>
