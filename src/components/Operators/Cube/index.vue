@@ -122,10 +122,14 @@ export default {
     },
     biLabels () {
       return this.$store.getters.biLabels
+    },
+    filters () {
+      return this.$store.state.filters
     }
   },
   watch: {
     biLabels () {
+      // 这部分代码可以通过在store中数据变化时做浅拷贝使得biLabels一定在变化时触发来简化代码
       console.log('bilabels change caught', this.preLabels, this.biLabels)
       let same = true
       let {dimensions, measures} = this.biLabels
@@ -149,6 +153,10 @@ export default {
       }
 
       this.preLabels = deepcopy(this.biLabels)
+    },
+    filters () {
+      console.log('filters change caught')
+      this.chooseAllNodes()
     }
   },
   mounted () {

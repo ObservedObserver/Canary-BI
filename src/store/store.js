@@ -197,7 +197,7 @@ var store = new Vuex.Store({
       state.currentLabel = {}
     },
     changeFilter (state, params) {
-      state.filters = params
+      state.filters = [...params]
     },
     changeFunc (state, para) {
       // para = 'Sum'
@@ -229,11 +229,11 @@ var store = new Vuex.Store({
     setCurrentAPI (state, api) {
       state.currentAPI = api
     },
+    // 数据源配置页面在设置数据类型时调用，用于根据配置信息对字段进行类型转化与清洗
     setFieldsType (state, val) {
       state.globalDataLabels.data = val
       let dimensions = []
       let measures = []
-      state.valueSet = dimensionValueSet({ rawData: state.globalData, dimensions: dimensions.concat(measures) })
       state.globalDataLabels.data.forEach(item => {
         if (item.type === 'string') {
           dimensions.push(item)
@@ -253,6 +253,7 @@ var store = new Vuex.Store({
       })
       state.globalDataLabels.dimensions = dimensions
       state.globalDataLabels.measures = measures
+      state.valueSet = dimensionValueSet({ rawData: state.globalData, dimensions: dimensions.concat(measures).map(item => item.name) })
     }
   },
   actions: {

@@ -53,6 +53,8 @@ export default {
       // 新建新添加的label
       newValue.forEach((label2) => {
         if (oldValue.length === 0 || oldValue.every(label1 => label2.name !== label1.name)) {
+          console.log('valueset', this.$store.state.valueSet)
+          // debugger
           let values = [...this.$store.state.valueSet[label2.name]]
           _filters.push({
             column: label2.name,
