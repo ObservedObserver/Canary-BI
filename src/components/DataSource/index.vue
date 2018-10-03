@@ -17,7 +17,11 @@
               </el-col>
             </el-row>
             <el-row style="margin-top: 1rem;">
-              <el-button @click="requestData">请求数据服务</el-button> 或 <el-button @click="dropbox.show=true">上传数据集</el-button>
+              <el-button size="small" type="primary"
+              @click="requestData">请求数据服务</el-button>
+              或
+              <el-button size="small" type="primary"
+              @click="dropbox.show=true">上传数据集</el-button>
             </el-row>
             <el-row>
               <el-dialog width="30%" title="dropbox" :visible.sync="dropbox.show">
@@ -57,11 +61,11 @@
                   </el-pagination>
               </el-card>
             </el-main>
-            <el-aside width="400px">
+            <el-aside style="width: 400px; padding: 20px 0px;">
               <el-card>
                 <div slot="header">
                   <span>字段配置</span>
-                  <el-button style="float: right" @click="setFieldConfig">确认</el-button>
+                  <el-button style="float: right" @click="setFieldConfig" size="small" type="primary">确认</el-button>
                 </div>
                 <el-form label-position="right" label-width="100px">
                   <el-form-item v-for="(field, index) in tableDataField"

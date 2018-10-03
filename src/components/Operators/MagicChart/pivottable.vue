@@ -1,19 +1,24 @@
 <template lang="html">
   <div>
-    <h5>width: {{page.width}}  / {{dataLength.width}}</h5>
-    <h5>height {{page.height}} + {{dataLength.height}}</h5>
+    <div class="num-card-container">
+      <numCard :content="numCardContent" :num="2"/>
+    </div>
     <el-button-group>
       <el-button @click="minusPage('height')"
       type="primary"
+      size="small"
       icon="el-icon-arrow-left">上一页(上下)</el-button>
       <el-button @click="addPage('height')"
+      size="small"
       type="primary">下一页(上下)<i class="el-icon-arrow-right el-icon--right"></i></el-button>
     </el-button-group>
     <el-button-group>
       <el-button @click="minusPage('width')"
       type="primary"
+      size="small"
       icon="el-icon-arrow-left">上一页(左右)</el-button>
       <el-button @click="addPage('width')"
+      size="small"
       type="primary">下一页(左右)<i class="el-icon-arrow-right el-icon--right"></i></el-button>
     </el-button-group>
     <table class="ui-table">
@@ -27,9 +32,13 @@
 </template>
 
 <script>
+import numCard from '@/widgets/numCard.vue'
 const PAGE_ROWS = 100
 export default {
   name: 'magic-table',
+  components: {
+    numCard
+  },
   data () {
     return {
       page: {
@@ -66,6 +75,12 @@ export default {
       return pivotTable.slice(this.page.height * PAGE_ROWS, (this.page.height + 1) * PAGE_ROWS).map((row) => {
         return row.slice(this.page.width * PAGE_ROWS, (this.page.width + 1) * PAGE_ROWS)
       })
+    },
+    numCardContent () {
+      return [
+        {title: '行数', value: this.page.height + '/' + this.dataLength.height},
+        {title: '列数', value: this.page.width + '/' + this.dataLength.width}
+      ]
     }
   }
 }
@@ -96,5 +111,10 @@ export default {
     color: rgba(0, 0, 0, 0.87);
     border-collapse: separate;
     border-spacing: 0px;
+}
+.num-card-container{
+  background-color: #FFFFFF;
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 </style>

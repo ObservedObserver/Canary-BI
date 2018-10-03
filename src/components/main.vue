@@ -1,10 +1,10 @@
 <template lang="html">
   <el-container class="vis-main-board" style="padding: 0px">
-    <el-aside width="146px">
+    <el-aside width="256px">
       <menu-board></menu-board>
     </el-aside>
     <el-main style="padding: 0px">
-      <operators-board v-show="currentPage === 'Main'" />
+      <operators-board v-show="currentPage.substr(0, 4) === 'Main'" />
       <dash-board v-if="currentPage === 'Dash'"/>
       <data-source v-show="currentPage === 'Data' " />
     </el-main>

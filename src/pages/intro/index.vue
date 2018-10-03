@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="intro-page">
     <el-container class="banner-page">
       <el-header>
         <div class="banner-header">
@@ -58,6 +58,10 @@ html body{
   margin: 0px!important;
   padding: 0px;
 }
+.intro-page{
+  background-color: #ffffff;
+  z-index: -2;
+}
 .banner-page{
   padding: 0.5rem 10%;
 }
@@ -72,7 +76,7 @@ html body{
   .banner-content {
     margin-top: 100px;
     width: 48%;
-    min-width: 500px;
+    min-width: 300px;
     max-width: 400px;
     min-height: 320px;
     color: #0d1a26;
@@ -94,7 +98,6 @@ html body{
   }
   .banner-segment img {
     position: absolute;
-    z-index: -1;
     left: 40%;
   }
   /* .rotate-segment{
