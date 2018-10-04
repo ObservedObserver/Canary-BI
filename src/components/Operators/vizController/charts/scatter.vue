@@ -6,25 +6,15 @@ function getChartOption () {
   return {
     legend: {},
     tooltip: {},
-    // dataset: {
-    //   source: []
-    // },
     xAxis: [],
     yAxis: [],
     grid: [],
     series: []
   }
 }
-function getUniqueArray (arr = [], field) {
-  if (typeof field === 'undefined') { return [] }
-  let set = new Set()
-  arr.forEach(item => {
-    set.add(item[field])
-  })
-  return [...set]
-}
+
 export default {
-  name: 'group-interval-chart',
+  name: 'scatter-chart',
   data () {
     return {}
   },
@@ -51,18 +41,14 @@ export default {
   computed: {
     option () {
       let option = getChartOption()
-      let {dataSource, dimensions, measures} = this.$props
+      let {dataSource, measures} = this.$props
       let facets = [...dataSource.children.keys()]
       let viewHeight = {
         margin: 2,
         height: parseInt(100 / facets.length)
       }
       option.xAxis = facets.map((facet, index) => {
-        return {
-          type: 'category',
-          gridIndex: index,
-          data: [...dataSource.children.get(facet).children.keys()]
-        }
+        return {gridIndex: index}
       })
       option.yAxis = facets.map((facet, index) => {
         return {gridIndex: index}
@@ -73,17 +59,22 @@ export default {
           bottom: 5 + 100 - ((index + 1) * viewHeight.height - viewHeight.margin) + '%'
         }
       })
-      option.series = []
-      facets.forEach((facet, index) => {
-        for (let child of dataSource.children.get(facet).children.values()) {
-          option.series.push({
-            type: 'bar',
-            xAxisIndex: index,
-            yAxisIndex: index,
-            data: [...child.children.values()].map(item => item._aggData[measures[0]])
+      option.series = facets.map((facet, index) => {
+        let data = []
+        let values = [...dataSource.children.values()]
+        values.forEach(item => {
+          item.rawData.forEach((r) => {
+            data.push([r[measures[0]], r[measures[1]]])
           })
+        })
+        return {
+          type: 'scatter',
+          xAxisIndex: index,
+          yAxisIndex: index,
+          data: data
         }
       })
+      console.log(option, dataSource)
       return option
     }
   }

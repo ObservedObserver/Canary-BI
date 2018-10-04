@@ -24,7 +24,7 @@ function getUniqueArray (arr = [], field) {
   return [...set]
 }
 export default {
-  name: 'group-interval-chart',
+  name: 'stack-interval-chart',
   data () {
     return {}
   },
@@ -78,6 +78,7 @@ export default {
         for (let child of dataSource.children.get(facet).children.values()) {
           option.series.push({
             type: 'bar',
+            stack: 'stack' + index,
             xAxisIndex: index,
             yAxisIndex: index,
             data: [...child.children.values()].map(item => item._aggData[measures[0]])

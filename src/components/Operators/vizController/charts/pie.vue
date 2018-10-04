@@ -9,14 +9,6 @@ function getChartOption () {
     series: []
   }
 }
-function getUniqueArray (arr = [], field) {
-  if (typeof field === 'undefined') { return [] }
-  let set = new Set()
-  arr.forEach(item => {
-    set.add(item[field])
-  })
-  return [...set]
-}
 export default {
   name: 'simple-pie-chart',
   data () {
@@ -24,7 +16,7 @@ export default {
   },
   props: {
     dataSource: {
-      type: Array,
+      type: Object,
       default () {
         return []
       }
@@ -46,9 +38,9 @@ export default {
     option () {
       let option = getChartOption()
       let {dimensions, measures, dataSource} = this.$props
-      let facetYs = getUniqueArray(dataSource, dimensions[0])
-      let rad = parseInt(100 / facetYs.length)
-      option.series = facetYs.map((facet, index) => {
+      let facets = [...dataSource.children.keys()]
+      let rad = parseInt(100 / facets.length)
+      option.series = facets.map((facet, index) => {
         return {
           type: 'pie',
           radius: [0, `${rad * 0.9}%`],
@@ -56,9 +48,13 @@ export default {
           label: {
             formatter: '{b}: {d}%'
           },
-          data: dataSource.filter(record => {
-            return record[dimensions[0]] === facet
-          }).map(item => item[measures[0]])
+          data: [...dataSource.children.get(facet).children.entries()]
+            .map(item => {
+              return {
+                name: item[0],
+                value: item[1]._aggData[measures[0]]
+              }
+            })
         }
       })
       return option

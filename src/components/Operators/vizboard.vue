@@ -41,7 +41,9 @@ export default {
           { name: 'bar' },
           { name: 'line' },
           { name: 'pie' },
-          { name: 'group-interval' }
+          { name: 'group-interval' },
+          { name: 'stack-interval' },
+          { name: 'scatter' }
         ]
       },
       currentChart: '0'

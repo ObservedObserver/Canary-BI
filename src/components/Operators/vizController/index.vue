@@ -12,25 +12,37 @@
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" />
+    <scatter-chart v-if="chartType === 'scatter'"
+    :dataSource="dataSource"
+    :dimensions="dimensions"
+    :measures="measures" />
     <group-interval v-if="chartType === 'group-interval'"
+    :dataSource="dataSource"
+    :dimensions="dimensions"
+    :measures="measures" />
+    <stack-interval v-if="chartType === 'stack-interval'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" />
   </div>
 </template>
 <script>
+import scatterChart from './charts/scatter.vue'
 import intervalChart from './charts/interval.vue'
 import lineChart from './charts/line.vue'
 import pieChart from './charts/pie.vue'
 import groupInterval from './charts/groupInterval.vue'
+import stackInterval from './charts/stackInterval.vue'
 import {createCube} from 'cube-core'
-import {tree2Matrix} from './utils/foldTree.js'
+// import {tree2Matrix} from './utils/foldTree.js'
 import {sum} from './utils/stat.js'
 const MEASURE_NAME = 'measure_name'
 const MEASURE_VALUE = 'measure_value'
 export default {
   name: 'viz-controller',
   components: {
+    scatterChart,
+    stackInterval,
     groupInterval,
     intervalChart,
     lineChart,
@@ -59,14 +71,21 @@ export default {
       return cube
     },
     dimensions () {
+      if (this.$props.chartType === 'scatter') {
+        return this.$store.getters.biLabels.dimensions
+      }
       return [MEASURE_NAME].concat(this.$store.getters.biLabels.dimensions)
     },
     measures () {
+      if (this.$props.chartType === 'scatter') {
+        return this.$store.getters.biLabels.measures
+      }
       return [MEASURE_VALUE]
     },
     dataSource () {
-      let dimensions = this.dimensions
-      return tree2Matrix({tree: this.cube.tree, dimensions})
+      return this.cube.tree
+      // let dimensions = this.dimensions
+      // return tree2Matrix({tree: this.cube.tree, dimensions})
     },
     foldData () {
       let dataSource = this.$store.getters.viewData
@@ -81,6 +100,7 @@ export default {
           })
         })
       })
+      console.log('new dataSource', dataSource)
       return foldData
     }
   }
