@@ -6,22 +6,11 @@ function getChartOption () {
   return {
     legend: {},
     tooltip: {},
-    // dataset: {
-    //   source: []
-    // },
     xAxis: [],
     yAxis: [],
     grid: [],
     series: []
   }
-}
-function getUniqueArray (arr = [], field) {
-  if (typeof field === 'undefined') { return [] }
-  let set = new Set()
-  arr.forEach(item => {
-    set.add(item[field])
-  })
-  return [...set]
 }
 export default {
   name: 'stack-interval-chart',
@@ -51,7 +40,7 @@ export default {
   computed: {
     option () {
       let option = getChartOption()
-      let {dataSource, dimensions, measures} = this.$props
+      let {dataSource, measures} = this.$props
       let facets = [...dataSource.children.keys()]
       let viewHeight = {
         margin: 2,

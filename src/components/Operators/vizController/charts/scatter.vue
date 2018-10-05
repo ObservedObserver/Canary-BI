@@ -41,8 +41,15 @@ export default {
   computed: {
     option () {
       let option = getChartOption()
-      let {dataSource, measures} = this.$props
-      let facets = [...dataSource.children.keys()]
+      let {dataSource, dimensions} = this.$props
+      let facets
+      if (dimensions.length >= 3) {
+        facets = [...dataSource.children.keys()]
+      } else {
+        // root of cube tree's tag
+        facets = ['all']
+      }
+      console.log(facets)
       let viewHeight = {
         margin: 2,
         height: parseInt(100 / facets.length)
@@ -61,10 +68,11 @@ export default {
       })
       option.series = facets.map((facet, index) => {
         let data = []
-        let values = [...dataSource.children.values()]
-        values.forEach(item => {
-          item.rawData.forEach((r) => {
-            data.push([r[measures[0]], r[measures[1]]])
+        let xs = [...dataSource.children.entries()]
+        xs.forEach(x => {
+          let ys = [...x[1].children.entries()]
+          ys.forEach(y => {
+            data.push([x[0], y[0]])
           })
         })
         return {

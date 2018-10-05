@@ -73,6 +73,8 @@ export default {
     dimensions () {
       if (this.$props.chartType === 'scatter') {
         return this.$store.getters.biLabels.dimensions
+          .slice(0, 1)
+          .concat(this.$store.getters.biLabels.measures)
       }
       return [MEASURE_NAME].concat(this.$store.getters.biLabels.dimensions)
     },

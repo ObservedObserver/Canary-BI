@@ -37,7 +37,7 @@ export default {
   computed: {
     option () {
       let option = getChartOption()
-      let {dimensions, measures, dataSource} = this.$props
+      let {measures, dataSource} = this.$props
       let facets = [...dataSource.children.keys()]
       let rad = parseInt(100 / facets.length)
       option.series = facets.map((facet, index) => {
