@@ -24,6 +24,11 @@
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" />
+    <simple-card v-if="chartType === 'simple-card'"
+    :dataSource="dataSource"
+    :dimensions="dimensions"
+    :measures="measures"
+    />
   </div>
 </template>
 <script>
@@ -33,6 +38,7 @@ import lineChart from './charts/line.vue'
 import pieChart from './charts/pie.vue'
 import groupInterval from './charts/groupInterval.vue'
 import stackInterval from './charts/stackInterval.vue'
+import simpleCard from './cards/simpleCard.vue'
 import {createCube} from 'cube-core'
 // import {tree2Matrix} from './utils/foldTree.js'
 import {sum} from './utils/stat.js'
@@ -46,7 +52,8 @@ export default {
     groupInterval,
     intervalChart,
     lineChart,
-    pieChart
+    pieChart,
+    simpleCard
   },
   data () {
     return {}

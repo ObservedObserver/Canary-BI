@@ -43,7 +43,8 @@ export default {
           { name: 'pie' },
           { name: 'group-interval' },
           { name: 'stack-interval' },
-          { name: 'scatter' }
+          { name: 'scatter' },
+          { name: 'simple-card' }
         ]
       },
       currentChart: '0'
