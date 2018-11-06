@@ -20,101 +20,25 @@ npm run build
 
 ```
 
-## 结构说明
+## 效果图
+Dashboard
+![](http://imglf3.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYdXRxUlNjK0Jyc1hjcm0rdmRZZTRDZmpveCtpUXI4VjRBPT0.png?imageView&thumbnail=3000y1672&type=png&quality=96&stripmeta=0)
 
-```bash
-.
-├── Menu
-│   └── menu.vue (左侧菜单栏)
-├── Operators
-│   ├── MagicChart
-│   │   ├── barchart.vue (柱状图)
-│   │   ├── linechart.vue (折线图插件)
-│   │   ├── piechart.vue (饼图插件)
-│   │   ├── scatter.vue (散点图插件)
-│   │   └── table.vue (表格)
-│   ├── Tool
-│   │   ├── filters
-│   │   │   ├── collapse.vue
-│   │   │   ├── form.vue
-│   │   │   ├── index.vue
-│   │   │   └── silder.vue
-│   │   ├── range.vue
-│   │   └── statistics.vue
-│   ├── data.vue (放置数据标签的模块)
-│   ├── dimension.vue
-│   ├── dragarea.vue (所有存放可拖拽标签的)
-│   ├── main.vue
-│   ├── vizboard.vue (存放数据可视化图表的面板)
-│   └── xymenu.vue (存放xAxis与yAxis中所有的数据标签)
-└── main.vue
-```
+自主分析
+![](http://imglf4.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYcXZXcjllNFpONU5remJRSUozOXN6V0dEZ2czTG82cUhnPT0.png?imageView&thumbnail=3000y1672&type=png&quality=96&stripmeta=0)
 
+数据透视表
+![](http://imglf5.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYcmtDM1dZZ2xjYVg0R0x0Q3c2dnhUSnBjZTJwTGpIQTF3PT0.png?imageView&thumbnail=3000y1672&type=png&quality=96&stripmeta=0)
 
-### 组件说明
+数据源配置
+![](http://imglf6.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYaDZSMllnSVN0WUxIclRycFJmbjJvTHZGWXl4V2hEQXF3PT0.png?imageView&thumbnail=3000y1677&type=png&quality=96&stripmeta=0)
 
-### 数据管理
-#### state
-```js
-state: {
-  globalData: [], // 全局的源数据
-  globalDataLabels: { // 全局数据标签
-    filter: [], // 可与filters合并
-    page: [], // 未使用
-    data: [],
-    X: [],
-    Y: [],
-    dimension: [] // 未使用
-  },
-  currentLabel: {}, // 当前拖拽/操作的标签
-  dimensionLabels: [ // 未使用
-    {name: '形状', style: ['circle', 'thin']},
-    {name: '大小', style: ['square']},
-    {name: '颜色', style: ['circle', 'green']}
-  ],
-  dataAggregation: true, // 数据聚合模式
-  filters: [], // 过滤器
-  func: ['Sum', 'Mean', 'Median', 'Count'], // 统计函数
-  pickedFunc: 'Sum', // 当前使用的统计函数
-  valueSet: {} // 所有维度与度量的所有值的集合
-},
-```
-### getters
-+ `originDataset` 将源数据转换为二维数组格式(类csv)
-+ `originLabels` 将所有的data标签进行分类(分为维度与度量)
-+ `biLabels` 将用户选择的(位于X标签区域与Y标签区域中)标签进行分类
-+ `viewData` 经过过滤后的视图数据
-+ `biDimension` 获取所选所有维度所有取值的排列组合矩阵
-+ `biDataset`获取最终用于图表生成的矩阵
-
-### 主数据结构
-```js
-// dimensions
-['name', 'city']
-// measures
-['value']
-// biDiemnsion
-[
-  ['name', 'city'],
-  ['Alice', 'Shanghai'],
-  ['Alice', 'Beijing'],
-  ['Alice', 'Hangzhou'],
-  ['Bob', 'Shanghai'],
-  ['Bob', 'Beijing'],
-  ['Bob', 'Hangzhou']
-]
-// biDataset
-[
-  ['name', 'city', 'value'],
-  ['Alice', 'Shanghai', 40],
-  ['Alice', 'Beijing', 28],
-  ['Alice', 'Hangzhou', 69],
-  ['Bob', 'Shanghai', 12],
-  ['Bob', 'Beijing', 20],
-  ['Bob', 'Hangzhou', 60]
-]
-```
+## OLAP
 
 ### BI-Dataset
 用于处理数据集的插件，目前默认的数据集中的数据无需主键，每个键的可能值任意。
 最终很根据原始数据生成一个类似于echarts-dataset的二维数组。这个数组本质上是原始数据集中隐藏的各个含有主键的表的bridge table。但是由于原始数据可能缺乏有实际含义的主键，所以这个二维数组即便在包涵所有维度的情况下最终的数据也可能是聚合计算后的数据。
+
+对于更为通用的多维数据集的数据透视等或数据立方体的计算等操作，也可以参考相对成熟的
++ [core-cube](https://github.com/ObservedObserver/cube-core)
++ [fast-pivot](https://github.com/ObservedObserver/fast-pivot)
