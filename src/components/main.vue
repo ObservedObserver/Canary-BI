@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     currentPage () {
-      return this.$store.state.page
+      return this.$store.state.page.primary
     }
   }
 }

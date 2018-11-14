@@ -51,7 +51,14 @@ function getInitState (oldState = []) {
     pickedFunc: 'sum',
     valueSet: {},
     dashBoard: [],
-    page: 'Main'
+    page: {
+      primary: 'Main',
+      secondary: 0
+    },
+    mysql: {
+      config: {},
+      databases: []
+    }
   }
   oldState.forEach((key) => {
     delete newState[key]
@@ -275,6 +282,18 @@ var store = new Vuex.Store({
             type: 'number'
           }
         }))
+      })
+    },
+    connectMySQL (context, config) {
+      let state = context.state
+      state.mysql.config = config
+      API.connectMySQL(config, (res) => {
+        console.log('mysql:', res)
+        if (res.success) {
+          state.mysql.databases = res.result
+        } else {
+          state.mysql.databases = []
+        }
       })
     },
     importUploadData (context, {file}) {

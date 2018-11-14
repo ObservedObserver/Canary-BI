@@ -8,6 +8,21 @@ var API = {
     }).then((res) => {
       return callback(res)
     })
+  },
+  connectMySQL (config, callback) {
+    fetch('http://localhost:1999/mysql/connect', {
+      method: 'POST',
+      body: JSON.stringify(config),
+      // credentials: 'include',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+    }).then((res) => {
+      return res.json()
+    }).then((res) => {
+      return callback(res)
+    })
   }
 }
 

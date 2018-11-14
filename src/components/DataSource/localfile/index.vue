@@ -1,0 +1,62 @@
+<template>
+  <div>
+    <div class="drop-area"
+      @dragenter="dragenter"
+      @dragover="dragover"
+      @drop="drop">
+      {{dropbox.content}}
+    </div>
+      <el-row v-for="file in dropbox.files" :key="file.name">
+        <el-col :span="12">{{file.name}}</el-col>
+        <el-col :span="12">{{file.size/1024}}KB</el-col>
+      </el-row>
+      <el-button @click="saveDataSource">Confirm</el-button>
+  </div>
+</template>
+<script>
+export default {
+  name: 'local-file',
+  data () {
+    return {
+      dropbox: {
+        show: false,
+        content: 'Drop your file here(json, csv, txt)',
+        files: []
+      }
+    }
+  },
+  methods: {
+    saveDataSource () {
+      this.$store.commit('initState', ['currentAPI', 'page'])
+      this.$store.dispatch('importUploadData', {file: this.dropbox.files[0]})
+      this.dropbox.show = false
+    },
+    dragover (e) {
+      e.stopPropagation()
+      e.preventDefault()
+    },
+    dragenter (e) {
+      e.stopPropagation()
+      e.preventDefault()
+    },
+    drop (e) {
+      e.stopPropagation()
+      e.preventDefault()
+      let dt = e.dataTransfer
+      this.dropbox.files = dt.files
+      console.log(dt.files)
+    }
+  }
+}
+</script>
+<style scoped>
+  .drop-area{
+    width: 100%;
+    height: 160px;
+    border-radius: 16px;
+    border: 1px dashed grey;
+    text-align: center;
+    line-height: 160px;
+    margin-bottom: 1rem;
+  }
+</style>
