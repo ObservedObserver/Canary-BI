@@ -40,15 +40,19 @@
           </el-table>
         </el-aside>
         <el-main>
-
+          <data-view :mysql="mysql" :tables="tables"/>
         </el-main>
       </el-container>
     </el-card>
   </div>
 </template>
 <script>
+import dataView from './dataView.vue'
 export default {
   name: 'mysql',
+  components: {
+    dataView
+  },
   data () {
     return {
       mysql: {
@@ -65,7 +69,7 @@ export default {
       this.$store.dispatch('connectMySQL', this.mysql)
     },
     getTables () {
-      this.$store.dispatch('sqlQuery', {
+      this.$store.dispatch('getTableFromDB', {
         config: this.mysql,
         sql: 'SHOW TABLES;'
       })
@@ -73,7 +77,7 @@ export default {
   },
   watch: {
     currentDatabase (val) {
-      if (val !== '') {
+      if (val !== '' && this.mysql.password !== '') {
         this.getTables()
       }
     }

@@ -297,7 +297,34 @@ var store = new Vuex.Store({
         }
       })
     },
-    sqlQuery (context, {config, sql}) {
+    queryTableData (context, {config, sql}) {
+      let state = context.state
+      API.sqlQuery({config, sql}, (res) => {
+        console.log('sqlQuery', res)
+        if (res.success) {
+          state.globalData = res.result
+          let dataSource = res.result
+          if (dataSource.length > 0) {
+            let keys = Object.keys(dataSource[0])
+            context.state.globalDataLabels.data = keys.map((key) => {
+              return {
+                type: typeof dataSource[0][key],
+                name: key
+              }
+            })
+            context.state.globalDataLabels.dimensions = context.state.globalDataLabels.data.filter(label => {
+              return label.type === 'string'
+            })
+            context.state.globalDataLabels.measures = context.state.globalDataLabels.data.filter(label => {
+              return label.type === 'number'
+            })
+          }
+        } else {
+          state.mysql.tables = []
+        }
+      })
+    },
+    getTableFromDB (context, {config, sql}) {
       let state = context.state
       API.sqlQuery({config, sql}, (res) => {
         console.log('sqlQuery', res)

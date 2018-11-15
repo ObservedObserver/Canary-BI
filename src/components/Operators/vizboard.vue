@@ -4,10 +4,10 @@
       <el-menu-item v-for="(item, i) in chartMenu" :key="analysisType + item.name" :index="i.toString()">{{item.name}}</el-menu-item>
     </el-menu>
     <div class="charts-board">
-      <div v-if="analysisType === 'Main-1'">
+      <div v-if="analysisType === 0">
         <vizController :chartType="chartMenu[parseInt(currentChart)].name" />
       </div>
-      <div v-if="analysisType === 'Main-2'">
+      <div v-if="analysisType === 1">
         <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) >= 1 && parseInt(currentChart) <= 4"/>
         <magic-table v-if="currentChart === '0'" />
       </div>
@@ -57,12 +57,12 @@ export default {
   },
   computed: {
     analysisType () {
-      return this.$store.state.page
+      return this.$store.state.page.secondary
     },
     chartMenu () {
-      if (this.analysisType === 'Main-1') {
+      if (this.analysisType === 0) {
         return this.menu.dashboard
-      } else if (this.analysisType === 'Main-2') {
+      } else if (this.analysisType === 1) {
         return this.menu.analysis
       } else {
         return []
