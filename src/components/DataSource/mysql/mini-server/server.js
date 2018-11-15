@@ -19,18 +19,20 @@ app.all('*',function (req, res, next) {
 });
 
 app.post('/mysql/query', function (req, res) {
-   const {sql, host, user, port, password} = req.body
+   const {config, sql} = req.body
+   const {host, port, user, password, database} = config
    try {
       let connection = mysql.createConnection({
         host,
         user,
         port,
-        password
+        password,
+        database
       })
       connection.connect()
       connection.query(sql, (err, result) => {
         res.send(JSON.stringify({
-          success: false,
+          success: true,
           result
         }))
       })

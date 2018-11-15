@@ -22,21 +22,28 @@
       <el-button size="small" type="primary"
       @click="connectMySQL">连接MySQL数据库</el-button>
     </el-row>
-    <el-container>
-      <el-aside style="width: 200px; padding: 0.36rem">
-        <el-select v-model="mysql.database" placeholder="请选择">
-          <el-option
-            v-for="db in databases"
-            :key="db.Database"
-            :label="db.Database"
-            :value="db.Database">
-          </el-option>
-        </el-select>
-      </el-aside>
-      <el-main>
+    <el-card style="margin-top: 1rem;">
+      <el-container>
+        <el-aside style="width: 200px; padding: 0.36rem">
+          <el-select v-model="mysql.database" placeholder="请选择">
+            <el-option
+              v-for="db in databases"
+              :key="db.Database"
+              :label="db.Database"
+              :value="db.Database">
+            </el-option>
+          </el-select>
+          <el-table :data="tables" :height="250">
+            <el-table-column prop="table" label="表">
 
-      </el-main>
-    </el-container>
+            </el-table-column>
+          </el-table>
+        </el-aside>
+        <el-main>
+
+        </el-main>
+      </el-container>
+    </el-card>
   </div>
 </template>
 <script>
@@ -56,11 +63,32 @@ export default {
   methods: {
     connectMySQL () {
       this.$store.dispatch('connectMySQL', this.mysql)
+    },
+    getTables () {
+      this.$store.dispatch('sqlQuery', {
+        config: this.mysql,
+        sql: 'SHOW TABLES;'
+      })
+    }
+  },
+  watch: {
+    currentDatabase (val) {
+      if (val !== '') {
+        this.getTables()
+      }
     }
   },
   computed: {
+    currentDatabase () {
+      return this.mysql.database
+    },
     databases () {
       return this.$store.state.mysql.databases
+    },
+    tables () {
+      return this.$store.state.mysql.tables.map(item => {
+        return {table: item[`Tables_in_${this.mysql.database.toLowerCase()}`]}
+      })
     }
   }
 }

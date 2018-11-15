@@ -57,7 +57,8 @@ function getInitState (oldState = []) {
     },
     mysql: {
       config: {},
-      databases: []
+      databases: [],
+      tables: []
     }
   }
   oldState.forEach((key) => {
@@ -293,6 +294,17 @@ var store = new Vuex.Store({
           state.mysql.databases = res.result
         } else {
           state.mysql.databases = []
+        }
+      })
+    },
+    sqlQuery (context, {config, sql}) {
+      let state = context.state
+      API.sqlQuery({config, sql}, (res) => {
+        console.log('sqlQuery', res)
+        if (res.success) {
+          state.mysql.tables = res.result
+        } else {
+          state.mysql.tables = []
         }
       })
     },
