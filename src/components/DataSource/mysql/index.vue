@@ -34,7 +34,7 @@
             </el-option>
           </el-select>
           <el-table :data="tables" :height="250">
-            <el-table-column prop="table" label="表">
+            <el-table-column prop="tableName" label="表">
 
             </el-table-column>
           </el-table>
@@ -90,9 +90,7 @@ export default {
       return this.$store.state.mysql.databases
     },
     tables () {
-      return this.$store.state.mysql.tables.map(item => {
-        return {table: item[`Tables_in_${this.mysql.database.toLowerCase()}`]}
-      })
+      return this.$store.state.mysql.tables
     }
   }
 }

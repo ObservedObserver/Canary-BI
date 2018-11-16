@@ -328,8 +328,20 @@ var store = new Vuex.Store({
       let state = context.state
       API.sqlQuery({config, sql}, (res) => {
         console.log('sqlQuery', res)
+        let tableList = res.result.map(item => {
+          return {tableName: item[`Tables_in_${config.database.toLowerCase()}`], keys: []}
+        })
         if (res.success) {
-          state.mysql.tables = res.result
+          state.mysql.tables = tableList
+          tableList.forEach(table => {
+            API.sqlQuery({config, sql: `DESC ${table.tableName}`}, (res2) => {
+              if (res2.success) {
+                table.keys = res2.result
+              } else {
+                table.keys = []
+              }
+            })
+          })
         } else {
           state.mysql.tables = []
         }
