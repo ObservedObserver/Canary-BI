@@ -1,7 +1,7 @@
 <template lang="html">
   <el-card class="box-card">
     <el-collapse>
-      <el-collapse-item title="Statistics">
+      <el-collapse-item title="聚合方式">
         <el-form>
           <div v-for="item in func" :key="item.id" style="margin-top:0.4rem">
             <el-radio v-model="picked" :label="item" border size="medium">{{item}}</el-radio>

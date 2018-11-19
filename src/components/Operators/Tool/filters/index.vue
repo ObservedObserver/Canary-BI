@@ -1,7 +1,7 @@
 <template lang="html">
   <el-card class="box-card">
     <el-collapse>
-      <el-collapse-item title="Filters">
+      <el-collapse-item title="筛选器">
         <drag-area class="infilter" area-name="filter" />
         <collapse :labels="labels" />
       </el-collapse-item>

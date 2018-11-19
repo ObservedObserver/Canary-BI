@@ -69,6 +69,7 @@ export default {
   border: 1px solid #f5f5f5;
   border-radius: 3px;
   box-shadow: 0px 1px 3px 3px #f5f5f5;
+  background-color: #fff;
 }
 .sub-chart {
   height: 100%;

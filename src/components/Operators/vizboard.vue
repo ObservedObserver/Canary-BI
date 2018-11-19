@@ -1,14 +1,14 @@
 <template lang="html">
   <div class="invizboard">
     <el-menu :default-active="currentChart" mode="horizontal" @select="changeChart">
-      <el-menu-item v-for="(item, i) in chartMenu" :key="analysisType + item.name" :index="i.toString()">{{item.name}}</el-menu-item>
+      <el-menu-item v-for="(item, i) in chartMenu" :key="analysisType + item.name" :index="i.toString()">{{item.label}}</el-menu-item>
     </el-menu>
     <div class="charts-board">
       <div v-if="analysisType === 0">
         <vizController :chartType="chartMenu[parseInt(currentChart)].name" />
       </div>
       <div v-if="analysisType === 1">
-        <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) >= 1 && parseInt(currentChart) <= 4"/>
+        <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) >= 1 && parseInt(currentChart) <= 5"/>
         <magic-table v-if="currentChart === '0'" />
       </div>
     </div>
@@ -31,20 +31,21 @@ export default {
     return {
       menu: {
         analysis: [
-          { name: '表格' },
-          { name: 'bar' },
-          { name: 'line' },
-          { name: 'pie' },
-          { name: 'scatter' }
+          { name: '表格', label: '数据透视表' },
+          { name: 'bar', label: '柱状图' },
+          { name: 'line', label: '折线图' },
+          { name: 'pie', label: '饼图' },
+          { name: 'scatter', label: '散点图' },
+          { name: 'map', label: '地图' }
         ],
         dashboard: [
-          { name: 'bar' },
-          { name: 'line' },
-          { name: 'pie' },
-          { name: 'group-interval' },
-          { name: 'stack-interval' },
-          { name: 'scatter' },
-          { name: 'simple-card' }
+          { name: 'bar', label: '柱状图' },
+          { name: 'line', label: '折线图' },
+          { name: 'pie', label: '饼图' },
+          { name: 'group-interval', label: '分组柱状图' },
+          { name: 'stack-interval', label: '堆叠柱状图' },
+          { name: 'scatter', label: '散点图' },
+          { name: 'simple-card', label: '卡片' }
         ]
       },
       currentChart: '0'

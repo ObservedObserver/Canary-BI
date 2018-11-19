@@ -37,7 +37,7 @@
     </el-submenu>
     <el-menu-item index="2" @click="gotoPage({primary: 'Dash', secondary: 0})">
       <i class="el-icon-menu"></i>
-      <span slot="title">DashBoard</span>
+      <span slot="title">仪表盘/看板</span>
     </el-menu-item>
     <el-menu-item index="3" @click="goHome">
       <i class="el-icon-menu"></i>

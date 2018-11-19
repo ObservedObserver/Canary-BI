@@ -10,9 +10,9 @@ var API = {
     })
   },
   connectMySQL (config, callback) {
-    fetch('http://localhost:1999/mysql/connect', {
+    fetch('http://localhost:1999/mysql/getdbs', {
       method: 'POST',
-      body: JSON.stringify(config),
+      body: JSON.stringify({config}),
       // credentials: 'include',
       headers: {
         'Accept': 'application/json',
@@ -28,6 +28,7 @@ var API = {
     fetch('http://localhost:1999/mysql/query', {
       method: 'POST',
       body: JSON.stringify(query),
+      // credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

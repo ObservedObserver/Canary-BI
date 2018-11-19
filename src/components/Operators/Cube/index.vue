@@ -21,6 +21,7 @@
         <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <pie-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <scatter-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <scatter-map v-if="cid === 5" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <el-row>
           <el-button type="warning" @click="saveChart">保存</el-button>
         </el-row>
@@ -35,6 +36,7 @@ import barChart from './Charts/barcharts.vue'
 import lineChart from './Charts/linecharts.vue'
 import pieChart from './Charts/piecharts.vue'
 import scatterChart from './Charts/scatter.vue'
+import scatterMap from './Charts/map.vue'
 import deepcopy from 'deepcopy'
 const PAGE_ROWS = 100
 export default {
@@ -167,7 +169,8 @@ export default {
     barChart,
     lineChart,
     pieChart,
-    scatterChart
+    scatterChart,
+    scatterMap
   }
 }
 </script>

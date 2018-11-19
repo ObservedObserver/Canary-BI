@@ -1,21 +1,18 @@
 <template lang="html">
   <div class="chart-container">
-    <el-switch
-      v-model="roseMode"
-      active-text="玫瑰模式(开启)"
-      inactive-text="玫瑰模式(关闭)">
-    </el-switch>
-    <chart class="barcharts" :options="option" style="width:100%;height: 400px"  />
+    <chart class="barcharts" :options="option" style="width:100%;height: 400px" />
   </div>
 </template>
 
 <script>
 import deepcopy from 'deepcopy'
+import { bmapStyle } from '../style/map.style.js'
 export default {
-  name: 'pie-chart',
+  name: 'scatter-map',
   data () {
     return {
-      roseMode: false,
+      transposition: 0,
+      spaceMode: false,
       initOption: {
         title: {},
         legend: {
@@ -26,6 +23,14 @@ export default {
           // dimensions: [],
           source: []
         },
+        bmap: {
+          center: [104.114129, 37.550339],
+          zoom: 5,
+          roam: true,
+          mapStyle: bmapStyle
+        },
+        // xAxis: {},
+        // yAxis: {},
         series: []
       }
     }
@@ -67,26 +72,30 @@ export default {
       let ans = nodes.map((node, index) => {
         return [node.label, ...node.value]
       })
-      ans.unshift([dimensions[this.$props.level - 1], ...measures])
-      // 这里的结果需要聚合计算
+      ans.unshift([dimensions[dimensions.length - 1], ...measures])
       return ans
     },
     option () {
       let op = deepcopy(this.initOption)
       op.dataset.source = this.dataset
-      let {dimensions, measures = []} = this.$store.getters.biLabels
-      let rad = parseInt(100 / measures.length)
-      console.log('rad', rad)
-      op.series = []
-      measures.forEach((mea, index) => {
+      let {dimensions, measures} = this.$store.getters.biLabels
+      let usedMeasures = 2
+      // if (this.spaceMode && measures.length >= 3) {
+      //   op.grid3D = {width: '100%', height: '100%'}
+      //   op.xAxis.show = false
+      //   op.yAxis.show = false
+      //   usedMeasures = 3
+      // }
+      let dataSource = this.dataset.slice(1)
+      measures.forEach((mea) => {
         op.series.push({
-          type: 'pie',
-          radius: [this.roseMode ? `${rad * 0.1}%` : 0, `${rad * 0.9}%`],
-          roseType: this.roseMode ? 'radius' : undefined,
-          center: [`${rad * (index + 0.5)}%`, '50%'],
-          encode: {
-            itemName: dimensions[this.$props.level - 1],
-            value: measures[index]
+          type: 'scatter',
+          coordinateSystem: 'bmap',
+          data: dataSource.map(row => {
+            return {value: row.slice(1)}
+          }),
+          symbolSize (val) {
+            return val[2] / 2
           }
         })
       })
