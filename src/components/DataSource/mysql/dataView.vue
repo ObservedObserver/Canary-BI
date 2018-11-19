@@ -5,6 +5,7 @@
       <el-radio-button label="join">join</el-radio-button>
     </el-radio-group>
     <el-form :mode="viewList" v-if="viewMode === 'join'">
+      <db-map :edgeList="viewList" />
       <el-row v-for="(relation, index) in viewList" :key="index">
         <el-col :span="9">
           <el-form-item label-position="right" label-width="60px" label="Table">
@@ -57,9 +58,13 @@
   </div>
 </template>
 <script>
+import dbMap from './dbmap.vue'
 export default {
   name: 'mysql-data-view',
   props: ['mysql', 'tables'],
+  components: {
+    dbMap
+  },
   data () {
     return {
       viewMode: 'single',
