@@ -78,14 +78,7 @@ export default {
     option () {
       let op = deepcopy(this.initOption)
       op.dataset.source = this.dataset
-      let {dimensions, measures} = this.$store.getters.biLabels
-      let usedMeasures = 2
-      // if (this.spaceMode && measures.length >= 3) {
-      //   op.grid3D = {width: '100%', height: '100%'}
-      //   op.xAxis.show = false
-      //   op.yAxis.show = false
-      //   usedMeasures = 3
-      // }
+      let {measures} = this.$store.getters.biLabels
       let dataSource = this.dataset.slice(1)
       measures.forEach((mea) => {
         op.series.push({
