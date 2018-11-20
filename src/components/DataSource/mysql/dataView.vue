@@ -10,7 +10,7 @@
         <el-col :span="9">
           <el-form-item label-position="right" label-width="60px" label="Table">
             <el-select v-model="relation.left.table">
-              <el-option v-for="table in tables" :key="table.tableName" :label="table.tableName" :value="table.tableName"></el-option>
+              <el-option v-for="table in accessTables(index)" :key="table.tableName" :label="table.tableName" :value="table.tableName"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label-position="right" label-width="60px" label="key">
@@ -123,6 +123,21 @@ export default {
         return tableInfo.keys
       }
       return []
+    },
+    accessTables (pos) {
+      let set = new Set()
+      if (pos === 0) {
+        return this.$props.tables
+      }
+      this.viewList.slice(0, pos).forEach((relation) => {
+        set.add(relation.left.table)
+        set.add(relation.right.table)
+      })
+      // console.log(set)
+      let ans = [...set]
+      return ans.map(name => {
+        return {tableName: name}
+      })
     }
   }
 }
