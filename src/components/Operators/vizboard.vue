@@ -9,13 +9,15 @@
       </div>
       <div v-if="analysisType === 1">
         <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) >= 1 && parseInt(currentChart) <= 5"/>
-        <magic-table v-if="currentChart === '0'" />
+        <magic-table v-if="currentChart === '1'" />
+        <normal-table v-if="currentChart === '0'" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import normalTable from './commons/table.vue'
 import magicTable from './MagicChart/pivottable.vue'
 import statistics from './Tool/statistics.vue'
 import magicChart from './MagicChart/superchart/index.vue'
@@ -31,7 +33,8 @@ export default {
     return {
       menu: {
         analysis: [
-          { name: '表格', label: '数据透视表' },
+          { name: 'normal-table', label: '表格' },
+          { name: 'pivot-table', label: '数据透视表' },
           { name: 'bar', label: '柱状图' },
           { name: 'line', label: '折线图' },
           { name: 'pie', label: '饼图' },
@@ -79,7 +82,8 @@ export default {
     magicScatter,
     magicTable,
     cube,
-    vizController
+    vizController,
+    normalTable
     // pivot
   }
 }

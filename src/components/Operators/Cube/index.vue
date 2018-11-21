@@ -17,11 +17,11 @@
           <el-button @click="addLevel"
           size="mini" type="success">下钻<i class="el-icon-arrow-down el-icon--right"></i></el-button>
         </el-button-group>
-        <bar-chart v-if="cid === 1" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
-        <line-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
-        <pie-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
-        <scatter-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
-        <scatter-map v-if="cid === 5" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <bar-chart v-if="cid === 2" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <line-chart v-if="cid === 3" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <pie-chart v-if="cid === 4" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <scatter-chart v-if="cid === 5" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
+        <scatter-map v-if="cid === 6" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <el-row>
           <el-button type="warning" @click="saveChart">保存</el-button>
         </el-row>
