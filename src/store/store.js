@@ -42,7 +42,11 @@ function getInitState (oldState = []) {
       value: [],
       dimensions: [],
       measures: [],
-      time: []
+      time: [],
+      color: [],
+      shape: [],
+      size: [],
+      opacity: []
     },
     currentLabel: {},
     dataAggregation: true,

@@ -14,6 +14,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@antv/data-set": "^0.10.1",
+    "@antv/g2": "^3.4.0",
     "bi-dataset": "^2.2.0",
     "comma-separated-values": "^3.6.4",
     "cube-core": "^1.2.0",
@@ -23,6 +25,7 @@
     "echarts-gl": "^1.0.1",
     "element-ui": "^2.3.7",
     "js-cookie": "^2.2.0",
+    "viser-vue": "^2.4.2",
     "vue": "^2.5.2",
     "vue-echarts": "^3.0.7",
     "vue-grid-layout": "^2.2.0",

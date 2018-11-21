@@ -1,43 +1,89 @@
 <template>
-  <div>
-    <interval-chart v-if="chartType === 'bar'"
+  <el-card>
+    <!-- <interval-chart v-if="chartType === 'bar'"
     :dataSource="dataSource"
     :dimensions="dimensions"
-    :measures="measures" />
-    <line-chart v-if="chartType === 'line'"
-    :dataSource="dataSource"
-    :dimensions="dimensions"
-    :measures="measures" />
-    <pie-chart v-if="chartType === 'pie'"
-    :dataSource="dataSource"
-    :dimensions="dimensions"
-    :measures="measures" />
+    :measures="measures" /> -->
+    <simple-interval v-if="chartType === 'bar'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    />
+    <simple-line v-if="chartType === 'line'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    />
+    <simple-pie v-if="chartType === 'pie'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    />
     <scatter-chart v-if="chartType === 'scatter'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    />
+    <!-- <group-interval v-if="chartType === 'group-interval'"
     :dataSource="dataSource"
     :dimensions="dimensions"
-    :measures="measures" />
+    :measures="measures" /> -->
     <group-interval v-if="chartType === 'group-interval'"
-    :dataSource="dataSource"
-    :dimensions="dimensions"
-    :measures="measures" />
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    />
     <stack-interval v-if="chartType === 'stack-interval'"
-    :dataSource="dataSource"
-    :dimensions="dimensions"
-    :measures="measures" />
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    />
     <simple-card v-if="chartType === 'simple-card'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures"
     />
-  </div>
+  </el-card>
 </template>
 <script>
-import scatterChart from './charts/scatter.vue'
+import simpleInterval from './widgets/simpleInterval.vue'
+import scatterChart from './widgets/scatter.vue'
 import intervalChart from './charts/interval.vue'
-import lineChart from './charts/line.vue'
-import pieChart from './charts/pie.vue'
-import groupInterval from './charts/groupInterval.vue'
-import stackInterval from './charts/stackInterval.vue'
+import simpleLine from './widgets/simpleLine.vue'
+import simplePie from './widgets/simplePie.vue'
+// import groupInterval from './charts/groupInterval.vue'
+import groupInterval from './widgets/groupInterval.vue'
+import stackInterval from './widgets/stackInterval.vue'
 import simpleCard from './cards/simpleCard.vue'
 import {createCube} from 'cube-core'
 // import {tree2Matrix} from './utils/foldTree.js'
@@ -51,9 +97,10 @@ export default {
     stackInterval,
     groupInterval,
     intervalChart,
-    lineChart,
-    pieChart,
-    simpleCard
+    simpleLine,
+    simplePie,
+    simpleCard,
+    simpleInterval
   },
   data () {
     return {}
@@ -65,6 +112,31 @@ export default {
     }
   },
   computed: {
+    color () {
+      return this.$store.state.globalDataLabels.color.slice(0, 1).map(item => item.name)[0]
+    },
+    shape () {
+      return this.$store.state.globalDataLabels.shape.slice(0, 1).map(item => item.name)[0]
+    },
+    size () {
+      return this.$store.state.globalDataLabels.size.slice(0, 1).map(item => item.name)[0]
+    },
+    opacity () {
+      return this.$store.state.globalDataLabels.opacity.slice(0, 1).map(item => item.name)[0]
+    },
+    operations () {
+      let ope = this.$store.state.pickedFunc
+      return this.$store.getters.biLabels.measures.map(item => ope)
+    },
+    rawDimensions () {
+      return this.$store.getters.biLabels.dimensions
+    },
+    rawMeasures () {
+      return this.$store.getters.biLabels.measures
+    },
+    rawData () {
+      return this.$store.state.globalData
+    },
     cube () {
       let factTable = this.foldData
       let dimensions = this.dimensions
