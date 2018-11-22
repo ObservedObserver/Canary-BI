@@ -116,7 +116,7 @@ export default {
         dimension: defaultField,
         groupBy: [MEASURE_NAME, ...this.facetFields],
         as: MEASURE_PERCENT
-      });
+      })
       return dv
     },
     position () {

@@ -4,9 +4,9 @@
       <menu-board></menu-board>
     </el-aside>
     <el-main style="padding: 0px">
-      <operators-board v-show="currentPage.substr(0, 4) === 'Main'" />
+      <operators-board v-if="currentPage === 'Main'" />
       <dash-board v-if="currentPage === 'Dash'"/>
-      <data-source v-show="currentPage === 'Data' " />
+      <data-source v-if="currentPage === 'DataCenter' " />
     </el-main>
   </el-container>
   <!-- <div class="vis-main-board">

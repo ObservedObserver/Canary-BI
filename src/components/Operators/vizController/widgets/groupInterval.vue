@@ -134,7 +134,7 @@ export default {
       if (this.allowRender) {
         const {color, shape, opacity, size} = this.$props
         let self = this
-        let defaultColorField = this.dimCode[this.dimCode.length -2]
+        let defaultColorField = this.dimCode[this.dimCode.length - 2]
         this.chart.clear()
         this.chart.source(this.data)
 

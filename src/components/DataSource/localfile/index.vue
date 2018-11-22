@@ -16,6 +16,7 @@
 <script>
 export default {
   name: 'local-file',
+  props: ['dsTitle'],
   data () {
     return {
       dropbox: {
@@ -28,7 +29,10 @@ export default {
   methods: {
     saveDataSource () {
       this.$store.commit('initState', ['currentAPI', 'page'])
-      this.$store.dispatch('importUploadData', {file: this.dropbox.files[0]})
+      this.$store.dispatch('importUploadData', {
+        file: this.dropbox.files[0], 
+        title: this.$props.dsTitle
+      })
       this.dropbox.show = false
     },
     dragover (e) {
