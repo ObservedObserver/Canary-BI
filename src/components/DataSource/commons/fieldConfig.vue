@@ -33,6 +33,9 @@ export default {
       fieldConfig: []
     }
   },
+  created () {
+    this.fieldConfig = deepcopy(this.dataLabels)
+  },
   watch: {
     dataLabels (val) {
       this.fieldConfig = deepcopy(this.dataLabels)

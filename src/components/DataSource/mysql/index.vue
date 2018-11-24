@@ -53,6 +53,14 @@ export default {
   components: {
     dataView
   },
+  props: {
+    mode: {
+      type: String,
+      default () {
+        return 'create'
+      }
+    }
+  },
   data () {
     return {
       mysql: {
@@ -63,6 +71,11 @@ export default {
         database: ''
       }
     }
+  },
+  mounted () {
+    // if (this.$props.mode === 'edit') {
+      
+    // }
   },
   methods: {
     connectMySQL () {

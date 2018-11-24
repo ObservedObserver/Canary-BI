@@ -6,7 +6,7 @@ function getInitState (oldState = []) {
       fileDB: []
     },
     dataSourceList: [],
-    currentDataSource: 0,
+    defaultDataSource: 0,
     globalData: [],
     dataConfig: {
       dimensions: [],

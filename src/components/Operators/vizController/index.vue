@@ -73,6 +73,10 @@
     :dimensions="dimensions"
     :measures="measures"
     />
+    <div>
+      <h4>Function</h4>
+      <el-button>Save to Lib</el-button>
+    </div>
   </el-card>
 </template>
 <script>
@@ -109,6 +113,25 @@ export default {
     chartType: {
       type: String,
       default: 'bar'
+    }
+  },
+  methods: {
+    saveChart () {
+      // fix mode
+      let vizJson = {
+        color: this.color,
+        shape: this.shape,
+        opacity: this.opacity,
+        size: this.size,
+        operations: this.operations,
+        dataSource: this.rawData,
+        dimensions: this.rawDimensions,
+        measures: this.rawMeasures,
+        chartType: this.$props.chartType
+      }
+      this.$store.commit('createChartTemplate', {
+        vizJson
+      })
     }
   },
   computed: {

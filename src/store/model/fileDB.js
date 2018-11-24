@@ -18,6 +18,25 @@ class FileDB {
     this.dataSource = []
     this.dimensions = []
     this.measures = []
+    // try {
+    //   this.loadData()
+    // } catch (error) {
+    //   console.log('load localfile data error', error)
+    // }
+  }
+  updateValue (props) {
+    const { file } = props
+    this.fileName = file.name
+    this.size = file.size
+    this.file = file
+    this.dataSource = []
+    this.dimensions = []
+    this.measures = []
+    // try {
+    //   this.loadData()
+    // } catch (error) {
+    //   console.log('load localfile data error', error)
+    // }
   }
   async loadData () {
     let fileNameArr = this.file.name.split('.')

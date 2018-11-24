@@ -1,20 +1,24 @@
 class DataSource {
-  constructor (props) {
-    const { title = 'new source', type = 'localfile' } = props
+  constructor (props = {}) {
+    const { title = 'new source', type = 0 } = props
     this.title = title
     this.type = type
+    this.foreignDB = null
   }
 
   linkDB (db) {
     this.foreignDB = db
   }
 
-  updateValue (config) {
-    let settings = Object.keys(config)
-    let self = this
-    settings.forEach(item => {
-      self[item] = config[item]
-    })
+  updateValue (props) {
+    const {
+      title = this.title,
+      type = this.type,
+      foreignDB = this.foreignDB
+    } = props
+    this.title = title
+    this.type = type
+    this.foreignDB = foreignDB
   }
 }
 

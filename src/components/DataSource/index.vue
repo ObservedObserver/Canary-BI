@@ -6,9 +6,10 @@
       background-color="rgb(0, 21, 41)"
       active-text-color="#ffd04b"
       text-color="rgba(255, 255, 255, 0.65)">
-      <el-menu-item
-      disabled
-      v-for="item in menu"
+      <el-menu-item 
+      @click="currentPage = index"
+      :disabled="index > 0"
+      v-for="(item, index) in menu"
       :key="item.title"
       :index="item.title">
         <template slot="title">
@@ -20,7 +21,9 @@
       <div class="ds-list-operations">
         <el-button @click="createSource" type="success">创建新数据源</el-button>
       </div>
-      <el-table :data="dataSourceList" style="width: 100%" border>
+      <el-table :data="dataSourceList"
+        :row-class-name="tableRowClassName"
+        style="width: 100%" border>
         <el-table-column v-for="field in dataSourceListFields"
         :key="field.prop"
         :label="field.label"
@@ -28,6 +31,10 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="success"
+              @click="setDefault(scope.$index, scope.row)">设为默认</el-button>
             <el-button
               size="mini"
               @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -39,45 +46,8 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="ds-list-container" v-if="currentPage === 1 && mode === 'create'">
-      <el-form style="width: 380px">
-        <el-form-item label="数据源名称">
-          <el-input v-model="dsTitle"></el-input>
-        </el-form-item>
-        <el-form-item label="数据源类型">
-          <el-select v-model="currentType">
-            <el-option v-for="sourceType in supportDataSourceType"
-            :key="sourceType.value"
-            :label="sourceType.label"
-            :value="sourceType.value"></el-option>
-          </el-select>
-          <el-button @click="gotoList">返回</el-button>
-        </el-form-item>
-      </el-form>
-      <data-source-config :sourceType="currentType" :dsTitle="dsTitle" />
-    </div>
-    <div class="ds-list-container" v-if="currentPage === 1 && mode === 'edit'">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :current-page.sync="currentDataSource"
-        :total="listLength">
-      </el-pagination>
-      <el-form style="width: 380px">
-        <el-form-item label="数据源名称">
-          <el-input v-model="dsTitle"></el-input>
-        </el-form-item>
-        <el-form-item label="数据源类型">
-          <el-select v-model="currentType">
-            <el-option v-for="sourceType in supportDataSourceType"
-            :key="sourceType.value"
-            :label="sourceType.label"
-            :value="sourceType.value"></el-option>
-          </el-select>
-          <el-button @click="gotoList">返回</el-button>
-        </el-form-item>
-      </el-form>
-      <data-source-config :sourceType="currentType" :dsTitle="dsTitle" />
+    <div class="ds-list-container" v-if="currentPage === 1">
+      <data-source-config :dsIndex="dsIndex" :mode="mode" />
     </div>
   </div>
 </template>
@@ -108,6 +78,7 @@ export default {
       dsTitle: '',
       currentDataSource: 0,
       mode: 'create',
+      dsIndex: 0,
       supportDataSourceType: [
         { label: '本地文件', value: 0 },
         { label: 'Restful API', value: 1 },
@@ -120,9 +91,9 @@ export default {
       let dataSource = this.$store.state.database.dataSource
       let ans = dataSource.map(item => {
         return {
-          title: item.title,
-          colNum: item.foreignDB.dataSource.length,
-          type: item.type,
+          title: item.title || 'undefined',
+          colNum: item.foreignDB === null ? 0 : item.foreignDB.dataSource.length,
+          type: item.type || 'undefined',
         }
       })
       return ans
@@ -132,18 +103,32 @@ export default {
     }
   },
   methods: {
-    handleEdit (index, row) {
-      console.log(index, row)
-    },
     handleDelete (index, row) {
       console.log(index, row)
     },
+    setDefault (index, row) {
+      this.$store.commit('setDefaultDataSource', index)
+    },
     createSource () {
       this.$store.commit('createDataSource')
+      this.mode = 'create'
       this.currentPage = 1
     },
     gotoList () {
       this.currentPage = 0
+    },
+    handleEdit(index, row) {
+      this.dsIndex = index
+      this.mode = 'edit'
+      this.currentPage = 1
+    },
+    tableRowClassName ({row, rowIndex}) {
+      let defaultRowIndex = this.$store.state.defaultDataSource
+      if (rowIndex === defaultRowIndex) {
+        return 'default-row'
+      } else {
+        return ''
+      }
     }
   }
 }
@@ -154,5 +139,8 @@ export default {
 }
 .ds-list-operations{
   margin: 0.6rem;
+}
+.el-table .default-row{
+  background: #f0f9eb;
 }
 </style>

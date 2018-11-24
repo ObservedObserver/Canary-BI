@@ -1,6 +1,8 @@
 import { dataDrop } from '../util/drop.js'
 import { dimensionValueSet } from 'bi-dataset/main.js'
 import { getInitState } from '../state/init.js'
+import DataSource from '../model/dataSource.js'
+import FileDB from '../model/fileDB.js'
 const mutitations = {
   initState (state, keptKeys) {
     let newState = getInitState(keptKeys)
@@ -100,6 +102,55 @@ const mutitations = {
   },
   setCurrentAPI (state, api) {
     state.currentAPI = api
+  },
+  setDefaultDataSource (state, index) {
+    let dbObj = state.database.dataSource[index].foreignDB
+    if (dbObj !== null) {
+      state.DefaultDataSource = index
+      state.globalDataLabels = {
+        filter: [],
+        data: [],
+        X: [],
+        Y: [],
+        value: [],
+        dimensions: [],
+        measures: [],
+        time: [],
+        color: [],
+        shape: [],
+        size: [],
+        opacity: []
+      }
+      state.globalDataLabels.dimensions = dbObj.dimensions.map(item => {
+        return { type: 'string', name: item }
+      })
+      state.globalDataLabels.measures = dbObj.measures.map(item => {
+        return { type: 'number', name: item }
+      })
+      state.globalDataLabels.data = state.globalDataLabels.dimensions.concat(state.globalDataLabels.measures)
+    } else {
+      console.log('WARNING: have not set dataSource correctly')
+    }
+  },
+  createDataSource (state) {
+    let dsObj = new DataSource()
+    state.database.dataSource.push(dsObj)
+  },
+  updateDataSource (state, props) {
+    const {dsIndex, value} = props
+    state.database.dataSource[dsIndex].updateValue(value)
+  },
+  createLocalFile (state, {file, dsIndex}) {
+    let FileObj = new FileDB({fileName: 'test', file})
+    // await FileObj.loadData()
+    state.database.fileDB.push(FileObj)
+    state.database.dataSource[dsIndex].foreignDB = FileObj
+  },
+  updateLocalFile (state, {file, dsIndex}) {
+    let FileObj = state.database.dataSource[dsIndex].foreignDB
+    if (FileObj !== null) {
+      FileObj.updateValue({file})
+    }
   }
 }
 
