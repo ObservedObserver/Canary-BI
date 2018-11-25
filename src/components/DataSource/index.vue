@@ -6,7 +6,7 @@
       background-color="rgb(0, 21, 41)"
       active-text-color="#ffd04b"
       text-color="rgba(255, 255, 255, 0.65)">
-      <el-menu-item 
+      <el-menu-item
       @click="currentPage = index"
       :disabled="index > 0"
       v-for="(item, index) in menu"
@@ -93,7 +93,7 @@ export default {
         return {
           title: item.title || 'undefined',
           colNum: item.foreignDB === null ? 0 : item.foreignDB.dataSource.length,
-          type: item.type || 'undefined',
+          type: item.type || 'undefined'
         }
       })
       return ans
@@ -117,7 +117,7 @@ export default {
     gotoList () {
       this.currentPage = 0
     },
-    handleEdit(index, row) {
+    handleEdit (index, row) {
       this.dsIndex = index
       this.mode = 'edit'
       this.currentPage = 1

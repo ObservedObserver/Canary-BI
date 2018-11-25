@@ -1,6 +1,4 @@
 import { API } from '@/store/service/api.js'
-import FileDB from '../model/fileDB.js'
-import DataSource from '../model/dataSource.js'
 const actions = {
   getMainData (context) {
     var state = context.state
@@ -127,6 +125,21 @@ const actions = {
     //   return { type: 'number', name: item }
     // })
     // state.globalDataLabels.data = state.globalDataLabels.dimensions.concat(state.globalDataLabels.measures)
+  },
+  async getDatabases (context, {dsIndex}) {
+    let state = context.state
+    let mysqlObj = state.database.dataSource[dsIndex].foreignDB
+    await mysqlObj.getDatabases()
+  },
+  async getTables (context, {dsIndex}) {
+    let state = context.state
+    let mysqlObj = state.database.dataSource[dsIndex].foreignDB
+    await mysqlObj.getTables()
+  },
+  async getSQLData (context, {dsIndex}) {
+    let state = context.state
+    let mysqlObj = state.database.dataSource[dsIndex].foreignDB
+    await mysqlObj.getData()
   }
 }
 

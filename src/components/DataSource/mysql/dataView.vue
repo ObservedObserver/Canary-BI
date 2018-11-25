@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-radio-group v-model="viewMode" style="margin-bottom: 30px;">
-      <el-radio-button label="single">single</el-radio-button>
+      <el-radio-button label="union">union</el-radio-button>
       <el-radio-button label="join">join</el-radio-button>
     </el-radio-group>
     <el-form :mode="viewList" v-if="viewMode === 'join'">
@@ -46,13 +46,14 @@
       </el-row>
       <el-button @click="addRelation">+ Add New Relation</el-button>
     </el-form>
-    <el-form>
-      <el-form-item label="Table" v-if="viewMode === 'single'">
-        <el-select v-model="singleTable">
+    <el-form v-if="viewMode === 'union'">
+      <el-form-item label="Table">
+        <el-select v-for="(view, index) in viewList" v-model="view.table" :key="index">
           <el-option v-for="table in tables" :key="table.tableName" :label="table.tableName" :value="table.tableName">
           </el-option>
         </el-select>
       </el-form-item>
+      <el-button @click="addUnionTable">+ Add Union Table</el-button>
     </el-form>
     <el-button @click="queryData">Confirm</el-button>
   </div>
@@ -61,13 +62,13 @@
 import dbMap from './dbmap.vue'
 export default {
   name: 'mysql-data-view',
-  props: ['mysql', 'tables'],
+  props: ['mysql', 'tables', 'dsIndex'],
   components: {
     dbMap
   },
   data () {
     return {
-      viewMode: 'single',
+      viewMode: 'union',
       viewList: [],
       relationList: [
         {label: 'left', value: 'LEFT'},
@@ -75,6 +76,31 @@ export default {
         {label: 'inner', value: 'INNER'}
       ],
       singleTable: undefined
+    }
+  },
+  created () {
+    let dsObj = this.dataSourceObj
+    if (dsObj.foreignDB !== null) {
+      // vue 双向绑定的原理导致了这种麻烦的写法
+      let {dataView, mode = 'union'} = dsObj.foreignDB.dataView
+      this.viewMode = mode
+      this.viewList = dataView
+    }
+  },
+  computed: {
+    dataSourceObj () {
+      return this.$store.state.database.dataSource[this.$props.dsIndex]
+    }
+  },
+  watch: {
+    viewMode (val) {
+      this.$store.commit('changeMySQLMode', {
+        mode: this.viewMode,
+        dsIndex: this.$props.dsIndex
+      })
+      let {dataView, mode = 'union'} = this.dataSourceObj.foreignDB
+      // this.viewMode = mode
+      this.viewList = dataView
     }
   },
   methods: {
@@ -91,36 +117,50 @@ export default {
         }
       })
     },
-    queryData () {
-      let config = this.$props.mysql
-      if (this.viewMode === 'single') {
-        let sql = `SELECT * from ${this.singleTable};`
-        this.$store.dispatch('queryTableData', {config, sql})
-      } else {
-        let sql = 'SELECT * from'
-        this.viewList.forEach((view, index) => {
-          if (index === 0) {
-            sql += ` ${view.left.table} ${view.relation} JOIN ${view.right.table} ON ${view.left.table}.${view.left.key} = ${view.right.table}.${view.right.key}`
-          } else {
-            sql += ` ${view.relation} JOIN ${view.right.table} ON ${view.left.table}.${view.left.key} = ${view.right.table}.${view.right.key}`
-          }
-        })
-        sql += ';'
-        console.log(sql)
-        this.$store.dispatch('queryTableData', {config, sql})
-      }
-    },
-    queryKey () {
-      let config = this.$props.mysql
-      let sql = `DESC ${this.singleTable};`
-      this.$store.dispatch('queryTableStructure', {config, sql})
-    },
-    tableKeyList (table) {
-      let tableInfo = this.$store.state.mysql.tables.find(t => {
-        return table === t.tableName
+    addUnionTable () {
+      this.viewList.push({
+        table: ''
       })
-      if (typeof tableInfo !== 'undefined') {
-        return tableInfo.keys
+    },
+    queryData () {
+      this.$store.commit('updateSQLDataView', {
+        dsIndex: this.$props.dsIndex,
+        dataView: this.viewList
+      })
+      this.$store.dispatch('getSQLData', {dsIndex: this.$props.dsIndex})
+      // let config = this.$props.mysql
+      // if (this.viewMode === 'single') {
+      //   let sql = `SELECT * from ${this.singleTable};`
+      //   this.$store.dispatch('queryTableData', {config, sql})
+      // } else {
+      //   let sql = 'SELECT * from'
+      //   this.viewList.forEach((view, index) => {
+      //     if (index === 0) {
+      //       sql += ` ${view.left.table} ${view.relation} JOIN ${view.right.table} ON ${view.left.table}.${view.left.key} = ${view.right.table}.${view.right.key}`
+      //     } else {
+      //       sql += ` ${view.relation} JOIN ${view.right.table} ON ${view.left.table}.${view.left.key} = ${view.right.table}.${view.right.key}`
+      //     }
+      //   })
+      //   sql += ';'
+      //   console.log(sql)
+      //   this.$store.dispatch('queryTableData', {config, sql})
+      // }
+    },
+    // queryKey () {
+    //   this.$store.dispatch('')
+    //   let config = this.$props.mysql
+    //   let sql = `DESC ${this.singleTable};`
+    //   this.$store.dispatch('queryTableStructure', {config, sql})
+    // },
+    tableKeyList (table) {
+      let mysqlObj = this.$store.state.database.dataSource[this.$props.dsIndex].foreignDB
+      if (mysqlObj !== null) {
+        let tableInfo = mysqlObj.tables.find(t => {
+          return table === t.tableName
+        })
+        if (typeof tableInfo !== 'undefined') {
+          return tableInfo.fields
+        }
       }
       return []
     },

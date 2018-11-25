@@ -3,7 +3,9 @@ function getInitState (oldState = []) {
     currentAPI: 'http://localhost:2018/api/data/titanic',
     database: {
       dataSource: [],
-      fileDB: []
+      fileDB: [],
+      mysql: [],
+      rest: []
     },
     dataSourceList: [],
     defaultDataSource: 0,

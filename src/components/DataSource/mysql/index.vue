@@ -40,7 +40,7 @@
           </el-table>
         </el-aside>
         <el-main>
-          <data-view :mysql="mysql" :tables="tables"/>
+          <data-view :mysql="mysql" :tables="tables" :dsIndex="dsIndex"/>
         </el-main>
       </el-container>
     </el-card>
@@ -59,6 +59,12 @@ export default {
       default () {
         return 'create'
       }
+    },
+    dsIndex: {
+      type: Number,
+      default () {
+        return 0
+      }
     }
   },
   data () {
@@ -72,20 +78,44 @@ export default {
       }
     }
   },
-  mounted () {
-    // if (this.$props.mode === 'edit') {
-      
-    // }
+  created () {
+    let dsObj = this.dataSourceObj
+    if (dsObj.foreignDB !== null) {
+      // vue 双向绑定的原理导致了这种麻烦的写法
+      let {host = '', port = '', user = '', password = '', database = ''} = dsObj.foreignDB.config
+      this.mysql.host = host
+      this.mysql.port = port
+      this.mysql.user = user
+      this.mysql.password = password
+      this.mysql.database = database
+    }
   },
   methods: {
     connectMySQL () {
-      this.$store.dispatch('connectMySQL', this.mysql)
+      if (this.dataSourceObj.foreignDB === null) {
+        this.$store.commit('createMySQL', {
+          dsIndex: this.$props.dsIndex,
+          config: this.mysql
+        })
+      } else {
+        this.$store.commit('updateMySQL', {
+          dsIndex: this.$props.dsIndex,
+          config: this.mysql
+        })
+      }
+      // this.$store.dispatch('connectMySQL', this.mysql)
+      this.$store.dispatch('getDatabases', {dsIndex: this.$props.dsIndex})
     },
     getTables () {
-      this.$store.dispatch('getTableFromDB', {
-        config: this.mysql,
-        sql: 'SHOW TABLES;'
-      })
+      // this.$store.dispatch('getTableFromDB', {
+      //   config: this.mysql,
+      //   sql: 'SHOW TABLES;'
+      // })
+      // this.$store.commit('updateMySQL', {
+      //   dsIndex: this.$props.dsIndex,
+      //   config: this.mysql
+      // })
+      this.$store.dispatch('getTables', {dsIndex: this.$props.dsIndex})
     }
   },
   watch: {
@@ -96,14 +126,29 @@ export default {
     }
   },
   computed: {
+    dataSourceObj () {
+      return this.$store.state.database.dataSource[this.$props.dsIndex]
+    },
     currentDatabase () {
       return this.mysql.database
+      // return this.$store.
     },
     databases () {
-      return this.$store.state.mysql.databases
+      let choosenDB = this.$store.state.database.dataSource[this.$props.dsIndex].foreignDB
+      if (choosenDB !== null) {
+        return choosenDB.databases
+      } else {
+        return []
+      }
+      // return this.$store.state.mysql.databases
     },
     tables () {
-      return this.$store.state.mysql.tables
+      let choosenDB = this.$store.state.database.dataSource[this.$props.dsIndex].foreignDB
+      if (choosenDB !== null) {
+        return choosenDB.tables
+      } else {
+        return []
+      }
     }
   }
 }

@@ -14,7 +14,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button :disabled="dataSourceObj.foreignDB !== null" 
+          <el-button :disabled="dataSourceObj.foreignDB !== null"
           @click="updateDataSource">Confirm</el-button>
         </el-form-item>
       </el-form>
@@ -25,10 +25,10 @@
         <localfile :dsIndex="dsIndex" />
       </div>
       <div class="dataSource-map" v-if="form.type === 1">
-        <restful />
+        <restful :dsIndex="dsIndex" />
       </div>
       <div class="dataSource-map" v-if="form.type === 2">
-        <mysql />
+        <mysql :dsIndex="dsIndex" />
       </div>
       <el-row style="padding: 1rem;">
         <el-col :span="14" style="padding-right: 1rem;">

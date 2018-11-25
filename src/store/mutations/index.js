@@ -3,6 +3,7 @@ import { dimensionValueSet } from 'bi-dataset/main.js'
 import { getInitState } from '../state/init.js'
 import DataSource from '../model/dataSource.js'
 import FileDB from '../model/fileDB.js'
+import MysqlDB from '../model/mysqlDB.js'
 const mutitations = {
   initState (state, keptKeys) {
     let newState = getInitState(keptKeys)
@@ -150,6 +151,29 @@ const mutitations = {
     let FileObj = state.database.dataSource[dsIndex].foreignDB
     if (FileObj !== null) {
       FileObj.updateValue({file})
+    }
+  },
+  createMySQL (state, {dsIndex, config}) {
+    let mysqlObj = new MysqlDB({config})
+    state.database.mysql.push(mysqlObj)
+    state.database.dataSource[dsIndex].foreignDB = mysqlObj
+  },
+  updateMySQL (state, {dsIndex, config}) {
+    let mysqlObj = state.database.dataSource[dsIndex].foreignDB
+    if (mysqlObj !== null) {
+      mysqlObj.updateConfig({config})
+    }
+  },
+  updateSQLDataView (state, {dsIndex, dataView}) {
+    let mysqlObj = state.database.dataSource[dsIndex].foreignDB
+    if (mysqlObj !== null) {
+      mysqlObj.updateDataView({dataView})
+    }
+  },
+  changeMySQLMode (state, {dsIndex, mode}) {
+    let mysqlObj = state.database.dataSource[dsIndex].foreignDB
+    if (mysqlObj !== null) {
+      mysqlObj.changeMode({mode})
     }
   }
 }
