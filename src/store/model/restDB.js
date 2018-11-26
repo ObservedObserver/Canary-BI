@@ -25,8 +25,8 @@ class RestDB {
     let res = await fetchRestData(`//${host}:${port}${service}`)
     let result = await res.json()
     this.dataSource = result.dataSource
-    this.dimensions = result.Dimensions
-    this.measures = result.Measures
+    this.dimensions = result.config.Dimensions
+    this.measures = result.config.Measures
   }
 }
 

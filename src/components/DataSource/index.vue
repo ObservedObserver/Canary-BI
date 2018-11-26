@@ -78,7 +78,7 @@ export default {
       dsTitle: '',
       currentDataSource: 0,
       mode: 'create',
-      dsIndex: 0,
+      dsIndex: -1,
       supportDataSourceType: [
         { label: '本地文件', value: 0 },
         { label: 'Restful API', value: 1 },
@@ -110,6 +110,7 @@ export default {
       this.$store.commit('setDefaultDataSource', index)
     },
     createSource () {
+      this.dsIndex++
       this.$store.commit('createDataSource')
       this.mode = 'create'
       this.currentPage = 1

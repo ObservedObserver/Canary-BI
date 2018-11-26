@@ -108,7 +108,7 @@ const mutitations = {
   setDefaultDataSource (state, index) {
     let dbObj = state.database.dataSource[index].foreignDB
     if (dbObj !== null) {
-      state.DefaultDataSource = index
+      state.defaultDataSource = index
       state.globalDataLabels = {
         filter: [],
         data: [],
@@ -123,6 +123,7 @@ const mutitations = {
         size: [],
         opacity: []
       }
+      state.globalData = dbObj.dataSource
       state.globalDataLabels.dimensions = dbObj.dimensions.map(item => {
         return { type: 'string', name: item }
       })

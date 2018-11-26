@@ -1,6 +1,19 @@
 import timeLabel from './timelabel.js'
+import valueSet from './valueSet.js'
 function dataDrop (state, component) {
-  if (component === 'dimensions' && state.currentLabel.type === 'number') {
+  if (component === 'filter') {
+    let values = valueSet({
+      dataSource: state.globalData,
+      column: state.currentLabel.name
+    })
+    state.globalDataLabels[component].push({
+      name: state.currentLabel.name,
+      type: state.currentLabel.type,
+      filterType: state.currentLabel.type === 'string' ? 'equal' : 'range',
+      range: state.currentLabel.type === 'string' ? values : [Math.min(...values), Math.max(...values)],
+      value: state.currentLabel.type === 'string' ? values : [Math.min(...values), Math.max(...values)]
+    })
+  } else if (component === 'dimensions' && state.currentLabel.type === 'number') {
     state.globalDataLabels[component].push({
       name: state.currentLabel.name,
       type: 'string'
