@@ -4,6 +4,7 @@ import { getInitState } from '../state/init.js'
 import DataSource from '../model/dataSource.js'
 import FileDB from '../model/fileDB.js'
 import MysqlDB from '../model/mysqlDB.js'
+import RestDB from '../model/restDB.js'
 const mutitations = {
   initState (state, keptKeys) {
     let newState = getInitState(keptKeys)
@@ -174,6 +175,17 @@ const mutitations = {
     let mysqlObj = state.database.dataSource[dsIndex].foreignDB
     if (mysqlObj !== null) {
       mysqlObj.changeMode({mode})
+    }
+  },
+  createRest (state, {dsIndex, api}) {
+    let restObj = new RestDB(api)
+    state.database.rest.push(restObj)
+    state.database.dataSource[dsIndex].foreignDB = restObj
+  },
+  updateRest (state, {dsIndex, api}) {
+    let restObj = state.database.dataSource[dsIndex].foreignDB
+    if (restObj !== null) {
+      restObj.updateValue(api)
     }
   }
 }

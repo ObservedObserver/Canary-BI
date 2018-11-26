@@ -140,6 +140,11 @@ const actions = {
     let state = context.state
     let mysqlObj = state.database.dataSource[dsIndex].foreignDB
     await mysqlObj.getData()
+  },
+  async getRestData (context, {dsIndex}) {
+    let state = context.state
+    let restObj = state.database.dataSource[dsIndex].foreignDB
+    await restObj.getData()
   }
 }
 

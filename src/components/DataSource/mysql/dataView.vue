@@ -98,7 +98,7 @@ export default {
         mode: this.viewMode,
         dsIndex: this.$props.dsIndex
       })
-      let {dataView, mode = 'union'} = this.dataSourceObj.foreignDB
+      let {dataView} = this.dataSourceObj.foreignDB
       // this.viewMode = mode
       this.viewList = dataView
     }

@@ -23,6 +23,7 @@
 <script>
 export default {
   name: 'restful-api',
+  props: ['dsIndex'],
   data () {
     return {
       api: {
@@ -32,17 +33,41 @@ export default {
       }
     }
   },
+  created () {
+    if (this.dataSourceObj.foreignDB !== null) {
+      const {host, port, service} = this.dataSourceObj.foreignDB
+      this.api.host = host
+      this.api.port = port
+      this.api.service = service
+    }
+  },
   methods: {
     requestData () {
-      this.$store.commit('setCurrentAPI', this.currentAPI)
-      this.$store.commit('initState', ['currentAPI', 'page'])
-      this.$store.dispatch('getMainData')
+      if (this.dataSourceObj.foreignDB !== null) {
+        this.$store.commit('updateRest', {
+          dsIndex: this.$props.dsIndex,
+          api: this.api
+        })
+      } else {
+        this.$store.commit('createRest', {
+          dsIndex: this.$props.dsIndex,
+          api: this.api
+        })
+      }
+      this.$store.dispatch('getRestData', {dsIndex: this.$props.dsIndex})
+
+      // this.$store.commit('setCurrentAPI', this.currentAPI)
+      // this.$store.commit('initState', ['currentAPI', 'page'])
+      // this.$store.dispatch('getMainData')
     }
   },
   computed: {
     currentAPI () {
       const { host, port, service } = this.api
       return `//${host}:${port}${service}`
+    },
+    dataSourceObj () {
+      return this.$store.state.database.dataSource[this.$props.dsIndex]
     }
   }
 }
