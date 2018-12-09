@@ -45,6 +45,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <div>
+        <el-row style="padding: 1rem;">
+          <el-col :span="14" style="padding-right: 1rem;">
+            <preview-table />
+          </el-col>
+          <el-col :span="10" style="padding-left: 1rem;">
+            <field-config />
+          </el-col>
+        </el-row>
+      </div>
     </div>
     <div class="ds-list-container" v-if="currentPage === 1">
       <data-source-config :dsIndex="dsIndex" :mode="mode" />
@@ -53,10 +63,14 @@
 </template>
 <script>
 import dataSourceConfig from './dataSource'
+import fieldConfig from './commons/fieldConfig.vue'
+import previewTable from './commons/previewTable.vue'
 export default {
   name: 'datasource-center',
   components: {
-    dataSourceConfig
+    dataSourceConfig,
+    fieldConfig,
+    previewTable
   },
   data () {
     return {
