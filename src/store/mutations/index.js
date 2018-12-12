@@ -43,6 +43,12 @@ const mutitations = {
     // 对全局数据（维度）进行维度成员统计，自主分析部分的树状交互需要用到该数据
     state.valueSet = dimensionValueSet({ rawData: state.globalData, dimensions: dimensions.concat(measures).map(item => item.name) })
   },
+  setDBFields (state, {dsIndex, fieldsType}) {
+    let db = state.database.dataSource[dsIndex].foreignDB
+    if (db !== null) {
+      db.setFieldsType(fieldsType)
+    }
+  },
   setDataLabels (state, {dimensions, measures}) {
     let data = []
     data = data.concat(dimensions.map((val) => {
@@ -138,6 +144,11 @@ const mutitations = {
   createDataSource (state) {
     let dsObj = new DataSource()
     state.database.dataSource.push(dsObj)
+  },
+  deleteDataSource (state, {dsIndex}) {
+    if (dsIndex > -1 && dsIndex < state.database.dataSource.length) {
+      state.database.dataSource = state.database.dataSource.splice(dsIndex, 1)
+    }
   },
   updateDataSource (state, props) {
     const {dsIndex, value} = props

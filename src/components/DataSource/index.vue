@@ -48,10 +48,10 @@
       <div>
         <el-row style="padding: 1rem;">
           <el-col :span="14" style="padding-right: 1rem;">
-            <preview-table />
+            <preview-table mode="global" />
           </el-col>
           <el-col :span="10" style="padding-left: 1rem;">
-            <field-config />
+            <field-config mode="global" />
           </el-col>
         </el-row>
       </div>
@@ -119,6 +119,7 @@ export default {
   methods: {
     handleDelete (index, row) {
       console.log(index, row)
+      this.$store.commit('deleteDB', {dsIndex: this.dsIndex})
     },
     setDefault (index, row) {
       this.$store.commit('setDefaultDataSource', index)

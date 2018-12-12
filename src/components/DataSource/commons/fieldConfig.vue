@@ -22,8 +22,18 @@
 </template>
 <script>
 import deepcopy from 'deepcopy'
+import GLOBAL_CONFIG from '@/config/index.js'
 export default {
   name: 'field-config',
+  props: {
+    mode: {
+      type: String,
+      default () {
+        return 'global' // or 'local'
+      }
+    },
+    dsIndex: { type: Number }
+  },
   data () {
     return {
       typeOptions: [
@@ -43,7 +53,22 @@ export default {
   },
   computed: {
     dataLabels () {
-      return this.$store.state.globalDataLabels.data
+      if (this.$props.mode === 'global') {
+        return this.$store.state.globalDataLabels.data
+      } else {
+        let dsIndex = this.$props.dsIndex
+        let db = this.$store.state.database.dataSource[dsIndex].foreignDB
+        let {dimensions = [], measures = []} = db !== null ? db : {}
+        let fields = [
+          ...dimensions.map(item => {
+            return {type: GLOBAL_CONFIG.fieldTypes.DIMENSION, name: item}
+          }),
+          ...measures.map(item => {
+            return {type: GLOBAL_CONFIG.fieldTypes.MEASURE, name: item}
+          })
+        ]
+        return fields
+      }
     },
     tableDataField () {
       // 这里只是简单的引用监控，会在部分条件下无法监控到值变化
@@ -53,7 +78,14 @@ export default {
   },
   methods: {
     setFieldConfig () {
-      this.$store.commit('setFieldsType', this.fieldConfig)
+      if (this.$props.mode === GLOBAL_CONFIG.previewMode.GLOBAL) {
+        this.$store.commit('setFieldsType', this.fieldConfig)
+      } else {
+        this.$store.commit('setDBFields', {
+          dsIndex: this.$props.dsIndex,
+          fieldsType: this.fieldConfig
+        })
+      }
     }
   }
 }

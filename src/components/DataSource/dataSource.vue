@@ -30,14 +30,14 @@
       <div class="dataSource-map" v-if="form.type === 2">
         <mysql :dsIndex="dsIndex" />
       </div>
-      <!-- <el-row style="padding: 1rem;">
+      <el-row style="padding: 1rem;">
         <el-col :span="14" style="padding-right: 1rem;">
-          <preview-table />
+          <preview-table mode="local" :dsIndex="dsIndex" />
         </el-col>
         <el-col :span="10" style="padding-left: 1rem;">
-          <field-config />
+          <field-config mode="local" :dsIndex="dsIndex" />
         </el-col>
-      </el-row> -->
+      </el-row>
     </div>
   </div>
 </template>

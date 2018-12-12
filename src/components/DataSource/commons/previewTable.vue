@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import GLOBAL_CONFIG from '@/config/index.js'
 const PAGE_SIZE = 10
 export default {
   name: 'preview-table',
@@ -31,12 +32,26 @@ export default {
       currentPage: 0
     }
   },
+  props: {
+    mode: {
+      type: String,
+      default () {
+        return GLOBAL_CONFIG.previewMode.GLOBAL
+      }
+    },
+    dsIndex: { type: Number }
+  },
   computed: {
     dataLength () {
       return this.dataSource.length
     },
     dataSource () {
-      return this.$store.state.globalData
+      if (this.$props.mode === GLOBAL_CONFIG.previewMode.GLOBAL) {
+        return this.$store.state.globalData
+      } else {
+        let db = this.$store.state.database.dataSource[this.$props.dsIndex].foreignDB
+        return db !== null ? db.dataSource : []
+      }
     },
     tableDataSource () {
       return this.dataSource.slice(this.currentPage * PAGE_SIZE, (this.currentPage + 1) * PAGE_SIZE)
@@ -47,7 +62,20 @@ export default {
       return this.dataLabels
     },
     dataLabels () {
-      return this.$store.state.globalDataLabels.data
+      if (this.$props.mode === GLOBAL_CONFIG.previewMode.GLOBAL) {
+        return this.$store.state.globalDataLabels.data
+      } else {
+        let db = this.$store.state.database.dataSource[this.$props.dsIndex].foreignDB
+        let {dimensions = [], measures = []} = db !== null ? db : {}
+        return [
+          ...dimensions.map(item => {
+            return {type: GLOBAL_CONFIG.fieldTypes.DIMENSION, name: item}
+          }),
+          ...measures.map(item => {
+            return {type: GLOBAL_CONFIG.fieldTypes.MEASURE, name: item}
+          })
+        ]
+      }
     }
   },
   methods: {

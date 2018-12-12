@@ -1,3 +1,5 @@
+import Config from '@/config/index.js'
+const {fieldTypes} = Config
 function sqlQuery (query) {
   return fetch('http://localhost:1999/mysql/query', {
     method: 'POST',
@@ -119,6 +121,14 @@ class MysqlDB {
           this.measures.push(key)
         }
       }
+    } else {
+      typeList.forEach(item => {
+        if (item.type === fieldTypes.DIMENSION) {
+          this.dimensions.push(item.name)
+        } else {
+          this.measures.push(item.name)
+        }
+      })
     }
   }
 }
