@@ -1,8 +1,6 @@
-# Manhattan-BI
+# Canary BI
 
-A Web BI Application(Tableau like).
-
-Webpack + Vue + Vuex + echart4+ + vue-echarts + element-ui
+web端自主分析服务
 
 > A Vue.js project
 
@@ -19,6 +17,8 @@ npm run dev
 npm run build
 
 ```
+## 线上版本
+[Demo](http://ooer.space:1997)
 
 ## 效果图
 Dashboard
