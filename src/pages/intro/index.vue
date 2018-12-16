@@ -3,16 +3,15 @@
     <el-container class="banner-page">
       <el-header>
         <div class="banner-header">
-          <img src="//avatars0.githubusercontent.com/u/35953084?s=200&v=4" alt="">
         </div>
       </el-header>
       <el-main class="banner-segment">
-        <img src="//powerbicdn.azureedge.net/cvt-d6431fcc8bafcfb914f233b33206ee2aa0f89088a3dce2aac8f31d0f60cf390d/pictures/pages/powerbi-desktop-hero.gif?636718490568034631" alt="">
+        <img src="@/assets/bird.png" alt="">
         <div class="banner-content">
-          <h1>Phantom BI</h1>
-          <p>服务于工业大数据自主分析，基于自由和开放的交互理念，让分析师更专注于数据背后的故事。</p>
+          <h1>Canary BI</h1>
+          <p>快速接入企业数据，探索数据背后的故事；提前进行预测、预警并提供自动化决策的BI系统</p>
           <div>
-            <el-button type="primary" round @click="goAnalysis">开始使用</el-button>
+            <el-button type="warning" round @click="goAnalysis">开始使用</el-button>
           </div>
         </div>
       </el-main>
@@ -28,8 +27,6 @@
         <el-row>
           <el-col :span="6">
             <h3>帮助</h3>
-            <p>联系我们</p>
-            <p>加入灵虎</p>
           </el-col>
         </el-row>
       </el-footer>
@@ -95,10 +92,13 @@ html body{
   .banner-segment {
     position: relative;
     overflow: hidden;
+    height: 580px;
   }
   .banner-segment img {
     position: absolute;
-    left: 40%;
+    top: 6rem;
+    left: 32rem;
+    width: 680px;
   }
   /* .rotate-segment{
     position: absolute;
@@ -109,7 +109,7 @@ html body{
   } */
   .banner-intro{
     margin-top: 100px;
-    background: linear-gradient(72deg, #096dd9, #1890ff);
+    background: linear-gradient(72deg, #faad14, #ffc53d);
     min-height: 400px;
     padding: 4rem;
   }
