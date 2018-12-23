@@ -1,10 +1,10 @@
 <template>
   <el-card>
-    <!-- <interval-chart v-if="chartType === 'bar'"
+    <!-- <interval-chart class="chart-in-analysis" v-if="chartType === 'bar'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" /> -->
-    <simple-interval v-if="chartType === 'bar'"
+    <simple-interval class="chart-in-analysis" v-if="chartType === 'bar'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -14,7 +14,7 @@
     :opacity="opacity"
     :size="size"
     />
-    <simple-line v-if="chartType === 'line'"
+    <simple-line  class="chart-in-analysis" v-if="chartType === 'line'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -24,7 +24,7 @@
     :opacity="opacity"
     :size="size"
     />
-    <simple-pie v-if="chartType === 'pie'"
+    <simple-pie class="chart-in-analysis" v-if="chartType === 'pie'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -34,7 +34,7 @@
     :opacity="opacity"
     :size="size"
     />
-    <scatter-chart v-if="chartType === 'scatter'"
+    <scatter-chart class="chart-in-analysis" v-if="chartType === 'scatter'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -44,11 +44,11 @@
     :opacity="opacity"
     :size="size"
     />
-    <!-- <group-interval v-if="chartType === 'group-interval'"
+    <!-- <group-interval class="chart-in-analysis" v-if="chartType === 'group-interval'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" /> -->
-    <group-interval v-if="chartType === 'group-interval'"
+    <group-interval class="chart-in-analysis" v-if="chartType === 'group-interval'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -58,7 +58,7 @@
     :opacity="opacity"
     :size="size"
     />
-    <stack-interval v-if="chartType === 'stack-interval'"
+    <stack-interval class="chart-in-analysis" v-if="chartType === 'stack-interval'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -68,14 +68,14 @@
     :opacity="opacity"
     :size="size"
     />
-    <simple-card v-if="chartType === 'simple-card'"
+    <simple-card class="chart-in-analysis" v-if="chartType === 'simple-card'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures"
     />
     <div>
-      <h4>Function</h4>
-      <el-button>Save to Lib</el-button>
+      <h4>功能</h4>
+      <el-button @click="saveChart">保存至图表库</el-button>
     </div>
   </el-card>
 </template>
@@ -124,18 +124,18 @@ export default {
         opacity: this.opacity,
         size: this.size,
         operations: this.operations,
-        dataSource: this.rawData,
+        // dataSource: this.rawData,
+        dsIndex: this.$store.state.defaultDataSource,
         dimensions: this.rawDimensions,
         measures: this.rawMeasures,
-        chartType: this.$props.chartType
+        type: this.$props.chartType
       }
-      this.$store.commit('createChartTemplate', {
-        vizJson
-      })
+      this.$store.commit('addChart', vizJson)
     }
   },
   computed: {
     color () {
+      // bad design no use limit
       return this.$store.state.globalDataLabels.color.slice(0, 1).map(item => item.name)[0]
     },
     shape () {
@@ -149,6 +149,7 @@ export default {
     },
     operations () {
       let ope = this.$store.state.pickedFunc
+      // bad design
       return this.$store.getters.biLabels.measures.map(item => ope)
     },
     rawDimensions () {
@@ -210,5 +211,8 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
+.chart-in-analysis{
+  height: 500px;
+}
 </style>

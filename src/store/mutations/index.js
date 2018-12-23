@@ -5,6 +5,10 @@ import DataSource from '../model/dataSource.js'
 import FileDB from '../model/fileDB.js'
 import MysqlDB from '../model/mysqlDB.js'
 import RestDB from '../model/restDB.js'
+import DashBoard from '../model/dashboard/index'
+import Segment from '../model/dashboard/segment'
+import Container from '../model/dashboard/container'
+import Chart from '../model/chart'
 const mutitations = {
   initState (state, keptKeys) {
     let newState = getInitState(keptKeys)
@@ -199,6 +203,25 @@ const mutitations = {
     if (restObj !== null) {
       restObj.updateValue(api)
     }
+  },
+  addDashBoard (state, props) {
+    let board = new DashBoard(props)
+    state.dashBoard.push(board)
+  },
+  addSegment (state, {boardIndex, chartIndex, dsIndex}) {
+    let container = new Container()
+    let chart = state.chartWarehouse[chartIndex]
+    let dataSource = state.database.dataSource[dsIndex]
+    let seg = new Segment({
+      dataSource,
+      chart,
+      container
+    })
+    state.dashBoardList[boardIndex].append(seg)
+  },
+  addChart (state, props) {
+    let chart = new Chart(props)
+    state.chartWarehouse.push(chart)
   }
 }
 

@@ -22,6 +22,11 @@ const MENU_ROUTER = [
     title: '仪表盘/看板',
     icon: 'el-icon-menu',
     location: { primary: 'Dash', secondary: 0 }
+  },
+  {
+    title: '可视化仓库',
+    icon: 'el-icon-menu',
+    location: { primary: 'Charts', secondary: 0 }
   }
 ]
 

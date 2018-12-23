@@ -37,9 +37,16 @@ export default {
     this.chart = new G2.Chart({
       container: this.chartId,
       forceFit: true,
-      height: 500
+      height: 0
     })
     this.renderChart()
+    this.$nextTick(() => {
+      console.log('changeHeight', document.getElementById(this.chartId).offsetHeight)
+      this.chart.changeHeight(document.getElementById(this.chartId).offsetHeight)
+    })
+  },
+  updated () {
+console.log('height ', document.getElementById(this.chartId))
   },
   watch: {
     dimensions () {

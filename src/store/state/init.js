@@ -1,3 +1,4 @@
+import DashBoard from '../model/dashboard/index'
 function getInitState (oldState = []) {
   let newState = {
     currentAPI: 'http://localhost:2018/api/data/titanic',
@@ -7,8 +8,11 @@ function getInitState (oldState = []) {
       mysql: [],
       rest: []
     },
+    dashBoardList: [new DashBoard()],
+    chartWarehouse: [],
     dataSourceList: [],
     defaultDataSource: 0,
+    currentDashboard: 0,
     globalData: [],
     dataConfig: {
       dimensions: [],

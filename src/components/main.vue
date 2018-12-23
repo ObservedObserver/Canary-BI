@@ -7,6 +7,7 @@
       <operators-board v-if="currentPage === 'Main'" />
       <dash-board v-if="currentPage === 'Dash'"/>
       <data-source v-if="currentPage === 'DataCenter' " />
+      <chart-warehouse v-if="currentPage === 'Charts' " />
     </el-main>
   </el-container>
   <!-- <div class="vis-main-board">
@@ -20,13 +21,15 @@ import OperatorsBoard from '@/components/Operators/main.vue'
 import MenuBoard from '@/components/Menu/menu.vue'
 import DashBoard from '@/components/DashBoard/index.vue'
 import DataSource from '@/components/DataSource/index.vue'
+import ChartWarehouse from '@/components/ChartWarehouse/index.vue'
 export default {
   name: 'main-board',
   components: {
     OperatorsBoard,
     MenuBoard,
     DashBoard,
-    DataSource
+    DataSource,
+    ChartWarehouse
   },
   mounted () {
     // this.$store.dispatch('getMainData')

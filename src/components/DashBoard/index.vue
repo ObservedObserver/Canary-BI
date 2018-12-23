@@ -8,6 +8,7 @@
          <chart :options="option" style="width:100%;height: 400px" />
        </el-card>
     </draggable> -->
+    <chart-list :boardIndex="boardIndex" />
     <grid-layout
       :layout="dashBoard"
       :col-num="12"
@@ -36,6 +37,7 @@
 
 <script>
 import VueGridLayout from 'vue-grid-layout'
+import ChartList from './list.vue'
 export default {
   name: 'dash-board',
   data () {
@@ -51,8 +53,14 @@ export default {
       this.$store.commit('updateList', this.dashBoard)
     }
   },
+  computed: {
+    boardIndex () {
+      return this.$store.state.currentDashboard
+    }
+  },
   components: {
-    VueGridLayout
+    VueGridLayout,
+    ChartList
   }
 }
 </script>
