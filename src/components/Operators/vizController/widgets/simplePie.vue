@@ -37,7 +37,7 @@ export default {
   mounted () {
     this.chart = new G2.Chart({
       container: this.chartId,
-      forceFit: true,
+      forceFit: true
       // height: 500
     })
     this.renderChart()

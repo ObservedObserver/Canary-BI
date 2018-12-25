@@ -1,15 +1,17 @@
+let i = 0
 class Container {
   constructor (props = {}) {
     const {
-      width = 600,
-      height = 400,
+      width = 6,
+      height = 1,
       x = 0,
       y = 0
     } = props
-    this.width = width
-    this.height = height
+    this.w = width
+    this.h = height
     this.x = x
     this.y = y
+    this.i = i++
   }
 }
 export default Container

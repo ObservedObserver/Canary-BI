@@ -4,7 +4,7 @@
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" /> -->
-    <simple-interval style="wdith: 100%; height: 100%" v-if="vizJson.type === 'bar'"
+    <simple-interval style="width: 100%; height: 100%" v-if="vizJson.type === 'bar'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -13,6 +13,8 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :width="width"
+    :height="height"
     />
     <simple-line v-if="vizJson.type === 'line'"
     :dataSource="rawData"

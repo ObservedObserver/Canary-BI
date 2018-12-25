@@ -1,103 +1,79 @@
-<template lang="html">
-  <div class="dash-board">
-    <!-- <el-card class="sub-chart" v-for="option in dashBoards" :key="option.id">
-      <chart :options="option" style="width:100%;height: 400px" />
-    </el-card> -->
-    <!-- <draggable v-model="dashBoards" @start="drag=true" @end="drag=false">
-       <el-card class="sub-chart" v-for="option in dashBoards" :key="option.id">
-         <chart :options="option" style="width:100%;height: 400px" />
-       </el-card>
-    </draggable> -->
-    <chart-list :boardIndex="boardIndex" />
-    <grid-layout
-      :layout="dashBoard"
-      :col-num="12"
-      :row-height="300"
-      :is-draggable="true"
-      :is-resizable="true"
-      :is-mirrored="false"
-      :vertical-compact="true"
-      :margin="[0, 0]"
-      :use-css-transforms="true"
-    >
-      <grid-item v-for="item in dashBoard"
-        :key="item.i"
-        :x="item.x"
-        :y="item.y"
-        :w="item.w"
-        :h="item.h"
-        :i="item.i">
-          <div class="chart-container">
-              <chart class="auto-size-chart" :auto-resize="true" :options="item.option" />
-          </div>
-      </grid-item>
-    </grid-layout>
+<template>
+  <div>
+    <div v-if="display === 0">
+      <el-button @click="initDialog">Add DashBoard</el-button>
+      <el-table :data="dashBoardList">
+        <el-table-column
+          prop="title"
+          label="标题"
+        >
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)">进入</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-dialog title="Dashboard Info" :visible.sync="showDialog">
+        <el-form>
+          <el-form-item label="title">
+            <el-input v-model="form.title"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addBoard">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
+    <dash-board v-if="display === 1" :boardIndex="boardIndex" />
   </div>
 </template>
-
 <script>
-import VueGridLayout from 'vue-grid-layout'
-import ChartList from './list.vue'
+import DashBoard from './dashboard.vue'
 export default {
-  name: 'dash-board',
+  name: 'dash-board-center',
+  components: {
+    DashBoard
+  },
   data () {
     return {
-      dashBoard: this.$store.state.dashBoard
-    }
-  },
-  mounted () {
-    this.dashBoard = this.$store.state.dashBoard
-  },
-  methods: {
-    updateDashBoard () {
-      this.$store.commit('updateList', this.dashBoard)
+      boardIndex: 0,
+      display: 0,
+      showDialog: false,
+      form: {
+        title: 'new dashboard'
+      }
     }
   },
   computed: {
-    boardIndex () {
-      return this.$store.state.currentDashboard
+    dashBoardList () {
+      return this.$store.state.dashBoardList
     }
   },
-  components: {
-    VueGridLayout,
-    ChartList
+  methods: {
+    handleEdit (index, row) {
+      this.boardIndex = index
+      this.display = 1
+    },
+    handleDelete (index, row) {
+    },
+    addBoard () {
+      this.showDialog = false
+      this.$store.commit('addDashBoard', this.form)
+    },
+    initDialog () {
+      this.form.title = 'new dashboard'
+      this.showDialog = true
+    }
   }
 }
 </script>
-
-<style lang="css" scoped>
-.dash-board {
-  padding: 1rem;
-}
-.chart-container{
-  padding: 1rem 1rem;
-  margin: 1rem 1rem;
-  height: 82%;
-  width: 98%;
-  border: 1px solid #f5f5f5;
-  border-radius: 3px;
-  box-shadow: 0px 1px 3px 3px #f5f5f5;
-  background-color: #fff;
-}
-.sub-chart {
-  height: 100%;
-  width: 100%;
-  min-width: 100px;
-  min-height: 50px;
-}
-.el-card.sub-chart.is-always-shadow .el-card__body{
-  height: 92%;
-  padding-bottom: 4%;
-  padding-top: 4%;
-}
-.auto-size-chart{
-  width: 100%;
-  height: 100%;
-  min-height: 50px;
-}
-.echarts {
-  width: 100%;
-  height: 100%;
-  min-height: 50px;
-}
+<style>
 </style>

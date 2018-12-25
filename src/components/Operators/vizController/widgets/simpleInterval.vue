@@ -21,7 +21,9 @@ export default {
     color: { type: String },
     shape: { type: String },
     size: { type: String },
-    opacity: { type: String }
+    opacity: { type: String },
+    width: { type: Number },
+    height: { type: Number },
   },
   data () {
     return {
@@ -43,10 +45,14 @@ export default {
     this.$nextTick(() => {
       console.log('changeHeight', document.getElementById(this.chartId).offsetHeight)
       this.chart.changeHeight(document.getElementById(this.chartId).offsetHeight)
+      if (typeof this.$props.width !== 'undefined') {
+        // this.chart.changeWidth(val)
+        this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
+      }
+      if (typeof this.$props.height !== 'undefined') {
+        this.chart.changeHeight(this.$props.height)
+      }
     })
-  },
-  updated () {
-console.log('height ', document.getElementById(this.chartId))
   },
   watch: {
     dimensions () {
@@ -75,6 +81,17 @@ console.log('height ', document.getElementById(this.chartId))
     },
     size () {
       this.renderChart()
+    },
+    width (val) {
+      if (typeof val !== 'undefined') {
+        // this.chart.changeWidth(val)
+        this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
+      }
+    },
+    height (val) {
+      if (typeof val !== 'undefined') {
+        this.chart.changeHeight(val)
+      }
     }
   },
   computed: {
