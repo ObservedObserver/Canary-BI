@@ -3,8 +3,15 @@
     <el-collapse-item title="图表仓库" name="charts">
       <div style="max-height:400px;overflow:auto">
         <div v-for="(chart, index) in chartList" :key="index" class="chart-box">
-          <el-button @click="addSegment(chart, index)" icon="el-icon-star-off" circle></el-button>
-          <renderer :vizJson="chart" />
+          <el-card style="margin: 1rem">
+            <div style="width: 280; height: 180px; overflow: hidden">
+              <renderer style="width: 280; height: 240px;" :vizJson="chart" />
+            </div>
+            <div style="padding: 0.7rem;">
+              <el-button type="primary" @click="addSegment(chart, index)"
+                icon="el-icon-goods">Add to Dashboard</el-button>
+            </div>
+          </el-card>
         </div>
       </div>
     </el-collapse-item>
@@ -37,8 +44,8 @@ export default {
 <style scoped>
 .chart-box{
   width: 300px;
-  height: 200px;
+  height: 300px;
   /* display: inline-block; */
-  /* float: right; */
+  float: left;
 }
 </style>

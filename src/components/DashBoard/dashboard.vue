@@ -29,7 +29,7 @@
           :h="segment.h"
           :i="segment.i">
             <div class="chart-container">
-                <renderer style="width: 100%; height: 100%" 
+                <renderer style="width: 100%; height: 100%"
                   :width="segment.w"
                   :height="segment.h * 300"
                   :vizJson="dashBoard.vizList[index]" />

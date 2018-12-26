@@ -4,6 +4,7 @@
 <script>
 import DataSet from '@antv/data-set'
 import G2 from '@antv/g2'
+import elementResizeDetectorMaker from 'element-resize-detector'
 let cnt = 0
 function getChartId () {
   return 'simple-interval-' + cnt++
@@ -23,7 +24,7 @@ export default {
     size: { type: String },
     opacity: { type: String },
     width: { type: Number },
-    height: { type: Number },
+    height: { type: Number }
   },
   data () {
     return {
@@ -36,23 +37,33 @@ export default {
     }
   },
   mounted () {
+    let self = this
+    this.erd = elementResizeDetectorMaker()
+    this.erd.listenTo(this.$el, (ele) => {
+      console.log('changeSize', ele.offsetWidth, ele.offsetHeight)
+      self.chart.changeSize(ele.offsetWidth, ele.offsetHeight)
+    })
     this.chart = new G2.Chart({
       container: this.chartId,
       forceFit: true,
       height: 0
     })
     this.renderChart()
-    this.$nextTick(() => {
-      console.log('changeHeight', document.getElementById(this.chartId).offsetHeight)
-      this.chart.changeHeight(document.getElementById(this.chartId).offsetHeight)
-      if (typeof this.$props.width !== 'undefined') {
-        // this.chart.changeWidth(val)
-        this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
-      }
-      if (typeof this.$props.height !== 'undefined') {
-        this.chart.changeHeight(this.$props.height)
-      }
-    })
+    // this.$nextTick(() => {
+    //   console.log('changeHeight', document.getElementById(this.chartId).offsetHeight)
+    //   this.chart.changeHeight(document.getElementById(this.chartId).offsetHeight)
+    //   if (typeof this.$props.width !== 'undefined') {
+    //     // this.chart.changeWidth(val)
+    //     this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
+    //   }
+    //   if (typeof this.$props.height !== 'undefined') {
+    //     this.chart.changeHeight(this.$props.height)
+    //   }
+    // })
+  },
+  beforeDestroy () {
+    this.erd.removeAllListeners(this.$el)
+    this.erd = null
   },
   watch: {
     dimensions () {
@@ -81,18 +92,18 @@ export default {
     },
     size () {
       this.renderChart()
-    },
-    width (val) {
-      if (typeof val !== 'undefined') {
-        // this.chart.changeWidth(val)
-        this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
-      }
-    },
-    height (val) {
-      if (typeof val !== 'undefined') {
-        this.chart.changeHeight(val)
-      }
     }
+    // width (val) {
+    //   if (typeof val !== 'undefined') {
+    //     // this.chart.changeWidth(val)
+    //     this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
+    //   }
+    // },
+    // height (val) {
+    //   if (typeof val !== 'undefined') {
+    //     this.chart.changeHeight(val)
+    //   }
+    // }
   },
   computed: {
     dimCode () {
