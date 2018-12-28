@@ -40,26 +40,13 @@ export default {
     let self = this
     this.erd = elementResizeDetectorMaker()
     this.erd.listenTo(this.$el, (ele) => {
-      console.log('changeSize', ele.offsetWidth, ele.offsetHeight)
       self.chart.changeSize(ele.offsetWidth, ele.offsetHeight)
     })
     this.chart = new G2.Chart({
       container: this.chartId,
-      forceFit: true,
-      height: 0
+      forceFit: true
     })
     this.renderChart()
-    // this.$nextTick(() => {
-    //   console.log('changeHeight', document.getElementById(this.chartId).offsetHeight)
-    //   this.chart.changeHeight(document.getElementById(this.chartId).offsetHeight)
-    //   if (typeof this.$props.width !== 'undefined') {
-    //     // this.chart.changeWidth(val)
-    //     this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
-    //   }
-    //   if (typeof this.$props.height !== 'undefined') {
-    //     this.chart.changeHeight(this.$props.height)
-    //   }
-    // })
   },
   beforeDestroy () {
     this.erd.removeAllListeners(this.$el)

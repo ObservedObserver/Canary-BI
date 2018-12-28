@@ -4,6 +4,7 @@
 <script>
 import DataSet from '@antv/data-set'
 import G2 from '@antv/g2'
+import elementResizeDetectorMaker from 'element-resize-detector'
 let cnt = 0
 function getChartId () {
   return 'group-interval-' + cnt++
@@ -34,10 +35,14 @@ export default {
     }
   },
   mounted () {
+    let self = this
+    this.erd = elementResizeDetectorMaker()
+    this.erd.listenTo(this.$el, (ele) => {
+      self.chart.changeSize(ele.offsetWidth, ele.offsetHeight)
+    })
     this.chart = new G2.Chart({
       container: this.chartId,
       forceFit: true
-      // height: 500
     })
     this.renderChart()
   },
