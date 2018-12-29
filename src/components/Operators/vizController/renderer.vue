@@ -16,7 +16,7 @@
     :width="width"
     :height="height"
     />
-    <simple-line v-if="vizJson.type === 'line'"
+    <simple-line style="width: 100%; height: 100%"  v-if="vizJson.type === 'line'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -26,7 +26,7 @@
     :opacity="opacity"
     :size="size"
     />
-    <simple-pie v-if="vizJson.type === 'pie'"
+    <simple-pie style="width: 100%; height: 100%"  v-if="vizJson.type === 'pie'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -36,7 +36,7 @@
     :opacity="opacity"
     :size="size"
     />
-    <scatter-chart v-if="vizJson.type === 'scatter'"
+    <scatter-chart style="width: 100%; height: 100%"  v-if="vizJson.type === 'scatter'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -50,7 +50,7 @@
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" /> -->
-    <group-interval v-if="vizJson.type === 'group-interval'"
+    <group-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'group-interval'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -60,7 +60,7 @@
     :opacity="opacity"
     :size="size"
     />
-    <stack-interval v-if="vizJson.type === 'stack-interval'"
+    <stack-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'stack-interval'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"

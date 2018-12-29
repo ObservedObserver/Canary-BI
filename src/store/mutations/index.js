@@ -206,7 +206,7 @@ const mutitations = {
   },
   addDashBoard (state, props) {
     let board = new DashBoard(props)
-    state.dashBoard.push(board)
+    state.dashBoardList.push(board)
   },
   addSegment (state, {boardIndex, chartIndex, dsIndex}) {
     let container = new Container()
@@ -222,6 +222,19 @@ const mutitations = {
   addChart (state, props) {
     let chart = new Chart(props)
     state.chartWarehouse.push(chart)
+  },
+  updateDashBoardContainer (state, {boardIndex, containerList}) {
+    console.log('container list', containerList)
+    // 1. 不严格，应做container.i的匹配
+    // 2. 应调用update方法
+    containerList.forEach((container, index) => {
+      let target = state.dashBoardList[boardIndex].segmentList.find(item => {
+        return item.container.i === container.i
+      })
+      if (typeof target !== 'undefined') {
+        target.container.updateValue(container)
+      }
+    })
   }
 }
 

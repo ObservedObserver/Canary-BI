@@ -1,7 +1,9 @@
 <template>
   <div>
     <div v-if="display === 0">
-      <el-button @click="initDialog">Add DashBoard</el-button>
+      <div class="board-center-header">
+        <el-button @click="initDialog" type="primary" icon="el-icon-plus" size="small">新建仪表盘</el-button>
+      </div>
       <el-table :data="dashBoardList">
         <el-table-column
           prop="title"
@@ -32,7 +34,7 @@
         </div>
       </el-dialog>
     </div>
-    <dash-board v-if="display === 1" :boardIndex="boardIndex" />
+    <dash-board v-if="display === 1" :boardIndex="boardIndex" @gotoCenter="display = 0" />
   </div>
 </template>
 <script>
@@ -75,5 +77,8 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
+.board-center-header{
+  padding: 0.4rem;
+}
 </style>

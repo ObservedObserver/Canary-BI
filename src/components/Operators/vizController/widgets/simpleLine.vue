@@ -35,16 +35,20 @@ export default {
     }
   },
   mounted () {
-    let self = this
-    this.erd = elementResizeDetectorMaker()
-    this.erd.listenTo(this.$el, (ele) => {
-      self.chart.changeSize(ele.offsetWidth, ele.offsetHeight)
-    })
     this.chart = new G2.Chart({
       container: this.chartId,
       forceFit: true
     })
     this.renderChart()
+    let self = this
+    this.erd = elementResizeDetectorMaker()
+    this.erd.listenTo(this.$el, (ele) => {
+      self.chart.changeSize(ele.offsetWidth, ele.offsetHeight)
+    })
+  },
+  beforeDestroy () {
+    this.erd.removeAllListeners(this.$el)
+    this.erd = null
   },
   watch: {
     dimensions () {

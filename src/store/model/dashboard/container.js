@@ -1,17 +1,25 @@
-let i = 0
+let index = 0
 class Container {
   constructor (props = {}) {
     const {
-      width = 6,
-      height = 1,
+      w = 6,
+      h = 1,
       x = 0,
-      y = 0
+      y = 0,
+      i = index++
     } = props
-    this.w = width
-    this.h = height
+    this.w = w
+    this.h = h
     this.x = x
     this.y = y
-    this.i = i++
+    this.i = i
+  }
+  updateValue (props = {}) {
+    const {w, h, x, y} = props
+    this.w = w
+    this.h = h
+    this.x = x
+    this.y = y
   }
 }
 export default Container

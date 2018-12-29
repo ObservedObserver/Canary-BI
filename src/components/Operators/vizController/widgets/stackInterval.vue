@@ -44,8 +44,11 @@ export default {
       container: this.chartId,
       forceFit: true
     })
-    console.log('re-mounted')
     this.renderChart()
+  },
+  beforeDestroy () {
+    this.erd.removeAllListeners(this.$el)
+    this.erd = null
   },
   watch: {
     dimensions () {

@@ -46,6 +46,10 @@ export default {
     })
     this.renderChart()
   },
+  beforeDestroy () {
+    this.erd.removeAllListeners(this.$el)
+    this.erd = null
+  },
   watch: {
     dimensions () {
       this.renderChart()

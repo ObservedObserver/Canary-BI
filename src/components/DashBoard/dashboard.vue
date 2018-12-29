@@ -1,13 +1,15 @@
 <template lang="html">
   <div class="dash-board">
-    <!-- <el-card class="sub-chart" v-for="option in dashBoards" :key="option.id">
-      <chart :options="option" style="width:100%;height: 400px" />
-    </el-card> -->
-    <!-- <draggable v-model="dashBoards" @start="drag=true" @end="drag=false">
-       <el-card class="sub-chart" v-for="option in dashBoards" :key="option.id">
-         <chart :options="option" style="width:100%;height: 400px" />
-       </el-card>
-    </draggable> -->
+    <div class="dashboard-info">
+      <el-row>
+        <el-col :span="8">
+          <el-button type="success" @click="updateDashBoard">保存修改</el-button>
+          <el-button type="warning" @click="gotoBoardCenter">返回</el-button>
+        </el-col>
+        <el-col :span="8">{{currentBoard.title}}</el-col>
+        <el-col :span="8"></el-col>
+      </el-row>
+    </div>
     <chart-list :boardIndex="boardIndex" />
     <div>
       <grid-layout
@@ -72,7 +74,13 @@ export default {
   },
   methods: {
     updateDashBoard () {
-      this.$store.commit('updateList', this.dashBoard)
+      this.$store.commit('updateDashBoardContainer', {
+        boardIndex: this.$props.boardIndex,
+        containerList: this.dashBoard.segmentList
+      })
+    },
+    gotoBoardCenter () {
+      this.$emit('gotoCenter')
     }
   },
   computed: {
@@ -81,6 +89,9 @@ export default {
     },
     globalSegmentList () {
       return this.$store.state.dashBoardList[this.$props.boardIndex].segmentList
+    },
+    currentBoard () {
+      return this.$store.state.dashBoardList[this.$props.boardIndex]
     }
   },
   watch: {
@@ -147,5 +158,8 @@ export default {
   width: 100%;
   height: 100%;
   min-height: 50px;
+}
+.dashboard-info{
+  padding: 0.4rem;
 }
 </style>
