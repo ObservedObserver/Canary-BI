@@ -24,7 +24,14 @@ const getters = {
   },
   viewData (state) {
     let viewData = []
-    viewData = filterData({ filters: state.filters, rawData: state.globalData })
+    let filters = state.globalDataLabels.filters.map(filter => {
+      return {
+        column: filter.name,
+        type: filter.filterType,
+        value: filter.filterType === 'range' ? filter.range : filter.value
+      }
+    })
+    viewData = filterData({ filters, rawData: state.globalData })
     return viewData
   },
   biTree (state, getters) {

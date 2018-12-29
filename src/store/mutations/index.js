@@ -83,7 +83,7 @@ const mutitations = {
     state.currentLabel = {}
   },
   changeFilter (state, params) {
-    state.filters = [...params]
+    state.globalDataLabels.filters = [...params]
   },
   changeFunc (state, para) {
     // para = 'Sum'
@@ -120,7 +120,7 @@ const mutitations = {
     if (dbObj !== null) {
       state.defaultDataSource = index
       state.globalDataLabels = {
-        filter: [],
+        filters: [],
         data: [],
         X: [],
         Y: [],

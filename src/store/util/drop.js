@@ -1,7 +1,7 @@
 import timeLabel from './timelabel.js'
 import valueSet from './valueSet.js'
 function dataDrop (state, component) {
-  if (component === 'filter') {
+  if (component === 'filters') {
     let values = valueSet({
       dataSource: state.globalData,
       column: state.currentLabel.name

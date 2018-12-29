@@ -22,7 +22,8 @@ export default {
     color: { type: String },
     shape: { type: String },
     size: { type: String },
-    opacity: { type: String }
+    opacity: { type: String },
+    filters: { type: Array }
   },
   data () {
     return {
@@ -77,6 +78,9 @@ export default {
     },
     size () {
       this.renderChart()
+    },
+    filters () {
+      this.renderChart()
     }
   },
   computed: {
@@ -104,6 +108,19 @@ export default {
     data () {
       let dv = new DataSet().createView()
       dv.source(this.$props.dataSource)
+      let filters = this.$props.filters
+      dv.transform({
+        type: 'filter',
+        callback (row) {
+          return filters.every(f => {
+            if (f.filterType === 'range') {
+              return row[f.name] >= f.range[0] && row[f.name] <= f.range[1]
+            } else {
+              return f.value.indexOf(row[f.name]) !== -1
+            }
+          })
+        }
+      })
       // dv.transform({
       //   type: 'aggregate',
       //   fields: this.meaCode,

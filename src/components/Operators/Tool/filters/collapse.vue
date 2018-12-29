@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     filters () {
-      return this.$store.state.globalDataLabels.filter
+      return this.$store.state.globalDataLabels.filters
     },
     copiedLabels () {
       // deepcopy 实现对引用对象的oldvalue的记忆

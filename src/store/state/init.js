@@ -19,7 +19,7 @@ function getInitState (oldState = []) {
       measures: []
     },
     globalDataLabels: {
-      filter: [],
+      filters: [],
       data: [],
       X: [],
       Y: [],
@@ -70,7 +70,7 @@ function addNewDataSource () {
       measures: []
     },
     globalDataLabels: {
-      filter: [],
+      filters: [],
       data: [],
       X: [],
       Y: [],

@@ -23,8 +23,7 @@ export default {
     shape: { type: String },
     size: { type: String },
     opacity: { type: String },
-    width: { type: Number },
-    height: { type: Number }
+    filters: { type: Array }
   },
   data () {
     return {
@@ -79,18 +78,10 @@ export default {
     },
     size () {
       this.renderChart()
+    },
+    filters () {
+      this.renderChart()
     }
-    // width (val) {
-    //   if (typeof val !== 'undefined') {
-    //     // this.chart.changeWidth(val)
-    //     this.chart.changeWidth(document.getElementById(this.chartId).offsetWidth)
-    //   }
-    // },
-    // height (val) {
-    //   if (typeof val !== 'undefined') {
-    //     this.chart.changeHeight(val)
-    //   }
-    // }
   },
   computed: {
     dimCode () {
@@ -117,6 +108,19 @@ export default {
     data () {
       let dv = new DataSet().createView()
       dv.source(this.$props.dataSource)
+      let filters = this.$props.filters
+      dv.transform({
+        type: 'filter',
+        callback (row) {
+          return filters.every(f => {
+            if (f.filterType === 'range') {
+              return row[f.name] >= f.range[0] && row[f.name] <= f.range[1]
+            } else {
+              return f.value.indexOf(row[f.name]) !== -1
+            }
+          })
+        }
+      })
       dv.transform({
         type: 'aggregate',
         fields: this.meaCode,

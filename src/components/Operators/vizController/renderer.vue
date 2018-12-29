@@ -13,8 +13,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
-    :width="width"
-    :height="height"
+    :filters="filters"
     />
     <simple-line style="width: 100%; height: 100%"  v-if="vizJson.type === 'line'"
     :dataSource="rawData"
@@ -25,6 +24,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <simple-pie style="width: 100%; height: 100%"  v-if="vizJson.type === 'pie'"
     :dataSource="rawData"
@@ -35,6 +35,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <scatter-chart style="width: 100%; height: 100%"  v-if="vizJson.type === 'scatter'"
     :dataSource="rawData"
@@ -45,6 +46,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <!-- <group-interval v-if="vizJson.type === 'group-interval'"
     :dataSource="dataSource"
@@ -59,6 +61,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <stack-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'stack-interval'"
     :dataSource="rawData"
@@ -69,6 +72,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <simple-card v-if="vizJson.type === 'simple-card'"
     :dataSource="dataSource"
@@ -121,6 +125,9 @@ export default {
     },
     operations () {
       return this.$props.vizJson.operations
+    },
+    filters () {
+      return this.$props.vizJson.filters
     },
     rawDimensions () {
       return this.$props.vizJson.dimensions

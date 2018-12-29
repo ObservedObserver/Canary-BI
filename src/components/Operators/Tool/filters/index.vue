@@ -2,7 +2,7 @@
   <el-card class="box-card">
     <el-collapse>
       <el-collapse-item title="筛选器">
-        <drag-area class="infilter" area-name="filter" />
+        <drag-area class="infilter" area-name="filters" />
         <collapse :labels="labels" />
       </el-collapse-item>
     </el-collapse>
@@ -30,7 +30,7 @@ export default {
   name: 'bi-filters',
   computed: {
     labels () {
-      return this.$store.state.globalDataLabels.filter
+      return this.$store.state.globalDataLabels.filters
     }
   },
   data () {

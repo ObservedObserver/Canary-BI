@@ -13,6 +13,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <simple-line  class="chart-in-analysis" v-if="chartType === 'line'"
     :dataSource="rawData"
@@ -23,6 +24,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <simple-pie class="chart-in-analysis" v-if="chartType === 'pie'"
     :dataSource="rawData"
@@ -33,6 +35,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <scatter-chart class="chart-in-analysis" v-if="chartType === 'scatter'"
     :dataSource="rawData"
@@ -43,6 +46,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <!-- <group-interval class="chart-in-analysis" v-if="chartType === 'group-interval'"
     :dataSource="dataSource"
@@ -57,6 +61,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <stack-interval class="chart-in-analysis" v-if="chartType === 'stack-interval'"
     :dataSource="rawData"
@@ -67,6 +72,7 @@
     :shape="shape"
     :opacity="opacity"
     :size="size"
+    :filters="filters"
     />
     <simple-card class="chart-in-analysis" v-if="chartType === 'simple-card'"
     :dataSource="dataSource"
@@ -124,6 +130,7 @@ export default {
         opacity: this.opacity,
         size: this.size,
         operations: this.operations,
+        filters: this.filters,
         // dataSource: this.rawData,
         dsIndex: this.$store.state.defaultDataSource,
         dimensions: this.rawDimensions,
@@ -146,6 +153,9 @@ export default {
     },
     opacity () {
       return this.$store.state.globalDataLabels.opacity.slice(0, 1).map(item => item.name)[0]
+    },
+    filters () {
+      return this.$store.state.globalDataLabels.filters
     },
     operations () {
       let ope = this.$store.state.pickedFunc

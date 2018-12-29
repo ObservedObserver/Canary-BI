@@ -11,6 +11,7 @@ class Chart {
       shape,
       type = 0,
       operations = [],
+      filters = [],
       dsIndex = -1
     } = props
     this.rows = rows
@@ -24,6 +25,7 @@ class Chart {
     this.type = type
     this.operations = operations
     this.dsIndex = dsIndex
+    this.filters = filters
   }
 }
 export default Chart
