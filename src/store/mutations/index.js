@@ -9,6 +9,7 @@ import DashBoard from '../model/dashboard/index'
 import Segment from '../model/dashboard/segment'
 import Container from '../model/dashboard/container'
 import Chart from '../model/chart'
+import Field from '../model/field'
 const mutitations = {
   initState (state, keptKeys) {
     let newState = getInitState(keptKeys)
@@ -25,7 +26,7 @@ const mutitations = {
     let measures = []
     // 将data中的数据标签分类为维度标签和度量标签
     state.globalDataLabels.data.forEach(item => {
-      if (item.type === 'string') {
+      if (item.isDimension()) {
         dimensions.push(item)
         state.globalData.forEach(record => {
           try {
@@ -34,7 +35,7 @@ const mutitations = {
             record[item.name] = ''
           }
         })
-      } else if (item.type === 'number') {
+      } else if (item.isMeasure()) {
         measures.push(item)
         state.globalData.forEach(record => {
           record[item.name] = Number(record[item.name]) || 0
@@ -56,16 +57,10 @@ const mutitations = {
   setDataLabels (state, {dimensions, measures}) {
     let data = []
     data = data.concat(dimensions.map((val) => {
-      return {
-        name: val,
-        type: 'string'
-      }
+      return new Field({name: val}).setDimension()
     }))
     data = data.concat(measures.map((val) => {
-      return {
-        name: val,
-        type: 'number'
-      }
+      return new Field({name: val}).setMeaure()
     }))
     state.dataConfig.data = data
     state.dataConfig.dimensions = dimensions
@@ -135,10 +130,10 @@ const mutitations = {
       }
       state.globalData = dbObj.dataSource
       state.globalDataLabels.dimensions = dbObj.dimensions.map(item => {
-        return { type: 'string', name: item }
+        return new Field({name: item}).setDimension()
       })
       state.globalDataLabels.measures = dbObj.measures.map(item => {
-        return { type: 'number', name: item }
+        return new Field({name: item}).setMeasure()
       })
       state.globalDataLabels.data = state.globalDataLabels.dimensions.concat(state.globalDataLabels.measures)
     } else {

@@ -77,7 +77,7 @@ export default {
     },
     changeFilter ({index, value}) {
       let filters = [...this.filters]
-      filters[index].value = value
+      filters[index].values = value
       this.$store.commit('changeFilter', filters)
     }
   },

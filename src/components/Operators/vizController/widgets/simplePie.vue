@@ -116,7 +116,7 @@ export default {
         callback (row) {
           return filters.every(f => {
             if (f.filterType === 'range') {
-              return row[f.name] >= f.range[0] && row[f.name] <= f.range[1]
+              return row[f.name] >= f.value[0] && row[f.name] <= f.value[1]
             } else {
               return f.value.indexOf(row[f.name]) !== -1
             }

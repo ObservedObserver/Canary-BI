@@ -28,7 +28,7 @@ const getters = {
       return {
         column: filter.name,
         type: filter.filterType,
-        value: filter.filterType === 'range' ? filter.range : filter.value
+        value: filter.value
       }
     })
     viewData = filterData({ filters, rawData: state.globalData })
