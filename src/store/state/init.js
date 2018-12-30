@@ -1,4 +1,5 @@
 import DashBoard from '../model/dashboard/index'
+import DataLabels from '../model/dataLabels'
 function getInitState (oldState = []) {
   let newState = {
     currentAPI: 'http://localhost:2018/api/data/titanic',
@@ -18,20 +19,7 @@ function getInitState (oldState = []) {
       dimensions: [],
       measures: []
     },
-    globalDataLabels: {
-      filters: [],
-      data: [],
-      X: [],
-      Y: [],
-      value: [],
-      dimensions: [],
-      measures: [],
-      time: [],
-      color: [],
-      shape: [],
-      size: [],
-      opacity: []
-    },
+    globalDataLabels: new DataLabels(),
     currentLabel: {},
     dataAggregation: true,
     filters: [],
@@ -42,11 +30,6 @@ function getInitState (oldState = []) {
     page: {
       primary: 'Main',
       secondary: 0
-    },
-    mysql: {
-      config: {},
-      databases: [],
-      tables: []
     }
   }
   oldState.forEach((key) => {
@@ -55,47 +38,4 @@ function getInitState (oldState = []) {
   return newState
 }
 
-function addNewDataSource () {
-  return {
-    currentAPI: '',
-    description: {
-      title: '',
-      colNum: '',
-      type: '',
-      size: ''
-    },
-    rawData: [],
-    dataConfig: {
-      dimensions: [],
-      measures: []
-    },
-    globalDataLabels: {
-      filters: [],
-      data: [],
-      X: [],
-      Y: [],
-      value: [],
-      dimensions: [],
-      measures: [],
-      time: [],
-      color: [],
-      shape: [],
-      size: [],
-      opacity: []
-    },
-    currentLabel: {},
-    dataAggregation: true,
-    filters: [],
-    func: ['sum', 'average', 'count'],
-    pickedFunc: 'sum',
-    valueSet: {},
-    dashBoard: [],
-    mysql: {
-      config: {},
-      databases: [],
-      tables: []
-    }
-  }
-}
-
-export { getInitState, addNewDataSource }
+export { getInitState }

@@ -10,6 +10,7 @@ import Segment from '../model/dashboard/segment'
 import Container from '../model/dashboard/container'
 import Chart from '../model/chart'
 import Field from '../model/field'
+import DataLabels from '../model/dataLabels'
 const mutitations = {
   initState (state, keptKeys) {
     let newState = getInitState(keptKeys)
@@ -114,20 +115,7 @@ const mutitations = {
     let dbObj = state.database.dataSource[index].foreignDB
     if (dbObj !== null) {
       state.defaultDataSource = index
-      state.globalDataLabels = {
-        filters: [],
-        data: [],
-        X: [],
-        Y: [],
-        value: [],
-        dimensions: [],
-        measures: [],
-        time: [],
-        color: [],
-        shape: [],
-        size: [],
-        opacity: []
-      }
+      state.globalDataLabels = new DataLabels()
       state.globalData = dbObj.dataSource
       state.globalDataLabels.dimensions = dbObj.dimensions.map(item => {
         return new Field({name: item}).setDimension()
