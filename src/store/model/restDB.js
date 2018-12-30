@@ -1,5 +1,3 @@
-import Config from '@/config/index.js'
-const {fieldTypes} = Config
 function fetchRestData (api) {
   return fetch(api, { method: 'GET' })
 }
@@ -44,7 +42,7 @@ class RestDB {
       }
     } else {
       typeList.forEach(item => {
-        if (item.type === fieldTypes.DIMENSION) {
+        if (item.isDimension()) {
           this.dimensions.push(item.name)
         } else {
           this.measures.push(item.name)

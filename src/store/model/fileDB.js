@@ -1,6 +1,4 @@
 import CSV from 'comma-separated-values'
-import Config from '@/config/index.js'
-const {fieldTypes} = Config
 function readFile (file) {
   return new Promise((resolve, reject) => {
     let reader = new FileReader()
@@ -68,7 +66,7 @@ class FileDB {
       }
     } else {
       typeList.forEach(item => {
-        if (item.type === fieldTypes.DIMENSION) {
+        if (item.isDimension()) {
           this.dimensions.push(item.name)
         } else {
           this.measures.push(item.name)

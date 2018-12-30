@@ -23,6 +23,7 @@
 <script>
 import deepcopy from 'deepcopy'
 import GLOBAL_CONFIG from '@/config/index.js'
+import Field from '@/store/model/field'
 export default {
   name: 'field-config',
   props: {
@@ -61,10 +62,10 @@ export default {
         let {dimensions = [], measures = []} = db !== null ? db : {}
         let fields = [
           ...dimensions.map(item => {
-            return {type: GLOBAL_CONFIG.fieldTypes.DIMENSION, name: item}
+            return new Field({name: item}).setDimension()
           }),
           ...measures.map(item => {
-            return {type: GLOBAL_CONFIG.fieldTypes.MEASURE, name: item}
+            return new Field({name: item}).setMeasure()
           })
         ]
         return fields
