@@ -218,6 +218,10 @@ const mutitations = {
         target.container.updateValue(container)
       }
     })
+  },
+  setMeasureAgg (state, {areaName, labelIndex, aggFunc}) {
+    let field = state.globalDataLabels[areaName][labelIndex]
+    field.setMeasure(aggFunc)
   }
 }
 

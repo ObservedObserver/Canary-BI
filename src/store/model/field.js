@@ -15,13 +15,15 @@ class Field {
     this.type = 'string'
     return this
   }
-  setMeasure () {
+  setMeasure (aggFunc = 'sum') {
     this.type = 'number'
+    this.aggFunc = aggFunc
     return this
   }
-  copy ({name, type}) {
+  copy ({name, type, aggFunc = 'sum'}) {
     this.name = name
     this.type = type
+    this.aggFunc = type === 'number' ? aggFunc : undefined
     return this
   }
 }

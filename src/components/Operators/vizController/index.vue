@@ -158,9 +158,9 @@ export default {
       return this.$store.state.globalDataLabels.filters
     },
     operations () {
-      let ope = this.$store.state.pickedFunc
-      // bad design
-      return this.$store.getters.biLabels.measures.map(item => ope)
+      return this.$store.state.globalDataLabels.value.map(item => {
+        return item.aggFunc
+      })
     },
     rawDimensions () {
       return this.$store.getters.biLabels.dimensions
