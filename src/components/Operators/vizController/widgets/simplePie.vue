@@ -5,6 +5,7 @@
 import DataSet from '@antv/data-set'
 import G2 from '@antv/g2'
 import elementResizeDetectorMaker from 'element-resize-detector'
+import Filter from '@/store/model/filter'
 let cnt = 0
 function getChartId () {
   return 'simple-pie-' + cnt++
@@ -42,6 +43,18 @@ export default {
       forceFit: true
     })
     this.renderChart()
+    let defaultColorField = this.dimCode[this.dimCode.length - 1]
+    this.chart.on('interval:click', ev => {
+      let filters = [
+        new Filter({
+          name: defaultColorField,
+          type: 'string',
+          filterType: 'equal',
+          values: [ev.data._origin[defaultColorField]]
+        })
+      ]
+      this.$emit('geomClick', { filters })
+    })
     let self = this
     this.erd = elementResizeDetectorMaker()
     this.erd.listenTo(this.$el, (ele) => {
@@ -49,6 +62,7 @@ export default {
     })
   },
   beforeDestroy () {
+    this.chart.off('interval:click')
     this.erd.removeAllListeners(this.$el)
     this.erd = null
   },

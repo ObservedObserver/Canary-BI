@@ -3,10 +3,10 @@
     <div class="dashboard-info">
       <el-row>
         <el-col :span="16">
-          <el-button type="success" @click="updateDashBoard">保存修改</el-button>
-          <el-button type="warning" @click="gotoBoardCenter">返回</el-button>
-          <el-button type="primary" @click="connectHotData">连接热数据</el-button>
-          <el-button type="danger" @click="clearFilters">清空筛选器</el-button>
+          <el-button size="small" type="success" @click="updateDashBoard">保存修改</el-button>
+          <el-button size="small" type="warning" @click="gotoBoardCenter">返回</el-button>
+          <el-button size="small" type="primary" @click="connectHotData">连接热数据</el-button>
+          <el-button size="small" type="danger" @click="clearFilters">清空筛选器</el-button>
           <el-switch
             v-model="filterMode"
             active-text="显示筛选器配置">
@@ -183,6 +183,7 @@ export default {
   bottom: 4px;
   left: 4px;
   right: 4px;
+  padding: 4px;
   border: 1px solid #f5f5f5;
   border-radius: 3px;
   box-shadow: 0px 1px 3px 3px #f5f5f5;

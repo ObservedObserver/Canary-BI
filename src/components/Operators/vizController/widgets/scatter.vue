@@ -5,6 +5,7 @@
 import DataSet from '@antv/data-set'
 import G2 from '@antv/g2'
 import elementResizeDetectorMaker from 'element-resize-detector'
+import Filter from '@/store/model/filter'
 let cnt = 0
 function getChartId () {
   return 'scatter-' + cnt++
@@ -46,8 +47,20 @@ export default {
       forceFit: true
     })
     this.renderChart()
+    this.chart.on('point:click', ev => {
+      let filters = this.position.map(mea => {
+        return new Filter({
+          name: mea,
+          type: 'number',
+          filterType: 'equal',
+          values: [ev.data._origin[mea]]
+        })
+      })
+      this.$emit('geomClick', { filters })
+    })
   },
   beforeDestroy () {
+    this.chart.off('point:click')
     this.erd.removeAllListeners(this.$el)
     this.erd = null
   },

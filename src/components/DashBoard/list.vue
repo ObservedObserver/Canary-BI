@@ -8,7 +8,7 @@
               <renderer style="width: 280; height: 240px;" :vizJson="chart" />
             </div>
             <div style="padding: 0.7rem;">
-              <el-button type="primary" @click="addSegment(chart, index)"
+              <el-button size="small" type="primary" @click="addSegment(chart, index)"
                 icon="el-icon-goods">Add to Dashboard</el-button>
             </div>
           </el-card>

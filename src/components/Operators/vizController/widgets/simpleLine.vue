@@ -5,6 +5,7 @@
 import DataSet from '@antv/data-set'
 import G2 from '@antv/g2'
 import elementResizeDetectorMaker from 'element-resize-detector'
+import Filter from '@/store/model/filter'
 let cnt = 0
 function getChartId () {
   return 'simple-line-' + cnt++
@@ -41,6 +42,18 @@ export default {
       forceFit: true
     })
     this.renderChart()
+    this.chart.on('point:click', ev => {
+      console.log('line click')
+      let filters = [
+        new Filter({
+          name: this.position[0],
+          type: 'string',
+          filterType: 'equal',
+          values: [ev.data._origin[this.position[0]]]
+        })
+      ]
+      this.$emit('geomClick', { filters })
+    })
     let self = this
     this.erd = elementResizeDetectorMaker()
     this.erd.listenTo(this.$el, (ele) => {
@@ -48,6 +61,7 @@ export default {
     })
   },
   beforeDestroy () {
+    this.chart.off('point:click')
     this.erd.removeAllListeners(this.$el)
     this.erd = null
   },
@@ -168,18 +182,24 @@ export default {
           fields: [MEASURE_NAME].concat(this.facetFields),
           eachView (view) {
             let geom = view.line()
+            let geomp = view.point()
             geom.position(self.position)
+            geomp.position(self.position)
             if (typeof color !== 'undefined') {
               geom.color(color)
+              geomp.color(color)
             }
             if (typeof opacity !== 'undefined') {
               geom.opacity(opacity)
+              geomp.opacity(opacity)
             }
             if (typeof size !== 'undefined') {
               geom.size(size)
+              geomp.size(size)
             }
             if (typeof shape !== 'undefined') {
               geom.shape(shape)
+              geomp.shape(shape)
             }
           }
         })

@@ -26,6 +26,7 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    @geomClick="geomClick"
     />
     <simple-pie style="width: 100%; height: 100%"  v-if="vizJson.type === 'pie'"
     :dataSource="rawData"
@@ -37,6 +38,7 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    @geomClick="geomClick"
     />
     <scatter-chart style="width: 100%; height: 100%"  v-if="vizJson.type === 'scatter'"
     :dataSource="rawData"
@@ -48,6 +50,7 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    @geomClick="geomClick"
     />
     <!-- <group-interval v-if="vizJson.type === 'group-interval'"
     :dataSource="dataSource"
@@ -63,6 +66,7 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    @geomClick="geomClick"
     />
     <stack-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'stack-interval'"
     :dataSource="rawData"
@@ -74,6 +78,7 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    @geomClick="geomClick"
     />
     <simple-card v-if="vizJson.type === 'simple-card'"
     :dataSource="dataSource"

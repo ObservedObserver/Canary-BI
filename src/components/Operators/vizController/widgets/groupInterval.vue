@@ -5,6 +5,7 @@
 import DataSet from '@antv/data-set'
 import G2 from '@antv/g2'
 import elementResizeDetectorMaker from 'element-resize-detector'
+import Filter from '@/store/model/filter'
 let cnt = 0
 function getChartId () {
   return 'group-interval-' + cnt++
@@ -46,8 +47,20 @@ export default {
       forceFit: true
     })
     this.renderChart()
+    this.chart.on('interval:click', ev => {
+      let filters = this.dimCode.slice(-2).map(dim => {
+        return new Filter({
+          name: dim,
+          type: 'string',
+          filterType: 'equal',
+          values: [ev.data._origin[dim]]
+        })
+      })
+      this.$emit('geomClick', { filters })
+    })
   },
   beforeDestroy () {
+    this.chart.off('interval:click')
     this.erd.removeAllListeners(this.$el)
     this.erd = null
   },
