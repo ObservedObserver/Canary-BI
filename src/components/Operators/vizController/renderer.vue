@@ -14,6 +14,7 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    @geomClick="geomClick"
     />
     <simple-line style="width: 100%; height: 100%"  v-if="vizJson.type === 'line'"
     :dataSource="rawData"
@@ -108,8 +109,37 @@ export default {
   data () {
     return {}
   },
-  props: ['vizJson', 'width', 'height'],
+  props: {
+    vizJson: { type: Object },
+    boardFilter: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    boardIndex: { type: Number },
+    setFilter: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    geomClick ({filters}) {
+      if (this.$props.setFilter) {
+        let oldFilters = this.$props.boardFilter.filter(f => {
+          return !(filters.find(item => {
+            return item.name === f.name
+          }))
+        })
+        this.$store.commit('setDashBoardFilters', {
+          boardIndex: this.$props.boardIndex,
+          filters: oldFilters.concat(filters)
+        })
+      }
+    }
+  },
   computed: {
+
     color () {
       // bad design no use limit
       return this.$props.vizJson.color
@@ -127,7 +157,10 @@ export default {
       return this.$props.vizJson.operations
     },
     filters () {
-      return this.$props.vizJson.filters
+      if (this.$props.setFilter) {
+        return this.$props.vizJson.filters
+      }
+      return this.$props.boardFilter.concat(this.$props.vizJson.filters)
     },
     rawDimensions () {
       return this.$props.vizJson.dimensions

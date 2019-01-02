@@ -191,6 +191,9 @@ const mutitations = {
     let board = new DashBoard(props)
     state.dashBoardList.push(board)
   },
+  setDashBoardFilters (state, {boardIndex, filters}) {
+    state.dashBoardList[boardIndex].filters = filters
+  },
   addSegment (state, {boardIndex, chartIndex, dsIndex}) {
     let container = new Container()
     let chart = state.chartWarehouse[chartIndex]
@@ -201,6 +204,9 @@ const mutitations = {
       container
     })
     state.dashBoardList[boardIndex].append(seg)
+  },
+  setSegmentFilter (state, {boardIndex, segmentIndex, setFilter}) {
+    state.dashBoardList[boardIndex].segmentList[segmentIndex].setFilter = setFilter
   },
   addChart (state, props) {
     let chart = new Chart(props)

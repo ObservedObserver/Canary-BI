@@ -62,6 +62,17 @@ const actions = {
     let state = context.state
     let restObj = state.database.dataSource[dsIndex].foreignDB
     await restObj.getData()
+  },
+  async getDashBoardData (context, {boardIndex}) {
+    let state = context.state
+    let dsSet = new Set()
+    state.dashBoardList[boardIndex].segmentList.forEach((segment) => {
+      dsSet.add(segment.chart.dsIndex)
+    })
+    for (let dsIndex of dsSet.values()) {
+      let db = state.database.dataSource[dsIndex].foreignDB
+      await db.getData()
+    }
   }
 }
 

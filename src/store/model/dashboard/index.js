@@ -9,6 +9,8 @@ class DashBoard {
     this.id = id
     this.title = title
     this.segmentList = []
+    this.filters = []
+    this.interval = null
   }
   append (seg) {
     if (seg instanceof Segment) {

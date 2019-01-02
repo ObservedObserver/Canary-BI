@@ -12,6 +12,7 @@ class Segment {
     this.chart = chart
     this.dataSource = dataSource
     this.container = container
+    this.setFilter = false
   }
 }
 

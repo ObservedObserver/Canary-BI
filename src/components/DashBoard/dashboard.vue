@@ -2,12 +2,17 @@
   <div class="dash-board">
     <div class="dashboard-info">
       <el-row>
-        <el-col :span="8">
+        <el-col :span="16">
           <el-button type="success" @click="updateDashBoard">保存修改</el-button>
           <el-button type="warning" @click="gotoBoardCenter">返回</el-button>
+          <el-button type="primary" @click="connectHotData">连接热数据</el-button>
+          <el-button type="danger" @click="clearFilters">清空筛选器</el-button>
+          <el-switch
+            v-model="filterMode"
+            active-text="显示筛选器配置">
+          </el-switch>
         </el-col>
         <el-col :span="8">{{currentBoard.title}}</el-col>
-        <el-col :span="8"></el-col>
       </el-row>
     </div>
     <chart-list :boardIndex="boardIndex" />
@@ -31,7 +36,15 @@
           :h="segment.h"
           :i="segment.i">
             <div class="chart-container">
+              <el-switch v-if="filterMode === true"
+                v-model="dashBoard.setFilterList[index]"
+                @change="(value) => {setAsFilter(value, index)}"
+                active-text="设为筛选器">
+              </el-switch>
                 <renderer style="width: 100%; height: 100%"
+                  :boardIndex="boardIndex"
+                  :boardFilter="boardFilter"
+                  :setFilter="dashBoard.setFilterList[index]"
                   :width="segment.w"
                   :height="segment.h * 300"
                   :vizJson="dashBoard.vizList[index]" />
@@ -53,8 +66,11 @@ export default {
     return {
       dashBoard: {
         segmentList: [],
-        vizList: []
-      }
+        vizList: [],
+        setFilterList: []
+      },
+      interval: null,
+      filterMode: false
     }
   },
   mounted () {
@@ -71,6 +87,15 @@ export default {
     this.dashBoard.vizList = board.segmentList.map(segment => {
       return segment.chart
     })
+    this.dashBoard.setFilterList = board.segmentList.map(segment => {
+      return segment.setFilter
+    })
+  },
+  beforeDestroy () {
+    if (this.interval !== null) {
+      clearInterval(this.interval)
+      this.interval = null
+    }
   },
   methods: {
     updateDashBoard () {
@@ -81,6 +106,28 @@ export default {
     },
     gotoBoardCenter () {
       this.$emit('gotoCenter')
+    },
+    connectHotData (t = 5) {
+      this.interval = setInterval(() => {
+        console.log('hot data', this)
+        this.$store.dispatch('getDashBoardData', {
+          boardIndex: this.$props.boardIndex
+        })
+      }, 5000)
+    },
+    setAsFilter (value, index) {
+      console.log(value, index)
+      this.$store.commit('setSegmentFilter', {
+        boardIndex: this.$props.boardIndex,
+        segmentIndex: index,
+        setFilter: value
+      })
+    },
+    clearFilters () {
+      this.$store.commit('setDashBoardFilters', {
+        boardIndex: this.$props.boardIndex,
+        filters: []
+      })
     }
   },
   computed: {
@@ -92,6 +139,9 @@ export default {
     },
     currentBoard () {
       return this.$store.state.dashBoardList[this.$props.boardIndex]
+    },
+    boardFilter () {
+      return this.currentBoard.filters
     }
   },
   watch: {
