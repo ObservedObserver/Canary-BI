@@ -172,8 +172,9 @@ export default {
   methods: {
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size} = this.$props
+        const {color, shape, opacity, size, dataSource} = this.$props
         let self = this
+        let dataLength = dataSource.length
         this.chart.clear()
         this.chart.source(this.data)
 
@@ -182,24 +183,34 @@ export default {
           fields: [MEASURE_NAME].concat(this.facetFields),
           eachView (view) {
             let geom = view.line()
-            let geomp = view.point()
+            let geomp = dataLength <= 20 ? view.point() : null
             geom.position(self.position)
-            geomp.position(self.position)
+            if (geomp !== null) {
+              geomp.position(self.position)
+            }
             if (typeof color !== 'undefined') {
               geom.color(color)
-              geomp.color(color)
+              if (geom !== null) {
+                geomp.color(color)
+              }
             }
             if (typeof opacity !== 'undefined') {
               geom.opacity(opacity)
-              geomp.opacity(opacity)
+              if (geomp !== null) {
+                geomp.opacity(opacity)
+              }
             }
             if (typeof size !== 'undefined') {
               geom.size(size)
-              geomp.size(size)
+              if (geomp !== null) {
+                geomp.size(size)
+              }
             }
             if (typeof shape !== 'undefined') {
               geom.shape(shape)
-              geomp.shape(shape)
+              if (geomp !== null) {
+                geomp.shape(shape)
+              }
             }
           }
         })

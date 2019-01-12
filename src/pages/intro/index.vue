@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     goAnalysis () {
-      this.$router.push('/analysis')
+      this.$router.push('/access')
     }
   }
 }

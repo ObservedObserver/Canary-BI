@@ -6,7 +6,10 @@ class Field {
     this.type = type
   }
   isDimension () {
-    return this.type === 'string'
+    return this.type === 'string' || this.type === 'time'
+  }
+  isTime () {
+    return this.type === 'time'
   }
   isMeasure () {
     return this.type === 'number'

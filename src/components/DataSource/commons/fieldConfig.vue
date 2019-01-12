@@ -39,7 +39,8 @@ export default {
     return {
       typeOptions: [
         {value: 'string', label: '维度'},
-        {value: 'number', label: '度量'}
+        {value: 'number', label: '度量'},
+        {value: 'time', label: '时间'}
       ],
       fieldConfig: []
     }

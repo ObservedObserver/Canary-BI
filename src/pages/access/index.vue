@@ -7,7 +7,7 @@
       </el-tabs>
       <div>
         <login-form v-if="activeForm === 'login'" />
-        <signup-form v-if="activeForm === 'signup'" />
+        <register-form v-if="activeForm === 'signup'" />
       </div>
     </el-card>
   </div>
@@ -15,7 +15,7 @@
 
 <script>
 import LoginForm from './login.vue'
-import SignupForm from './signup.vue'
+import RegisterForm from './register.vue'
 export default {
   name: 'access',
   data () {
@@ -25,7 +25,7 @@ export default {
   },
   components: {
     LoginForm,
-    SignupForm
+    RegisterForm
   }
 }
 </script>

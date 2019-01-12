@@ -34,7 +34,7 @@ class RestDB {
     if (typeof typeList === 'undefined') {
       let sample = this.dataSource[0]
       for (let key in sample) {
-        if (typeof sample[key] === 'number') {
+        if (typeof sample[key] === 'string') {
           this.dimensions.push(key)
         } else {
           this.measures.push(key)
@@ -42,7 +42,12 @@ class RestDB {
       }
     } else {
       typeList.forEach(item => {
-        if (item.isDimension()) {
+        if (item.isTime()) {
+          this.dimensions.push(item.name)
+          this.dataSource.forEach(row => {
+            row[item.name] = row[item.name].replace(/[A-Z]/g, ' ').replace(/[.].+/, '').replace(/[ ]$/, '')
+          })
+        } else if (item.isDimension()) {
           this.dimensions.push(item.name)
         } else {
           this.measures.push(item.name)

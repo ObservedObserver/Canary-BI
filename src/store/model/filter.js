@@ -4,7 +4,7 @@ class Filter {
     this.name = name
     this.type = type
     this.values = values
-    this.filterType = filterType || type === 'string' ? 'equal' : 'range'
+    this.filterType = filterType || (type === 'string' || type === 'time') ? 'equal' : 'range'
     this.range = this.filterType === 'equal' ? values : [Math.min(...this.values), Math.max(...this.values)]
   }
   updateValues (values) {
