@@ -44,7 +44,7 @@ export default {
   methods: {
     loadData () {
       // this.$store.commit('initState', ['currentAPI', 'page'])
-
+      this.$emit('updateDataSource')
       this.$store.dispatch('loadFileData', {
         dsIndex: this.dsIndex
       })

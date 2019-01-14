@@ -27,7 +27,7 @@ var sum = ({keys, num, rawData}) => {
   return ans
 }
 
-var count = ({key, num, rawData}) => {
+var count = ({keys, num, rawData}) => {
   var ans = {}
   for (let k of keys) {
     let dataset = []
@@ -55,7 +55,7 @@ var count = ({key, num, rawData}) => {
   return ans
 }
 
-var mean = ({key, num, rawData}) => {
+var mean = ({keys, num, rawData}) => {
   var ans = {}
   for (let k of keys) {
     let dataset = []
@@ -68,9 +68,9 @@ var mean = ({key, num, rawData}) => {
           smap.set(val[k], [0, 0])
         }
         mapVal = smap.get(val[k])
-        smap.set(val[k], [mapVal[0] + val[n], mapVal[0] ++])
+        smap.set(val[k], [mapVal[0] + val[n], mapVal[0]++])
       })
-      for (mapKey in smap) {
+      for (let mapKey in smap) {
         mapVal = smap.get(mapKey)
         smap.set(mapKey, [mapVal[0] / mapVal[1]])
       }
@@ -89,7 +89,7 @@ var mean = ({key, num, rawData}) => {
   return ans
 }
 
-var median = ({key, num, rawData}) => {
+var median = ({keys, num, rawData}) => {
   var ans = {}
   for (let k of keys) {
     let dataset = []
@@ -105,7 +105,7 @@ var median = ({key, num, rawData}) => {
         mapVal.push(val[n])
         smap.set(val[k], mapVal)
       })
-      for (mapKey in smap) {
+      for (let mapKey in smap) {
         mapVal = smap.get(mapKey)
         smap.set(mapKey, arrayMedian(mapVal))
       }

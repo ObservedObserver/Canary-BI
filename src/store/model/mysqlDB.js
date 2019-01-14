@@ -24,9 +24,11 @@ class MysqlDB {
   }
   changeMode (props) {
     const {mode} = props
-    this.mode = mode
-    this.dataView = []
-    this.dataSource = []
+    if (mode !== this.mode) {
+      this.mode = mode
+      this.dataView = []
+      this.dataSource = []
+    }
   }
   updateConfig (props) {
     const {config} = props

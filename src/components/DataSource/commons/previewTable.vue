@@ -30,7 +30,7 @@ export default {
   name: 'preview-table',
   data () {
     return {
-      currentPage: 0
+      currentPage: 1
     }
   },
   props: {
@@ -55,7 +55,7 @@ export default {
       }
     },
     tableDataSource () {
-      return this.dataSource.slice(this.currentPage * PAGE_SIZE, (this.currentPage + 1) * PAGE_SIZE)
+      return this.dataSource.slice((this.currentPage - 1) * PAGE_SIZE, this.currentPage * PAGE_SIZE)
     },
     tableDataField () {
       // 这里只是简单的引用监控，会在部分条件下无法监控到值变化

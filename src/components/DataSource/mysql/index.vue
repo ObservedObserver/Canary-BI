@@ -93,6 +93,7 @@ export default {
   methods: {
     connectMySQL () {
       if (this.dataSourceObj.foreignDB === null) {
+        this.$emit('updateDataSource')
         this.$store.commit('createMySQL', {
           dsIndex: this.$props.dsIndex,
           config: this.mysql

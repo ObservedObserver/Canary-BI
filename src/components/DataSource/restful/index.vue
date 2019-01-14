@@ -49,6 +49,7 @@ export default {
           api: this.api
         })
       } else {
+        this.$emit('updateDataSource')
         this.$store.commit('createRest', {
           dsIndex: this.$props.dsIndex,
           api: this.api

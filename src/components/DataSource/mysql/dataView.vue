@@ -78,11 +78,12 @@ export default {
       singleTable: undefined
     }
   },
-  created () {
+  mounted () {
     let dsObj = this.dataSourceObj
     if (dsObj.foreignDB !== null) {
       // vue 双向绑定的原理导致了这种麻烦的写法
-      let {dataView, mode = 'union'} = dsObj.foreignDB.dataView
+      let {dataView, mode = 'union'} = dsObj.foreignDB
+      console.log('mode', mode)
       this.viewMode = mode
       this.viewList = dataView
     }

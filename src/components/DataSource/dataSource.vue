@@ -22,13 +22,13 @@
     <div class="dataSource-container">
       <h3>{{dataPageConfig[sourceType]}}</h3>
       <div class="dataSource-map" v-if="form.type === 0">
-        <localfile :dsIndex="dsIndex" />
+        <localfile :dsIndex="dsIndex" @updateDataSource="updateDataSource" />
       </div>
       <div class="dataSource-map" v-if="form.type === 1">
-        <restful :dsIndex="dsIndex" />
+        <restful :dsIndex="dsIndex" @updateDataSource="updateDataSource" />
       </div>
       <div class="dataSource-map" v-if="form.type === 2">
-        <mysql :dsIndex="dsIndex" />
+        <mysql :dsIndex="dsIndex" @updateDataSource="updateDataSource" />
       </div>
       <el-row style="padding: 1rem;">
         <el-col :span="14" style="padding-right: 1rem;">
