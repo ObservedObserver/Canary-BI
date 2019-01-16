@@ -14,6 +14,8 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
     />
     <simple-line  class="chart-in-analysis" v-if="chartType === 'line'"
     :dataSource="rawData"
@@ -25,6 +27,8 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
     />
     <simple-pie class="chart-in-analysis" v-if="chartType === 'pie'"
     :dataSource="rawData"
@@ -36,6 +40,8 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    :coord="'theta'"
+    :transpose="transpose"
     />
     <scatter-chart class="chart-in-analysis" v-if="chartType === 'scatter'"
     :dataSource="rawData"
@@ -47,6 +53,8 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
     />
     <!-- <group-interval class="chart-in-analysis" v-if="chartType === 'group-interval'"
     :dataSource="dataSource"
@@ -62,6 +70,8 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
     />
     <stack-interval class="chart-in-analysis" v-if="chartType === 'stack-interval'"
     :dataSource="rawData"
@@ -73,6 +83,8 @@
     :opacity="opacity"
     :size="size"
     :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
     />
     <simple-card class="chart-in-analysis" v-if="chartType === 'simple-card'"
     :dataSource="dataSource"
@@ -81,6 +93,24 @@
     />
     <div>
       <h4>功能</h4>
+      <el-form>
+        <el-form-item label="坐标系">
+          <el-select v-model="coord" placeholder="请选择" :disabled="chartType === 'pie'">
+            <el-option
+              v-for="item in coordOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="转置">
+          <el-switch
+            v-model="transpose"
+            inactive-text="转置">
+          </el-switch>
+        </el-form-item>
+      </el-form>
       <el-button @click="saveChart">保存至图表库</el-button>
     </div>
   </el-card>
@@ -113,7 +143,16 @@ export default {
     simpleInterval
   },
   data () {
-    return {}
+    return {
+      coordOptions: [
+        {value: 'rect', label: '直角坐标系'},
+        {value: 'polar', label: '极坐标'},
+        {value: 'theta', label: '环形坐标系'},
+        {value: 'helix', label: '螺旋坐标系'}
+      ],
+      coord: 'rect',
+      transpose: false
+    }
   },
   props: {
     chartType: {
@@ -131,6 +170,8 @@ export default {
         size: this.size,
         operations: this.operations,
         filters: this.filters,
+        coord: this.$props.chartType === 'pie' ? 'theta' : this.coord,
+        transpose: this.transpose,
         // dataSource: this.rawData,
         dsIndex: this.$store.state.defaultDataSource,
         dimensions: this.rawDimensions,

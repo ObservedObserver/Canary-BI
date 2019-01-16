@@ -24,7 +24,9 @@ export default {
     shape: { type: String },
     size: { type: String },
     opacity: { type: String },
-    filters: { type: Array }
+    filters: { type: Array },
+    coord: { type: String },
+    transpose: { type: Boolean }
   },
   data () {
     return {
@@ -94,6 +96,12 @@ export default {
     },
     filters () {
       this.renderChart()
+    },
+    coord () {
+      this.renderChart()
+    },
+    transpose () {
+      this.renderChart()
     }
   },
   computed: {
@@ -162,11 +170,13 @@ export default {
   methods: {
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size} = this.$props
+        const {color, shape, opacity, size, coord, transpose} = this.$props
         let self = this
         this.chart.clear()
         this.chart.source(this.data)
         this.chart.scale(this.scale)
+        let c = this.chart.coord(coord)
+        if (transpose) { c.transpose() }
         this.chart.facet('rect', {
           fields: this.facetFields,
           eachView (view) {

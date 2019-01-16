@@ -24,7 +24,9 @@ export default {
     shape: { type: String },
     size: { type: String },
     opacity: { type: String },
-    filters: { type: Array }
+    filters: { type: Array },
+    coord: { type: String },
+    transpose: { type: Boolean }
   },
   data () {
     return {
@@ -93,6 +95,12 @@ export default {
       this.renderChart()
     },
     filters () {
+      this.renderChart()
+    },
+    coord () {
+      this.renderChart()
+    },
+    transpose () {
       this.renderChart()
     }
   },
@@ -169,16 +177,20 @@ export default {
     }
   },
   methods: {
+    renderCoord () {
+      const {coord, transpose} = this.$props
+      let c = this.chart.coord(coord)
+      if (transpose) { c.transpose() }
+    },
     renderChart () {
       if (this.allowRender) {
         const {color, shape, opacity, size} = this.$props
-        console.log('render chart', color, shape, opacity, size)
         let self = this
         let defaultColorField = this.dimCode[this.dimCode.length - 2]
         this.chart.clear()
         this.chart.source(this.data)
-
         this.chart.scale(this.scale)
+        this.renderCoord()
         this.chart.facet('rect', {
           fields: [MEASURE_NAME].concat(this.facetFields),
           eachView (view) {
@@ -196,6 +208,10 @@ export default {
             if (typeof shape !== 'undefined') {
               geom.shape(shape)
             }
+            geom.style({
+              lineWidth: 1,
+              stroke: '#fff'
+            })
           }
         })
         this.chart.render()

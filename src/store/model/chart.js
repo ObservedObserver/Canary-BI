@@ -10,6 +10,8 @@ class Chart {
       size,
       shape,
       type = 0,
+      coord = 'rect',
+      transpose = false,
       operations = [],
       filters = [],
       dsIndex = -1
@@ -26,6 +28,8 @@ class Chart {
     this.operations = operations
     this.dsIndex = dsIndex
     this.filters = filters
+    this.coord = coord
+    this.transpose = transpose
   }
 }
 export default Chart

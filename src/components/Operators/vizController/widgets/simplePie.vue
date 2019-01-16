@@ -25,7 +25,8 @@ export default {
     shape: { type: String },
     size: { type: String },
     opacity: { type: String },
-    filters: { type: Array }
+    filters: { type: Array },
+    coord: { type: String }
   },
   data () {
     return {
@@ -95,6 +96,9 @@ export default {
       this.renderChart()
     },
     filters () {
+      this.renderChart()
+    },
+    coord () {
       this.renderChart()
     }
   },
@@ -178,16 +182,19 @@ export default {
   methods: {
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size} = this.$props
+        const {color, shape, opacity, size, coord} = this.$props
         let self = this
         let defaultColorField = this.dimCode[this.dimCode.length - 1]
         this.chart.clear()
         this.chart.source(this.data)
-
         this.chart.scale(this.scale)
-        this.chart.coord('theta', {
-          radius: 0.75
-        })
+        if (coord === 'theta') {
+          this.chart.coord('theta', {
+            radius: 0.75
+          })
+        } else {
+          this.chart.coord(coord)
+        }
         this.chart.facet('rect', {
           fields: [MEASURE_NAME].concat(this.facetFields),
           eachView (view) {
