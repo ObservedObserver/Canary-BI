@@ -48,6 +48,7 @@ export default {
           { name: 'group-interval', label: '分组柱状图' },
           { name: 'stack-interval', label: '堆叠柱状图' },
           { name: 'scatter', label: '散点图' },
+          { name: 'area', label: '面积图' },
           { name: 'simple-card', label: '卡片' }
         ]
       },

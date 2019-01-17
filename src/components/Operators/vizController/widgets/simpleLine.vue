@@ -6,6 +6,8 @@ import DataSet from '@antv/data-set'
 import G2 from '@antv/g2'
 import elementResizeDetectorMaker from 'element-resize-detector'
 import Filter from '@/store/model/filter'
+import {uniqueCount} from '../utils/unique'
+import vizConfig from '../config/index'
 let cnt = 0
 function getChartId () {
   return 'simple-line-' + cnt++
@@ -26,7 +28,8 @@ export default {
     opacity: { type: String },
     filters: { type: Array },
     coord: { type: String },
-    transpose: { type: Boolean }
+    transpose: { type: Boolean },
+    constScale: { type: Boolean }
   },
   data () {
     return {
@@ -34,7 +37,7 @@ export default {
       chart: undefined,
       renderCondition: {
         dimensions: [0, 2],
-        measures: [1, 2]
+        measures: [1, Infinity]
       }
     }
   },
@@ -103,6 +106,9 @@ export default {
     },
     transpose () {
       this.renderChart()
+    },
+    constScale () {
+      this.renderChart()
     }
   },
   computed: {
@@ -118,13 +124,26 @@ export default {
       })
     },
     scale () {
+      const {dataSource, constScale, coord} = this.$props
       let ans = {}
       let fields = [...this.meaCode, ...this.dimCode, MEASURE_NAME, MEASURE_VALUE]
       fields.forEach(item => {
         ans[item] = {
-          sync: true
+          sync: this.$props.constScale
         }
       })
+      let dim = this.dimCode.slice(-1)[0]
+      let dimAxis = dataSource.map(item => {
+        return item[dim]
+      })
+      if (uniqueCount(dimAxis) > 20) {
+        this.dimCode.forEach(item => {
+          ans[item] = {
+            sync: constScale,
+            tickCount: parseInt(vizConfig.tickCount[coord] / this.meaCode.length)
+          }
+        })
+      }
       return ans
     },
     data () {

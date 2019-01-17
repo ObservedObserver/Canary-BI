@@ -16,6 +16,7 @@
     :filters="filters"
     :coord="coord"
     :transpose="transpose"
+    :constScale="constScale"
     />
     <simple-line  class="chart-in-analysis" v-if="chartType === 'line'"
     :dataSource="rawData"
@@ -29,6 +30,7 @@
     :filters="filters"
     :coord="coord"
     :transpose="transpose"
+    :constScale="constScale"
     />
     <simple-pie class="chart-in-analysis" v-if="chartType === 'pie'"
     :dataSource="rawData"
@@ -42,6 +44,7 @@
     :filters="filters"
     :coord="'theta'"
     :transpose="transpose"
+    :constScale="constScale"
     />
     <scatter-chart class="chart-in-analysis" v-if="chartType === 'scatter'"
     :dataSource="rawData"
@@ -55,6 +58,7 @@
     :filters="filters"
     :coord="coord"
     :transpose="transpose"
+    :constScale="constScale"
     />
     <!-- <group-interval class="chart-in-analysis" v-if="chartType === 'group-interval'"
     :dataSource="dataSource"
@@ -72,6 +76,7 @@
     :filters="filters"
     :coord="coord"
     :transpose="transpose"
+    :constScale="constScale"
     />
     <stack-interval class="chart-in-analysis" v-if="chartType === 'stack-interval'"
     :dataSource="rawData"
@@ -85,6 +90,21 @@
     :filters="filters"
     :coord="coord"
     :transpose="transpose"
+    :constScale="constScale"
+    />
+    <area-chart class="chart-in-analysis" v-if="chartType === 'area'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
+    :constScale="constScale"
     />
     <simple-card class="chart-in-analysis" v-if="chartType === 'simple-card'"
     :dataSource="dataSource"
@@ -93,7 +113,7 @@
     />
     <div>
       <h4>功能</h4>
-      <el-form>
+      <el-form label-width="80px" label-position="right">
         <el-form-item label="坐标系">
           <el-select v-model="coord" placeholder="请选择" :disabled="chartType === 'pie'">
             <el-option
@@ -105,13 +125,17 @@
           </el-select>
         </el-form-item>
         <el-form-item label="转置">
-          <el-switch
-            v-model="transpose"
-            inactive-text="转置">
+          <el-switch v-model="transpose">
           </el-switch>
         </el-form-item>
+        <el-form-item label="统一标度">
+          <el-switch v-model="constScale">
+          </el-switch>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="saveChart" type="success">保存至图表库</el-button>
+        </el-form-item>
       </el-form>
-      <el-button @click="saveChart">保存至图表库</el-button>
     </div>
   </el-card>
 </template>
@@ -125,6 +149,7 @@ import simplePie from './widgets/simplePie.vue'
 import groupInterval from './widgets/groupInterval.vue'
 import stackInterval from './widgets/stackInterval.vue'
 import simpleCard from './cards/simpleCard.vue'
+import areaChart from './widgets/area.vue'
 import {createCube} from 'cube-core'
 // import {tree2Matrix} from './utils/foldTree.js'
 import {sum} from './utils/stat.js'
@@ -140,7 +165,8 @@ export default {
     simpleLine,
     simplePie,
     simpleCard,
-    simpleInterval
+    simpleInterval,
+    areaChart
   },
   data () {
     return {
@@ -151,7 +177,8 @@ export default {
         {value: 'helix', label: '螺旋坐标系'}
       ],
       coord: 'rect',
-      transpose: false
+      transpose: false,
+      constScale: false
     }
   },
   props: {
@@ -176,6 +203,7 @@ export default {
         dsIndex: this.$store.state.defaultDataSource,
         dimensions: this.rawDimensions,
         measures: this.rawMeasures,
+        constScale: this.constScale,
         type: this.$props.chartType
       }
       this.$store.commit('addChart', vizJson)

@@ -15,6 +15,7 @@
     :size="size"
     :filters="filters"
     :coord="coord"
+    :constScale="constScale"
     @geomClick="geomClick"
     />
     <simple-line style="width: 100%; height: 100%"  v-if="vizJson.type === 'line'"
@@ -28,6 +29,7 @@
     :size="size"
     :filters="filters"
     :coord="coord"
+    :constScale="constScale"
     @geomClick="geomClick"
     />
     <simple-pie style="width: 100%; height: 100%"  v-if="vizJson.type === 'pie'"
@@ -41,6 +43,7 @@
     :size="size"
     :filters="filters"
     :coord="coord"
+    :constScale="constScale"
     @geomClick="geomClick"
     />
     <scatter-chart style="width: 100%; height: 100%"  v-if="vizJson.type === 'scatter'"
@@ -54,6 +57,7 @@
     :size="size"
     :filters="filters"
     :coord="coord"
+    :constScale="constScale"
     @geomClick="geomClick"
     />
     <!-- <group-interval v-if="vizJson.type === 'group-interval'"
@@ -71,6 +75,7 @@
     :size="size"
     :filters="filters"
     :coord="coord"
+    :constScale="constScale"
     @geomClick="geomClick"
     />
     <stack-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'stack-interval'"
@@ -84,6 +89,7 @@
     :size="size"
     :filters="filters"
     :coord="coord"
+    :constScale="constScale"
     @geomClick="geomClick"
     />
     <simple-card v-if="vizJson.type === 'simple-card'"
@@ -178,6 +184,9 @@ export default {
     },
     transpose () {
       return this.$props.vizJson.transpose
+    },
+    constSclae () {
+      return this.$props.vizJson.constScale
     },
     rawDimensions () {
       return this.$props.vizJson.dimensions

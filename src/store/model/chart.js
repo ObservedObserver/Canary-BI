@@ -12,6 +12,7 @@ class Chart {
       type = 0,
       coord = 'rect',
       transpose = false,
+      constScale = false,
       operations = [],
       filters = [],
       dsIndex = -1
@@ -30,6 +31,7 @@ class Chart {
     this.filters = filters
     this.coord = coord
     this.transpose = transpose
+    this.constScale = constScale
   }
 }
 export default Chart

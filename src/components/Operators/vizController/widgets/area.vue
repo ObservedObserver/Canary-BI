@@ -10,12 +10,12 @@ import {uniqueCount} from '../utils/unique'
 import vizConfig from '../config/index'
 let cnt = 0
 function getChartId () {
-  return 'group-interval-' + cnt++
+  return 'area-chart-' + cnt++
 }
 const MEASURE_NAME = 'MEASURE_NAME'
 const MEASURE_VALUE = 'MEASURE_VALUE'
 export default {
-  name: 'group-interval',
+  name: 'simple-area',
   props: {
     dimensions: { type: Array },
     measures: { type: Array },
@@ -36,36 +36,37 @@ export default {
       chartId: getChartId(),
       chart: undefined,
       renderCondition: {
-        dimensions: [2, 3],
+        dimensions: [0, 2],
         measures: [1, Infinity]
       }
     }
   },
   mounted () {
-    let self = this
-    this.erd = elementResizeDetectorMaker()
-    this.erd.listenTo(this.$el, (ele) => {
-      self.chart.changeSize(ele.offsetWidth, ele.offsetHeight)
-    })
     this.chart = new G2.Chart({
       container: this.chartId,
       forceFit: true
     })
     this.renderChart()
-    this.chart.on('interval:click', ev => {
-      let filters = this.dimCode.slice(-2).map(dim => {
-        return new Filter({
-          name: dim,
+    this.chart.on('point:click', ev => {
+      console.log('line click')
+      let filters = [
+        new Filter({
+          name: this.position[0],
           type: 'string',
           filterType: 'equal',
-          values: [ev.data._origin[dim]]
+          values: [ev.data._origin[this.position[0]]]
         })
-      })
+      ]
       this.$emit('geomClick', { filters })
+    })
+    let self = this
+    this.erd = elementResizeDetectorMaker()
+    this.erd.listenTo(this.$el, (ele) => {
+      self.chart.changeSize(ele.offsetWidth, ele.offsetHeight)
     })
   },
   beforeDestroy () {
-    this.chart.off('interval:click')
+    this.chart.off('point:click')
     this.erd.removeAllListeners(this.$el)
     this.erd = null
   },
@@ -183,7 +184,7 @@ export default {
       return this.dimCode.slice(-1).concat(MEASURE_VALUE)
     },
     facetFields () {
-      return this.dimCode.slice(0, -2)
+      return this.dimCode.slice(0, -1)
     },
     allowRender () {
       if (this.meaCode.length < this.renderCondition.measures[0]) {
@@ -198,20 +199,46 @@ export default {
   methods: {
     renderCoord () {
       const {coord, transpose} = this.$props
-      let config = {}
-      if (coord === 'polar') {
-        config = {
-          innerRadius: 0.2
-        }
-      }
-      let c = this.chart.coord(coord, config)
+      let c = this.chart.coord(coord)
       if (transpose) { c.transpose() }
+    },
+    renderLine (view) {
+      const {color, shape, opacity, size} = this.$props
+      let geom = view.line()
+      geom.position(this.position)
+      if (typeof color !== 'undefined') {
+        geom.color(color)
+      }
+      if (typeof opacity !== 'undefined') {
+        geom.opacity(opacity)
+      }
+      if (typeof size !== 'undefined') {
+        geom.size(size)
+      }
+      if (typeof shape !== 'undefined') {
+        geom.shape(shape)
+      }
+    },
+    renderArea (view) {
+      const {color, shape, opacity, size} = this.$props
+      let geom = view.area()
+      geom.position(this.position)
+      if (typeof color !== 'undefined') {
+        geom.color(color)
+      }
+      if (typeof opacity !== 'undefined') {
+        geom.opacity(opacity)
+      }
+      if (typeof size !== 'undefined') {
+        geom.size(size)
+      }
+      if (typeof shape !== 'undefined') {
+        geom.shape(shape)
+      }
     },
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size} = this.$props
         let self = this
-        let defaultColorField = this.dimCode[this.dimCode.length - 2]
         this.chart.clear()
         this.chart.source(this.data)
         this.chart.scale(this.scale)
@@ -219,22 +246,8 @@ export default {
         this.chart.facet('rect', {
           fields: [MEASURE_NAME].concat(this.facetFields),
           eachView (view) {
-            let geom = view.interval().color(defaultColorField).adjust([{
-              type: 'dodge'
-            }])
-            geom.position(self.position)
-            if (typeof color !== 'undefined') {
-              geom.color(color)
-            }
-            if (typeof opacity !== 'undefined') {
-              geom.opacity(opacity)
-            }
-            if (typeof size !== 'undefined') {
-              geom.size(size)
-            }
-            if (typeof shape !== 'undefined') {
-              geom.shape(shape)
-            }
+            self.renderLine(view)
+            self.renderArea(view)
           }
         })
         this.chart.render()

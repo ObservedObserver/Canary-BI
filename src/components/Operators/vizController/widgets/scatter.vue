@@ -26,7 +26,8 @@ export default {
     opacity: { type: String },
     filters: { type: Array },
     coord: { type: String },
-    transpose: { type: Boolean }
+    transpose: { type: Boolean },
+    constScale: { type: Boolean }
   },
   data () {
     return {
@@ -102,6 +103,9 @@ export default {
     },
     transpose () {
       this.renderChart()
+    },
+    constScale () {
+      this.renderChart()
     }
   },
   computed: {
@@ -121,7 +125,7 @@ export default {
       let fields = [...this.meaCode, ...this.dimCode, MEASURE_NAME, MEASURE_VALUE]
       fields.forEach(item => {
         ans[item] = {
-          sync: true
+          sync: this.$props.constScale
         }
       })
       return ans
