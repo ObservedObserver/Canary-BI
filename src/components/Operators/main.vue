@@ -4,9 +4,8 @@
       <el-main class="clear-padding">
         <viz-board></viz-board>
       </el-main>
-      <el-aside width="36%">
+      <el-aside width="400px">
         <filters></filters>
-        <statistics/>
         <selected-data />
         <data-board></data-board>
       </el-aside>

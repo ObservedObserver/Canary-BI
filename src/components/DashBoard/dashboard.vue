@@ -42,6 +42,7 @@
                 active-text="设为筛选器">
               </el-switch>
                 <renderer style="width: 100%; height: 100%"
+                  :event="true"
                   :boardIndex="boardIndex"
                   :boardFilter="boardFilter"
                   :setFilter="dashBoard.setFilterList[index]"

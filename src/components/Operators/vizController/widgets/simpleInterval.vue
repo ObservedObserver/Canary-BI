@@ -29,7 +29,11 @@ export default {
     filters: { type: Array },
     coord: { type: String },
     transpose: { type: Boolean },
-    constScale: { type: Boolean }
+    constScale: { type: Boolean },
+    event: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -198,11 +202,12 @@ export default {
   methods: {
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size, coord, transpose} = this.$props
+        const {color, shape, opacity, size, coord, transpose, event} = this.$props
         let self = this
         this.chart.clear()
         this.chart.source(this.data)
         this.chart.scale(this.scale)
+        this.chart.tooltip(event)
         let c = this.chart.coord(coord)
         if (transpose) { c.transpose() }
         this.chart.facet('rect', {
@@ -222,6 +227,7 @@ export default {
             if (typeof shape !== 'undefined') {
               geom.shape(shape)
             }
+            geom.active(event)
           }
         })
         this.chart.render()

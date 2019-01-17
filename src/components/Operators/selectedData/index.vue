@@ -1,12 +1,12 @@
 <template>
   <el-card class="box-card">
     <el-collapse v-model="activeNames">
-      <el-collapse-item title="列维度" name="1">
+      <el-collapse-item title="维度" name="1">
         <drag-area area-name="X" class="inSelected"></drag-area>
       </el-collapse-item>
-      <el-collapse-item title="行维度" name="2">
+      <!-- <el-collapse-item title="行维度" name="2">
         <drag-area area-name="Y" class="inSelected"></drag-area>
-      </el-collapse-item>
+      </el-collapse-item> -->
       <el-collapse-item title="度量" name="3">
         <drag-area area-name="value" class="inSelected"></drag-area>
       </el-collapse-item>

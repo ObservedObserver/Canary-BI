@@ -29,7 +29,11 @@ export default {
     opacity: { type: String },
     filters: { type: Array },
     coord: { type: String },
-    constScale: { type: Boolean }
+    constScale: { type: Boolean },
+    event: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -201,12 +205,13 @@ export default {
   methods: {
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size, coord} = this.$props
+        const {color, shape, opacity, size, coord, event} = this.$props
         let self = this
         let defaultColorField = this.dimCode[this.dimCode.length - 1]
         this.chart.clear()
         this.chart.source(this.data)
         this.chart.scale(this.scale)
+        this.chart.tooltip(event)
         if (coord === 'theta') {
           this.chart.coord('theta', {
             radius: 0.75
@@ -231,6 +236,7 @@ export default {
             if (typeof shape !== 'undefined') {
               geom.shape(shape)
             }
+            geom.active(event)
           }
         })
         this.chart.render()

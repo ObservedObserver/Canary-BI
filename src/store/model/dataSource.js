@@ -1,9 +1,10 @@
 class DataSource {
   constructor (props = {}) {
-    const { title = 'new source', type = 0 } = props
+    const { title = 'new source', type = 0, id = null } = props
     this.title = title
     this.type = type
     this.foreignDB = null
+    this.id = id
   }
 
   linkDB (db) {

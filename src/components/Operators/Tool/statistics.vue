@@ -1,15 +1,11 @@
 <template lang="html">
-  <el-card class="box-card">
-    <el-collapse>
-      <el-collapse-item title="聚合方式">
-        <el-form>
-          <div v-for="item in func" :key="item.id" style="margin-top:0.4rem">
-            <el-radio v-model="picked" :label="item" border size="medium">{{item}}</el-radio>
-          </div>
-        </el-form>
-      </el-collapse-item>
-    </el-collapse>
-  </el-card>
+  <div>
+    <el-form>
+      <el-form-item label="聚合方式">
+        <el-radio v-for="item in func" :key="item.id" v-model="picked" :label="item" size="medium">{{item}}</el-radio>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script>

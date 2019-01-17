@@ -6,7 +6,7 @@ const loadingOption = {
   text: '加载数据中'
 }
 const actions = {
-  async login (context, userInfo) {
+  async login ({state, dispatch}, userInfo) {
     try {
       let res = await Service.login(userInfo)
       let result = await res.json()
@@ -16,6 +16,7 @@ const actions = {
           message: '登录成功'
         })
         router.push('/analysis')
+        await dispatch('getInitData')
       } else {
         Message.error({
           showClose: true,
@@ -52,30 +53,57 @@ const actions = {
       })
     }
   },
-  async importUploadData (context, {dsIndex}) {
-    let state = context.state
-    // 创建文件实例，加载数据，并将其存储在database中
-    // let FileObj = new FileDB({fileName: 'test', file})
-    // await FileObj.loadData()
-    // state.database.fileDB.push(FileObj)
-    // // 创建数据源实例，并设置数据源实例的外键为刚刚创建的文件实例
-    // let dsObj = new DataSource({type: 'localfile', title})
-    // dsObj.linkDB(FileObj)
-    // state.database.dataSource.push(dsObj)
-    // // 更新全局状态数据，可对这部分再封装以便其他模块共享
-    let fileObj = state.database.dataSource[dsIndex].foreignDB
-    await fileObj.loadData()
-    state.globalData = fileObj.dataSource
-    state.globalDataLabels.dimensions = fileObj.dimensions.map(item => {
-      return { type: 'string', name: item }
-    })
-    state.globalDataLabels.measures = fileObj.measures.map(item => {
-      return { type: 'number', name: item }
-    })
-    state.globalDataLabels.data = state.globalDataLabels.dimensions.concat(state.globalDataLabels.measures)
+  async getInitData ({state}) {
+    try {
+      let res = await Service.getInitData()
+      let result = await res.json()
+      if (result.success) {
+        const {dataSource, dashBoardList, chartWarehouse} = result.data
+        state.database.dataSource = dataSource
+        state.dashBoardList = dashBoardList
+        state.chartWarehouse = chartWarehouse
+      }
+    } catch (error) {
+      console.log(error)
+    }
   },
-  async loadFileData (context, {dsIndex}) {
-    let state = context.state
+  async addDataSource ({state, dispatch}, {dsIndex}) {
+    try {
+      let res = await Service.addDataSource(state.database.dataSource[dsIndex])
+      let result = await res.json()
+      if (result.success) {
+        const { id } = result.data
+        state.database.dataSource[dsIndex].id = id
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async updateDataSource ({state}, {dsIndex}) {
+    try {
+      let res = await Service.updateDataSource(state.database.dataSource[dsIndex])
+      let result = await res.json()
+      if (result.success) {
+        // 理论上建议getDataSource来保证数据的一致性
+        console.log('update success')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async deleteDataSource ({state}, {dsIndex}) {
+    try {
+      let res = await Service.deleteDataSource(state.database.dataSource[dsIndex])
+      let result = await res.json()
+      if (result.success) {
+        // 理论上建议getDataSource来保证数据的一致性
+        console.log('delete success')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async loadFileData ({state, dispatch}, {dsIndex}) {
     // 创建文件实例，加载数据，并将其存储在database中
     // let FileObj = new FileDB({fileName: 'test', file})
     // await FileObj.loadData()
@@ -86,7 +114,13 @@ const actions = {
     // state.database.dataSource.push(dsObj)
     // // 更新全局状态数据，可对这部分再封装以便其他模块共享
     let fileObj = state.database.dataSource[dsIndex].foreignDB
+    let id = state.database.dataSource[dsIndex].id
     await fileObj.loadData()
+    if (id === null) {
+      await dispatch('addDataSource', {dsIndex})
+    } else {
+      await dispatch('updateDataSource', {dsIndex})
+    }
     // state.globalData = fileObj.dataSource
     // state.globalDataLabels.dimensions = fileObj.dimensions.map(item => {
     //   return { type: 'string', name: item }
@@ -126,12 +160,17 @@ const actions = {
       })
     }
   },
-  async getSQLData (context, {dsIndex}) {
-    let state = context.state
+  async getSQLData ({state, dispatch}, {dsIndex}) {
     let mysqlObj = state.database.dataSource[dsIndex].foreignDB
     let loadingInstance = Loading.service(loadingOption)
     try {
       await mysqlObj.getData()
+      let id = state.database.dataSource[dsIndex].id
+      if (id === null) {
+        await dispatch('addDataSource', {dsIndex})
+      } else {
+        await dispatch('updateDataSource', {dsIndex})
+      }
       loadingInstance.close()
     } catch (error) {
       loadingInstance.close()
@@ -141,13 +180,18 @@ const actions = {
       })
     }
   },
-  async getRestData (context, {dsIndex}) {
-    let state = context.state
+  async getRestData ({state, dispatch}, {dsIndex}) {
     let restObj = state.database.dataSource[dsIndex].foreignDB
     let loadingInstance = Loading.service(loadingOption)
     try {
       await restObj.getData()
       loadingInstance.close()
+      let id = state.database.dataSource[dsIndex].id
+      if (id === null) {
+        await dispatch('addDataSource', {dsIndex})
+      } else {
+        await dispatch('updateDataSource', {dsIndex})
+      }
     } catch (error) {
       loadingInstance.close()
       Message.error({

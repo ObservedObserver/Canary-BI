@@ -63,10 +63,6 @@ export default {
           dsIndex: this.dsIndex
         })
       }
-      // debugger
-      // this.$store.dispatch('importUploadData', {
-      //   file: this.dropbox.files[0]
-      // })
     },
     dragover (e) {
       e.stopPropagation()

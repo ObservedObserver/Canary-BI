@@ -8,7 +8,7 @@
         <vizController :chartType="chartMenu[parseInt(currentChart)].name" />
       </div>
       <div v-if="analysisType === 1">
-        <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) >= 1 && parseInt(currentChart) <= 5"/>
+        <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) > 1 && parseInt(currentChart) <= 6"/>
         <magic-table v-if="currentChart === '1'" />
         <normal-table v-if="currentChart === '0'" />
       </div>

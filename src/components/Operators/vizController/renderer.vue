@@ -16,6 +16,8 @@
     :filters="filters"
     :coord="coord"
     :constScale="constScale"
+    :transpose="transpose"
+    :event="event"
     @geomClick="geomClick"
     />
     <simple-line style="width: 100%; height: 100%"  v-if="vizJson.type === 'line'"
@@ -30,6 +32,8 @@
     :filters="filters"
     :coord="coord"
     :constScale="constScale"
+    :transpose="transpose"
+    :event="event"
     @geomClick="geomClick"
     />
     <simple-pie style="width: 100%; height: 100%"  v-if="vizJson.type === 'pie'"
@@ -44,6 +48,8 @@
     :filters="filters"
     :coord="coord"
     :constScale="constScale"
+    :transpose="transpose"
+    :event="event"
     @geomClick="geomClick"
     />
     <scatter-chart style="width: 100%; height: 100%"  v-if="vizJson.type === 'scatter'"
@@ -58,6 +64,8 @@
     :filters="filters"
     :coord="coord"
     :constScale="constScale"
+    :transpose="transpose"
+    :event="event"
     @geomClick="geomClick"
     />
     <!-- <group-interval v-if="vizJson.type === 'group-interval'"
@@ -76,6 +84,8 @@
     :filters="filters"
     :coord="coord"
     :constScale="constScale"
+    :transpose="transpose"
+    :event="event"
     @geomClick="geomClick"
     />
     <stack-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'stack-interval'"
@@ -90,7 +100,24 @@
     :filters="filters"
     :coord="coord"
     :constScale="constScale"
+    :transpose="transpose"
+    :event="event"
     @geomClick="geomClick"
+    />
+    <area-chart class="chart-in-analysis" v-if="vizJson.type === 'area'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
+    :event="event"
+    :constScale="constScale"
     />
     <simple-card v-if="vizJson.type === 'simple-card'"
     :dataSource="dataSource"
@@ -109,6 +136,7 @@ import simplePie from './widgets/simplePie.vue'
 import groupInterval from './widgets/groupInterval.vue'
 import stackInterval from './widgets/stackInterval.vue'
 import simpleCard from './cards/simpleCard.vue'
+import areaChart from './widgets/area.vue'
 const MEASURE_NAME = 'measure_name'
 const MEASURE_VALUE = 'measure_value'
 export default {
@@ -121,13 +149,18 @@ export default {
     simpleLine,
     simplePie,
     simpleCard,
-    simpleInterval
+    simpleInterval,
+    areaChart
   },
   data () {
     return {}
   },
   props: {
     vizJson: { type: Object },
+    event: {
+      type: Boolean,
+      default: false
+    },
     boardFilter: {
       type: Array,
       default () {
@@ -156,7 +189,6 @@ export default {
     }
   },
   computed: {
-
     color () {
       // bad design no use limit
       return this.$props.vizJson.color
@@ -185,7 +217,7 @@ export default {
     transpose () {
       return this.$props.vizJson.transpose
     },
-    constSclae () {
+    constScale () {
       return this.$props.vizJson.constScale
     },
     rawDimensions () {

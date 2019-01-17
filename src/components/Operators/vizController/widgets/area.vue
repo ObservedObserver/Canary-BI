@@ -29,7 +29,11 @@ export default {
     filters: { type: Array },
     coord: { type: String },
     transpose: { type: Boolean },
-    constScale: { type: Boolean }
+    constScale: { type: Boolean },
+    event: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -203,7 +207,7 @@ export default {
       if (transpose) { c.transpose() }
     },
     renderLine (view) {
-      const {color, shape, opacity, size} = this.$props
+      const {color, shape, opacity, size, event} = this.$props
       let geom = view.line()
       geom.position(this.position)
       if (typeof color !== 'undefined') {
@@ -218,9 +222,10 @@ export default {
       if (typeof shape !== 'undefined') {
         geom.shape(shape)
       }
+      geom.active(event)
     },
     renderArea (view) {
-      const {color, shape, opacity, size} = this.$props
+      const {color, shape, opacity, size, event} = this.$props
       let geom = view.area()
       geom.position(this.position)
       if (typeof color !== 'undefined') {
@@ -235,13 +240,16 @@ export default {
       if (typeof shape !== 'undefined') {
         geom.shape(shape)
       }
+      geom.active(event)
     },
     renderChart () {
+      const {event} = this.$props
       if (this.allowRender) {
         let self = this
         this.chart.clear()
         this.chart.source(this.data)
         this.chart.scale(this.scale)
+        this.chart.tooltip(event)
         this.renderCoord()
         this.chart.facet('rect', {
           fields: [MEASURE_NAME].concat(this.facetFields),

@@ -29,7 +29,11 @@ export default {
     filters: { type: Array },
     coord: { type: String },
     transpose: { type: Boolean },
-    constScale: { type: Boolean }
+    constScale: { type: Boolean },
+    event: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -203,12 +207,13 @@ export default {
     },
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size} = this.$props
+        const {color, shape, opacity, size, event} = this.$props
         let self = this
         let defaultColorField = this.dimCode[this.dimCode.length - 2]
         this.chart.clear()
         this.chart.source(this.data)
         this.chart.scale(this.scale)
+        this.chart.tooltip(event)
         this.renderCoord()
         this.chart.facet('rect', {
           fields: [MEASURE_NAME].concat(this.facetFields),
@@ -231,6 +236,7 @@ export default {
               lineWidth: 1,
               stroke: '#fff'
             })
+            geom.active(event)
           }
         })
         this.chart.render()

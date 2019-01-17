@@ -23,7 +23,8 @@
         <scatter-chart v-if="cid === 5" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <scatter-map v-if="cid === 6" :nodes="nodes" :level="level" :save="save" @processSave="submitSave" />
         <el-row>
-          <el-button type="warning" @click="saveChart">保存</el-button>
+          <statistics/>
+          <!-- <el-button type="warning" @click="saveChart">保存</el-button> -->
         </el-row>
       </el-main>
     </el-container>
@@ -37,6 +38,7 @@ import lineChart from './Charts/linecharts.vue'
 import pieChart from './Charts/piecharts.vue'
 import scatterChart from './Charts/scatter.vue'
 import scatterMap from './Charts/map.vue'
+import statistics from '@/components/Operators/Tool/statistics.vue'
 import deepcopy from 'deepcopy'
 const PAGE_ROWS = 100
 export default {
@@ -127,6 +129,9 @@ export default {
     },
     filters () {
       return this.$store.state.filters
+    },
+    aggFunc () {
+      return this.$store.state.pickedFunc
     }
   },
   watch: {
@@ -159,6 +164,9 @@ export default {
     filters () {
       console.log('filters change caught')
       this.chooseAllNodes()
+    },
+    aggFunc () {
+      this.chooseAllNodes()
     }
   },
   mounted () {
@@ -170,7 +178,8 @@ export default {
     lineChart,
     pieChart,
     scatterChart,
-    scatterMap
+    scatterMap,
+    statistics
   }
 }
 </script>

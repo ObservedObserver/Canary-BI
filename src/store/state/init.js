@@ -1,4 +1,4 @@
-import DashBoard from '../model/dashboard/index'
+// import DashBoard from '../model/dashboard/index'
 import DataLabels from '../model/dataLabels'
 function getInitState (oldState = []) {
   let newState = {
@@ -9,7 +9,7 @@ function getInitState (oldState = []) {
       mysql: [],
       rest: []
     },
-    dashBoardList: [new DashBoard()],
+    dashBoardList: [],
     chartWarehouse: [],
     dataSourceList: [],
     defaultDataSource: 0,
