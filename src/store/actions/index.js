@@ -1,6 +1,11 @@
 import Service from './service.js'
 import router from '@/router/index.js'
 import { Message, Loading } from 'element-ui'
+import DataSource from '../model/dataSource.js'
+import FileDB from '../model/fileDB.js'
+import MysqlDB from '../model/mysqlDB.js'
+import RestDB from '../model/restDB.js'
+const createDB = [FileDB, RestDB, MysqlDB]
 const loadingOption = {
   lock: true,
   text: '加载数据中'
@@ -59,10 +64,20 @@ const actions = {
       let result = await res.json()
       if (result.success) {
         const {dataSource, dashBoardList, chartWarehouse} = result.data
-        state.database.dataSource = dataSource
+        state.database.dataSource = dataSource.map(item => {
+          let db = item.foreignDB
+          let ds = new DataSource(item)
+          let foreignDB = new createDB[ds.type](db)
+          ds.linkDB(foreignDB)
+          return ds
+        })
         state.dashBoardList = dashBoardList
         state.chartWarehouse = chartWarehouse
       }
+      Message.success({
+        showClose: true,
+        message: '获取数据源成功'
+      })
     } catch (error) {
       console.log(error)
     }

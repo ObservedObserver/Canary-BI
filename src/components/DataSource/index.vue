@@ -20,6 +20,7 @@
     <div class="ds-list-container" v-if="currentPage === 0">
       <div class="ds-list-operations">
         <el-button @click="createSource" type="success">创建新数据源</el-button>
+        <el-button @click="updateSource" type="primary">刷新数据源</el-button>
       </div>
       <el-table :data="dataSourceList"
         :row-class-name="tableRowClassName"
@@ -129,6 +130,9 @@ export default {
       this.$store.commit('createDataSource')
       this.mode = 'create'
       this.currentPage = 1
+    },
+    updateSource () {
+      this.$store.dispatch('getInitData')
     },
     gotoList () {
       this.currentPage = 0

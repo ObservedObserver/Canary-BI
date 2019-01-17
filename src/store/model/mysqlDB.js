@@ -11,15 +11,24 @@ function sqlQuery (query) {
 }
 class MysqlDB {
   constructor (props) {
-    const {config} = props
+    const {
+      config,
+      dataView = [],
+      databases = [],
+      tables = [],
+      dataSource = [],
+      mode = 'union',
+      dimensions = [],
+      measures = []
+    } = props
     this.config = config
-    this.dataView = []
-    this.databases = []
-    this.tables = []
-    this.dataSource = []
-    this.mode = 'union'
-    this.dimensions = []
-    this.measures = []
+    this.dataView = dataView
+    this.databases = databases
+    this.tables = tables
+    this.dataSource = dataSource
+    this.mode = mode
+    this.dimensions = dimensions
+    this.measures = measures
     // this.choosenTable = ''
   }
   changeMode (props) {

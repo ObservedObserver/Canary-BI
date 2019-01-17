@@ -5,6 +5,9 @@ class DataSource {
     this.type = type
     this.foreignDB = null
     this.id = id
+    // { label: '本地文件', value: 0 },
+    // { label: 'Restful API', value: 1 },
+    // { label: 'MySQL', value: 2 }
   }
 
   linkDB (db) {

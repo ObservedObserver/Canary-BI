@@ -14,8 +14,10 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button :disabled="dataSourceObj.foreignDB !== null"
-          @click="updateDataSource">Confirm</el-button>
+          <!-- <el-button
+          @click="updateDataSource">更新配置信息</el-button> -->
+          <el-button type="success" :disabled="dataSourceObj.foreignDB === null"
+          @click="putDataSource">保存修改到服务器</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -80,6 +82,10 @@ export default {
         dsIndex: this.currentDsIndex,
         value: this.form
       })
+    },
+    putDataSource () {
+      this.updateDataSource()
+      this.$store.dispatch('updateDataSource', {dsIndex: this.currentDsIndex})
     }
   },
   created () {

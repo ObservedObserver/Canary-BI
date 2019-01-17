@@ -11,13 +11,13 @@ function readFile (file) {
 }
 class FileDB {
   constructor (props) {
-    const { file } = props
+    const { file, dataSource = [], dimensions = [], measures = [] } = props
     this.fileName = file.name
     this.size = file.size
     this.file = file
-    this.dataSource = []
-    this.dimensions = []
-    this.measures = []
+    this.dataSource = dataSource
+    this.dimensions = dimensions
+    this.measures = measures
     // try {
     //   this.loadData()
     // } catch (error) {

@@ -3,13 +3,20 @@ function fetchRestData (api) {
 }
 class RestDB {
   constructor (props) {
-    const {host = '', port = '', service = ''} = props
+    const {
+      host = '',
+      port = '',
+      service = '',
+      dimensions = [],
+      measures = [],
+      dataSource = []
+    } = props
     this.host = host
     this.port = port
     this.service = service
-    this.dimensions = []
-    this.measures = []
-    this.dataSource = []
+    this.dimensions = dimensions
+    this.measures = measures
+    this.dataSource = dataSource
   }
   updateValue (props) {
     const {host = '', port = '', service = ''} = props
