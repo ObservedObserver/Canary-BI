@@ -48,7 +48,7 @@
                   :setFilter="dashBoard.setFilterList[index]"
                   :width="segment.w"
                   :height="segment.h * 300"
-                  :vizJson="dashBoard.vizList[index]" />
+                  :chart="dashBoard.vizList[index]" />
             </div>
         </grid-item>
       </grid-layout>
@@ -100,9 +100,13 @@ export default {
   },
   methods: {
     updateDashBoard () {
+      let boardIndex = this.$props.boardIndex
       this.$store.commit('updateDashBoardContainer', {
-        boardIndex: this.$props.boardIndex,
+        boardIndex,
         containerList: this.dashBoard.segmentList
+      })
+      this.$store.dispatch('updateDashBoard', {
+        boardIndex
       })
     },
     gotoBoardCenter () {

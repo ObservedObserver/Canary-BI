@@ -1,9 +1,9 @@
 class DataSource {
   constructor (props = {}) {
-    const { title = 'new source', type = 0, id = null } = props
+    const { title = 'new source', type = 0, id = null, foreignDB = null } = props
     this.title = title
     this.type = type
-    this.foreignDB = null
+    this.foreignDB = foreignDB
     this.id = id
     // { label: '本地文件', value: 0 },
     // { label: 'Restful API', value: 1 },

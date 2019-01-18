@@ -15,8 +15,10 @@ class Chart {
       constScale = false,
       operations = [],
       filters = [],
-      dsIndex = -1
+      dsId = null,
+      id = null
     } = props
+    this.id = id
     this.rows = rows
     this.cols = cols
     this.measures = measures
@@ -27,11 +29,16 @@ class Chart {
     this.shape = shape
     this.type = type
     this.operations = operations
-    this.dsIndex = dsIndex
+    this.dsId = dsId
     this.filters = filters
     this.coord = coord
     this.transpose = transpose
     this.constScale = constScale
+  }
+  dsIndex (dataSourceList) {
+    return dataSourceList.findIndex(ds => {
+      return ds.id === this.dsId
+    })
   }
 }
 export default Chart

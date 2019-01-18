@@ -4,13 +4,16 @@ class DashBoard {
   constructor (props = {}) {
     const {
       id = -1,
-      title = 'new dashboard'
+      title = 'new dashboard',
+      segmentList = [],
+      filters = [],
+      interval = null
     } = props
     this.id = id
     this.title = title
-    this.segmentList = []
-    this.filters = []
-    this.interval = null
+    this.segmentList = segmentList
+    this.filters = filters
+    this.interval = interval
   }
   append (seg) {
     if (seg instanceof Segment) {

@@ -6,7 +6,7 @@
           <div v-for="(chart, index) in chartList" :key="index" class="chart-box">
             <el-card style="margin: 1rem">
               <div style="width: 280; height: 180px; overflow: hidden">
-                <renderer style="width: 280; height: 240px;" :vizJson="chart" />
+                <renderer style="width: 280; height: 240px;" :chart="chart" />
               </div>
               <div style="padding: 0.7rem;">
                 <el-button size="small" type="primary" @click="addSegment(chart, index)"

@@ -32,6 +32,7 @@ export default {
     ChartWarehouse
   },
   mounted () {
+    this.$store.dispatch('getInitData')
     // this.$store.dispatch('getMainData')
   },
   computed: {

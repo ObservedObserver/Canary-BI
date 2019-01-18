@@ -68,7 +68,8 @@ export default {
     },
     addBoard () {
       this.showDialog = false
-      this.$store.commit('addDashBoard', this.form)
+      // this.$store.commit('addDashBoard', this.form)
+      this.$store.dispatch('addDashBoard', this.form)
     },
     initDialog () {
       this.form.title = 'new dashboard'

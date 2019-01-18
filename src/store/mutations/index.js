@@ -10,6 +10,7 @@ import Segment from '../model/dashboard/segment'
 import Container from '../model/dashboard/container'
 import Chart from '../model/chart'
 import Field from '../model/field'
+import Filter from '../model/filter'
 import DataLabels from '../model/dataLabels'
 const mutitations = {
   initState (state, keptKeys) {
@@ -191,15 +192,20 @@ const mutitations = {
     let board = new DashBoard(props)
     state.dashBoardList.push(board)
   },
+  deleteDashBoard (state, {boardIndex}) {
+    try {
+      state.dashBoardList.splice(boardIndex, 1)
+    } catch (error) {
+      console.log('delete error', error)
+    }
+  },
   setDashBoardFilters (state, {boardIndex, filters}) {
     state.dashBoardList[boardIndex].filters = filters
   },
-  addSegment (state, {boardIndex, chartIndex, dsIndex}) {
+  addSegment (state, {boardIndex, chartIndex}) {
     let container = new Container()
     let chart = state.chartWarehouse[chartIndex]
-    let dataSource = state.database.dataSource[dsIndex]
     let seg = new Segment({
-      dataSource,
       chart,
       container
     })
@@ -228,6 +234,28 @@ const mutitations = {
   setMeasureAgg (state, {areaName, labelIndex, aggFunc}) {
     let field = state.globalDataLabels[areaName][labelIndex]
     field.setMeasure(aggFunc)
+  },
+  transformDashBoardData (state, {dashBoardList}) {
+    state.dashBoardList = dashBoardList.map(board => {
+      let segmentList = board.segmentList.map(seg => {
+        let chart = new Chart(seg.chart)
+        let container = new Container(seg.container)
+        let segment = new Segment({
+          ...seg,
+          chart,
+          container
+        })
+        return segment
+      })
+      let filters = board.filters.map(f => {
+        return new Filter(f)
+      })
+      return new DashBoard({
+        ...board,
+        filters,
+        segmentList
+      })
+    })
   }
 }
 

@@ -3,7 +3,7 @@
     <el-card v-for="(chart, index) in chartList" :key="index">
       <el-row>
         <el-col :span="18" class="chart-in-warehouse">
-          <renderer :vizJson="chart" />
+          <renderer :chart="chart" />
         </el-col>
         <el-col :span="6">
           dataSource Config: {{chart.title}}

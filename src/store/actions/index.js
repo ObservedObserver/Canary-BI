@@ -58,12 +58,12 @@ const actions = {
       })
     }
   },
-  async getInitData ({state}) {
+  async getInitData ({state, commit}) {
     try {
       let res = await Service.getInitData()
       let result = await res.json()
       if (result.success) {
-        const {dataSource, dashBoardList, chartWarehouse} = result.data
+        const {dataSource, dashBoardList} = result.data
         state.database.dataSource = dataSource.map(item => {
           let db = item.foreignDB
           let ds = new DataSource(item)
@@ -71,8 +71,19 @@ const actions = {
           ds.linkDB(foreignDB)
           return ds
         })
-        state.dashBoardList = dashBoardList
-        state.chartWarehouse = chartWarehouse
+        commit('transformDashBoardData', {dashBoardList})
+        // 先生成chartWarehouse然后在使用id将这些图标重新引用到DashBoard中
+        let chartMap = new Map()
+        state.dashBoardList.forEach(board => {
+          board.segmentList.forEach(segment => {
+            let {chart} = segment
+            if (!chartMap.has(chart.id)) {
+              chartMap.set(chart.id, chart)
+            }
+          })
+        })
+        console.log('chartMap', chartMap)
+        state.chartWarehouse = [...chartMap.values()]
       }
       Message.success({
         showClose: true,
@@ -106,13 +117,81 @@ const actions = {
       console.log(error)
     }
   },
-  async deleteDataSource ({state}, {dsIndex}) {
+  async deleteDataSource ({state, commit}, {dsIndex}) {
     try {
       let res = await Service.deleteDataSource(state.database.dataSource[dsIndex])
       let result = await res.json()
       if (result.success) {
         // 理论上建议getDataSource来保证数据的一致性
         console.log('delete success')
+        commit('deleteDataSource', {dsIndex})
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async addChart ({state, commit}, props) {
+    try {
+      commit('addChart', props)
+      let chartIndex = state.chartWarehouse.length - 1
+      let res = await Service.addChart(state.chartWarehouse[chartIndex])
+      let result = await res.json()
+      if (result.success) {
+        // 理论上建议getDataSource来保证数据的一致性
+        console.log('add success')
+        state.chartWarehouse[chartIndex].id = result.data.id
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async addDashBoard ({state, commit}, props) {
+    try {
+      commit('addDashBoard', props)
+      let boardIndex = state.dashBoardList.length - 1
+      let res = await Service.addDashBoard(state.dashBoardList[boardIndex])
+      let result = await res.json()
+      if (result.success) {
+        // 理论上建议getDataSource来保证数据的一致性
+        console.log('add success')
+        state.dashBoardList[boardIndex].id = result.data.id
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async updateDashBoard ({state}, {boardIndex}) {
+    try {
+      let res = await Service.updateDashBoard(state.dashBoardList[boardIndex])
+      let result = await res.json()
+      if (result.success) {
+        // 理论上建议getDataSource来保证数据的一致性
+        console.log('update success')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async deleteDashBoard ({state, commit}, {boardIndex}) {
+    try {
+      let res = await Service.deleteDashBoard(state.dashBoardList[boardIndex])
+      let result = await res.json()
+      if (result.success) {
+        // 理论上建议getDataSource来保证数据的一致性
+        console.log('delete success')
+        commit('deleteDashBoard', {boardIndex})
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async getDashBoardList ({state, commit}, {boardIndex}) {
+    try {
+      let res = await Service.getDashBoard(state.dashBoardList[boardIndex])
+      let result = await res.json()
+      if (result.success) {
+        // 理论上建议getDataSource来保证数据的一致性
+        console.log('get success')
       }
     } catch (error) {
       console.log(error)

@@ -55,6 +55,72 @@ const Service = {
       },
       body: JSON.stringify({ id })
     })
+  },
+  addDashBoard (dashBoard) {
+    return fetch(server + '/api/addDashBoard', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dashBoard)
+    })
+  },
+  updateDashBoard (dashBoard) {
+    return fetch(server + '/api/updateDashBoard', {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dashBoard)
+    })
+  },
+  deleteDashBoard (id) {
+    return fetch(server + '/api/addDashBoard', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id})
+    })
+  },
+  getChartList () {
+    return fetch(server + '/api/getChartList', {
+      method: 'GET',
+      credentials: 'include'
+    })
+  },
+  addChart (chart) {
+    return fetch(server + '/api/addChart', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(chart)
+    })
+  },
+  updateChart (chart) {
+    return fetch(server + '/api/updateChart', {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(chart)
+    })
+  },
+  deleteChart (chart) {
+    return fetch(server + '/api/deleteChart', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(chart)
+    })
   }
 }
 

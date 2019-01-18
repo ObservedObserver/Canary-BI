@@ -1,10 +1,10 @@
 <template>
   <div style="wdith: 100%; height: 100%">
-    <!-- <interval-chart v-if="vizJson.type === 'bar'"
+    <!-- <interval-chart v-if="chart.type === 'bar'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" /> -->
-    <simple-interval style="width: 100%; height: 100%" v-if="vizJson.type === 'bar'"
+    <simple-interval style="width: 100%; height: 100%" v-if="chart.type === 'bar'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -20,7 +20,7 @@
     :event="event"
     @geomClick="geomClick"
     />
-    <simple-line style="width: 100%; height: 100%"  v-if="vizJson.type === 'line'"
+    <simple-line style="width: 100%; height: 100%"  v-if="chart.type === 'line'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -36,7 +36,7 @@
     :event="event"
     @geomClick="geomClick"
     />
-    <simple-pie style="width: 100%; height: 100%"  v-if="vizJson.type === 'pie'"
+    <simple-pie style="width: 100%; height: 100%"  v-if="chart.type === 'pie'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -52,7 +52,7 @@
     :event="event"
     @geomClick="geomClick"
     />
-    <scatter-chart style="width: 100%; height: 100%"  v-if="vizJson.type === 'scatter'"
+    <scatter-chart style="width: 100%; height: 100%"  v-if="chart.type === 'scatter'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -68,11 +68,11 @@
     :event="event"
     @geomClick="geomClick"
     />
-    <!-- <group-interval v-if="vizJson.type === 'group-interval'"
+    <!-- <group-interval v-if="chart.type === 'group-interval'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures" /> -->
-    <group-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'group-interval'"
+    <group-interval style="width: 100%; height: 100%"  v-if="chart.type === 'group-interval'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -88,7 +88,7 @@
     :event="event"
     @geomClick="geomClick"
     />
-    <stack-interval style="width: 100%; height: 100%"  v-if="vizJson.type === 'stack-interval'"
+    <stack-interval style="width: 100%; height: 100%"  v-if="chart.type === 'stack-interval'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -104,7 +104,7 @@
     :event="event"
     @geomClick="geomClick"
     />
-    <area-chart class="chart-in-analysis" v-if="vizJson.type === 'area'"
+    <area-chart class="chart-in-analysis" v-if="chart.type === 'area'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
     :measures="rawMeasures"
@@ -119,7 +119,7 @@
     :event="event"
     :constScale="constScale"
     />
-    <simple-card v-if="vizJson.type === 'simple-card'"
+    <simple-card v-if="chart.type === 'simple-card'"
     :dataSource="dataSource"
     :dimensions="dimensions"
     :measures="measures"
@@ -156,7 +156,7 @@ export default {
     return {}
   },
   props: {
-    vizJson: { type: Object },
+    chart: { type: Object },
     event: {
       type: Boolean,
       default: false
@@ -191,47 +191,48 @@ export default {
   computed: {
     color () {
       // bad design no use limit
-      return this.$props.vizJson.color
+      return this.$props.chart.color
     },
     shape () {
-      return this.$props.vizJson.shape
+      return this.$props.chart.shape
     },
     size () {
-      return this.$props.vizJson.size
+      return this.$props.chart.size
     },
     opacity () {
-      return this.$props.vizJson.opacity
+      return this.$props.chart.opacity
     },
     operations () {
-      return this.$props.vizJson.operations
+      return this.$props.chart.operations
     },
     filters () {
       if (this.$props.setFilter) {
-        return this.$props.vizJson.filters
+        return this.$props.chart.filters
       }
-      return this.$props.boardFilter.concat(this.$props.vizJson.filters)
+      return this.$props.boardFilter.concat(this.$props.chart.filters)
     },
     coord () {
-      return this.$props.vizJson.coord
+      return this.$props.chart.coord
     },
     transpose () {
-      return this.$props.vizJson.transpose
+      return this.$props.chart.transpose
     },
     constScale () {
-      return this.$props.vizJson.constScale
+      return this.$props.chart.constScale
     },
     rawDimensions () {
-      return this.$props.vizJson.dimensions
+      return this.$props.chart.dimensions
     },
     rawMeasures () {
-      return this.$props.vizJson.measures
+      return this.$props.chart.measures
     },
     rawData () {
-      let dsIndex = this.$props.vizJson.dsIndex
-      return this.$store.state.database.dataSource[dsIndex].foreignDB.dataSource
+      let dataSourceList = this.$store.state.database.dataSource
+      let dsIndex = this.$props.chart.dsIndex(dataSourceList)
+      return dataSourceList[dsIndex].foreignDB.dataSource
     },
     dimensions () {
-      if (this.$props.vizJson.type === 'scatter') {
+      if (this.$props.chart.type === 'scatter') {
         return this.rawDimensions
           .slice(0, 1)
           .concat(this.rawMeasures)
@@ -239,7 +240,7 @@ export default {
       return [MEASURE_NAME].concat(this.rawDimensions)
     },
     measures () {
-      if (this.$props.vizJson.type === 'scatter') {
+      if (this.$props.chart.type === 'scatter') {
         return this.rawMeasures
       }
       return [MEASURE_VALUE]

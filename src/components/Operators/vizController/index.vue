@@ -190,6 +190,8 @@ export default {
   methods: {
     saveChart () {
       // fix mode
+      let dsIndex = this.$store.state.defaultDataSource
+      let ds = this.$store.state.database.dataSource
       let vizJson = {
         color: this.color,
         shape: this.shape,
@@ -200,13 +202,14 @@ export default {
         coord: this.$props.chartType === 'pie' ? 'theta' : this.coord,
         transpose: this.transpose,
         // dataSource: this.rawData,
-        dsIndex: this.$store.state.defaultDataSource,
+        dsId: ds[dsIndex].id || null,
         dimensions: this.rawDimensions,
         measures: this.rawMeasures,
         constScale: this.constScale,
         type: this.$props.chartType
       }
-      this.$store.commit('addChart', vizJson)
+      // this.$store.commit('addChart', vizJson)
+      this.$store.dispatch('addChart', vizJson)
     }
   },
   computed: {
