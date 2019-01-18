@@ -1,4 +1,3 @@
-let index = 0
 class Container {
   constructor (props = {}) {
     const {
@@ -6,7 +5,7 @@ class Container {
       h = 1,
       x = 0,
       y = 0,
-      i = index++
+      i = `${new Date()}-${Math.random()}`
     } = props
     this.w = w
     this.h = h
