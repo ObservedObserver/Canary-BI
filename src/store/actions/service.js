@@ -1,4 +1,4 @@
-const server = 'http://localhost:7001'
+const server = 'http://bi.canary.plus:7001'
 const Service = {
   login (userInfo) {
     return fetch(server + '/api/login', {
