@@ -12,7 +12,6 @@ function getChartId () {
 }
 // const MEASURE_NAME = 'MEASURE_NAME'
 // const MEASURE_VALUE = 'MEASURE_VALUE'
-const FAKE_DIM = 'FAKE_DIM'
 // const SCATTER_MAX_RENDER_NUMBER = 300
 export default {
   name: 'scatter',
