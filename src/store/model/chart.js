@@ -13,6 +13,7 @@ class Chart {
       coord = 'rect',
       transpose = false,
       constScale = false,
+      aggregate = true,
       operations = [],
       filters = [],
       dsId = null,
@@ -32,6 +33,7 @@ class Chart {
     this.dsId = dsId
     this.filters = filters
     this.coord = coord
+    this.aggregate = aggregate
     this.transpose = transpose
     this.constScale = constScale
   }

@@ -59,6 +59,7 @@
     :coord="coord"
     :transpose="transpose"
     :constScale="constScale"
+    :aggregate="aggregate"
     />
     <!-- <group-interval class="chart-in-analysis" v-if="chartType === 'group-interval'"
     :dataSource="dataSource"
@@ -132,6 +133,10 @@
           <el-switch v-model="constScale">
           </el-switch>
         </el-form-item>
+        <el-form-item label="聚合度量">
+          <el-switch v-model="aggregate">
+          </el-switch>
+        </el-form-item>
         <el-form-item>
           <el-button @click="saveChart" type="success">保存至图表库</el-button>
         </el-form-item>
@@ -178,7 +183,8 @@ export default {
       ],
       coord: 'rect',
       transpose: false,
-      constScale: false
+      constScale: false,
+      aggregate: true
     }
   },
   props: {
@@ -206,6 +212,7 @@ export default {
         dimensions: this.rawDimensions,
         measures: this.rawMeasures,
         constScale: this.constScale,
+        aggregate: this.aggregate,
         type: this.$props.chartType
       }
       // this.$store.commit('addChart', vizJson)

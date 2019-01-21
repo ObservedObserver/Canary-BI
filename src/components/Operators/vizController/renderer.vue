@@ -66,6 +66,7 @@
     :constScale="constScale"
     :transpose="transpose"
     :event="event"
+    :aggregate="aggregate"
     @geomClick="geomClick"
     />
     <!-- <group-interval v-if="chart.type === 'group-interval'"
@@ -219,6 +220,9 @@ export default {
     },
     constScale () {
       return this.$props.chart.constScale
+    },
+    aggregate () {
+      return this.$props.chart.aggregate
     },
     rawDimensions () {
       return this.$props.chart.dimensions

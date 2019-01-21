@@ -10,8 +10,10 @@ let cnt = 0
 function getChartId () {
   return 'scatter-' + cnt++
 }
-const MEASURE_NAME = 'MEASURE_NAME'
-const MEASURE_VALUE = 'MEASURE_VALUE'
+// const MEASURE_NAME = 'MEASURE_NAME'
+// const MEASURE_VALUE = 'MEASURE_VALUE'
+const FAKE_DIM = 'FAME_DIM'
+// const SCATTER_MAX_RENDER_NUMBER = 300
 export default {
   name: 'scatter',
   props: {
@@ -28,6 +30,7 @@ export default {
     coord: { type: String },
     transpose: { type: Boolean },
     constScale: { type: Boolean },
+    aggregate: { type: Boolean },
     event: {
       type: Boolean,
       default: true
@@ -110,11 +113,15 @@ export default {
     },
     constScale () {
       this.renderChart()
+    },
+    aggregate () {
+      this.renderChart()
     }
   },
   computed: {
     dimCode () {
       return this.$props.dimensions.slice(0, this.renderCondition.dimensions[1])
+        .concat(FAKE_DIM)
     },
     meaCode () {
       return this.$props.measures.slice(0, this.renderCondition.measures[1])
@@ -124,9 +131,15 @@ export default {
         return item + '(aggregate)'
       })
     },
+    hyperDimensions () {
+      const {color, size, shape, opacity} = this.$props
+      return [color, size, shape, opacity].filter(item => {
+        return typeof item !== 'undefined'
+      })
+    },
     scale () {
       let ans = {}
-      let fields = [...this.meaCode, ...this.dimCode, MEASURE_NAME, MEASURE_VALUE]
+      let fields = [...this.mapMeaCode, ...this.meaCode, ...this.dimCode]
       fields.forEach(item => {
         ans[item] = {
           sync: this.$props.constScale
@@ -150,16 +163,44 @@ export default {
           })
         }
       })
-      // dv.transform({
-      //   type: 'aggregate',
-      //   fields: this.meaCode,
-      //   operations: this.$props.operations,
-      //   as: this.mapMeaCode,
-      //   groupBy: this.dimCode
-      // })
+      dv.transform({
+        type: 'impute',
+        field: FAKE_DIM,
+        method: 'value',
+        value: FAKE_DIM
+      })
+      // if (this.$props.dataSource.length > SCATTER_MAX_RENDER_NUMBER) {
+      //   dv.transform({
+      //     type: 'kernel-smooth.density',
+      //     fields: this.position,
+      //     as: [...this.position, 'density']
+      //   })
+      // }
+      if (this.$props.aggregate) {
+        if (this.dimCode.length === 0) {
+          dv.transform({
+            type: 'aggregate',
+            fields: this.meaCode,
+            operations: this.$props.operations,
+            as: this.mapMeaCode,
+            groupBy: this.hyperDimensions
+          })
+        } else {
+          dv.transform({
+            type: 'aggregate',
+            fields: this.meaCode,
+            operations: this.$props.operations,
+            as: this.mapMeaCode,
+            groupBy: this.dimCode.concat(FAKE_DIM)
+          })
+        }
+      }
       return dv
     },
     position () {
+      if (this.$props.aggregate) {
+        return this.mapMeaCode.slice(0, 2)
+      }
       return this.meaCode.slice(0, 2)
     },
     facetFields () {
@@ -176,36 +217,55 @@ export default {
     }
   },
   methods: {
+    renderPoint () {
+      const self = this
+      this.chart.facet('rect', {
+        fields: this.facetFields,
+        eachView (view) {
+          let geom = view.point()
+          console.log('render view', view)
+          geom.position(self.position).shape('circle');
+          (['color', 'opacity', 'size', 'shape']).filter((aesthetic) => {
+            return typeof self.$props[aesthetic] !== 'undefined'
+          }).forEach(aesthetic => {
+            geom[aesthetic](self.$props[aesthetic])
+          })
+          geom.active(event)
+        }
+      })
+    },
+    renderHeatMap () {
+      const self = this
+      this.chart.facet('rect', {
+        fields: this.facetFields,
+        eachView (view) {
+          let geom = view.heatmap()
+          geom.color('density', 'blue-cyan-lime-yellow-red')
+          geom.position(self.position);
+          (['color', 'opacity']).filter((aesthetic) => {
+            return typeof self.$props[aesthetic] !== 'undefined'
+          }).forEach(aesthetic => {
+            geom[aesthetic](self.$props[aesthetic])
+          })
+          geom.active(event)
+        }
+      })
+    },
     renderChart () {
       if (this.allowRender) {
-        const {color, shape, opacity, size, coord, transpose, event} = this.$props
-        let self = this
+        const {coord, transpose, event} = this.$props
         this.chart.clear()
         this.chart.source(this.data)
         this.chart.scale(this.scale)
         this.chart.tooltip(event)
         let c = this.chart.coord(coord)
         if (transpose) { c.transpose() }
-        this.chart.facet('rect', {
-          fields: this.facetFields,
-          eachView (view) {
-            let geom = view.point()
-            geom.position(self.position).shape('circle')
-            if (typeof color !== 'undefined') {
-              geom.color(color)
-            }
-            if (typeof opacity !== 'undefined') {
-              geom.opacity(opacity)
-            }
-            if (typeof size !== 'undefined') {
-              geom.size(size)
-            }
-            if (typeof shape !== 'undefined') {
-              geom.shape(shape)
-            }
-            geom.active(event)
-          }
-        })
+        this.renderPoint()
+        // if (this.$props.dataSource.length > SCATTER_MAX_RENDER_NUMBER) {
+        //   this.renderHeatMap()
+        // } else {
+        //   this.renderPoint()
+        // }
         this.chart.render()
       }
     }
