@@ -12,7 +12,7 @@ function getChartId () {
 }
 // const MEASURE_NAME = 'MEASURE_NAME'
 // const MEASURE_VALUE = 'MEASURE_VALUE'
-const FAKE_DIM = 'FAME_DIM'
+const FAKE_DIM = 'FAKE_DIM'
 // const SCATTER_MAX_RENDER_NUMBER = 300
 export default {
   name: 'scatter',
@@ -121,7 +121,6 @@ export default {
   computed: {
     dimCode () {
       return this.$props.dimensions.slice(0, this.renderCondition.dimensions[1])
-        .concat(FAKE_DIM)
     },
     meaCode () {
       return this.$props.measures.slice(0, this.renderCondition.measures[1])
@@ -163,12 +162,6 @@ export default {
           })
         }
       })
-      dv.transform({
-        type: 'impute',
-        field: FAKE_DIM,
-        method: 'value',
-        value: FAKE_DIM
-      })
       // if (this.$props.dataSource.length > SCATTER_MAX_RENDER_NUMBER) {
       //   dv.transform({
       //     type: 'kernel-smooth.density',
@@ -191,7 +184,7 @@ export default {
             fields: this.meaCode,
             operations: this.$props.operations,
             as: this.mapMeaCode,
-            groupBy: this.dimCode.concat(FAKE_DIM)
+            groupBy: this.dimCode
           })
         }
       }
