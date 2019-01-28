@@ -9,8 +9,7 @@ function dataDrop (state, component) {
       column: state.currentLabel.name
     })
     state.globalDataLabels[component].push(new Filter({
-      name: state.currentLabel.name,
-      type: state.currentLabel.type,
+      ...state.currentLabel,
       values
     }))
   } else if (component === 'dimensions' && state.currentLabel.isMeasure()) {

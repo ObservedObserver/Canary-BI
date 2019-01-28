@@ -1,9 +1,10 @@
 class Field {
   constructor (props = {}) {
-    const {label, name, type} = props
+    const {label, name, type, aggFunc = 'sum'} = props
     this.label = label
     this.name = name
     this.type = type
+    this.aggFunc = aggFunc
   }
   isDimension () {
     return this.type === 'string' || this.type === 'time'
