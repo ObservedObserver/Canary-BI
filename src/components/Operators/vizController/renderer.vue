@@ -20,6 +20,22 @@
     :event="event"
     @geomClick="geomClick"
     />
+    <trick-interval style="width: 100%; height: 100%" v-if="chart.type === 'trick-bar'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    :filters="filters"
+    :coord="coord"
+    :constScale="constScale"
+    :transpose="transpose"
+    :event="event"
+    @geomClick="geomClick"
+    />
     <simple-line style="width: 100%; height: 100%"  v-if="chart.type === 'line'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
@@ -129,6 +145,7 @@
 </template>
 <script>
 import simpleInterval from './widgets/simpleInterval.vue'
+import trickInterval from './widgets/trickInterval.vue'
 import scatterChart from './widgets/scatter.vue'
 import intervalChart from './charts/interval.vue'
 import simpleLine from './widgets/simpleLine.vue'
@@ -151,6 +168,7 @@ export default {
     simplePie,
     simpleCard,
     simpleInterval,
+    trickInterval,
     areaChart
   },
   data () {

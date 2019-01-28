@@ -18,6 +18,20 @@
     :transpose="transpose"
     :constScale="constScale"
     />
+    <trick-interval class="chart-in-analysis" v-if="chartType === 'trick-bar'"
+    :dataSource="rawData"
+    :dimensions="rawDimensions"
+    :measures="rawMeasures"
+    :operations="operations"
+    :color="color"
+    :shape="shape"
+    :opacity="opacity"
+    :size="size"
+    :filters="filters"
+    :coord="coord"
+    :transpose="transpose"
+    :constScale="constScale"
+    />
     <simple-line  class="chart-in-analysis" v-if="chartType === 'line'"
     :dataSource="rawData"
     :dimensions="rawDimensions"
@@ -146,6 +160,7 @@
 </template>
 <script>
 import simpleInterval from './widgets/simpleInterval.vue'
+import trickInterval from './widgets/trickInterval.vue'
 import scatterChart from './widgets/scatter.vue'
 import intervalChart from './charts/interval.vue'
 import simpleLine from './widgets/simpleLine.vue'
@@ -171,6 +186,7 @@ export default {
     simplePie,
     simpleCard,
     simpleInterval,
+    trickInterval,
     areaChart
   },
   data () {

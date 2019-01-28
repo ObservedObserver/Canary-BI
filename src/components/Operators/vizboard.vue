@@ -43,6 +43,7 @@ export default {
         ],
         dashboard: [
           { name: 'bar', label: '柱状图' },
+          { name: 'trick-bar', label: '柱状图(n分面测试)' },
           { name: 'line', label: '折线图' },
           { name: 'pie', label: '饼图' },
           { name: 'group-interval', label: '分组柱状图' },
