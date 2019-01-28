@@ -35,4 +35,10 @@ npm run build
 在使用mysql数据源时需要搭建sql转发服务，为了安全性问题，线上不提供开放的demo，建议自行搭建
 [DataSource-Manager](https://github.com/ObservedObserver/DataSource-Manager)
 
-更新：最新版本建议使用[Canary-Server](https://github.com/ObservedObserver/Canary-Server)作为后端(供测试使用)
+### 更新
+最新版本建议使用[Canary-Server](https://github.com/ObservedObserver/Canary-Server)作为后端(供测试使用)
+
+### 提供的线上测试数据
+为了方便测试，线上部署了一些可以直接使用的数据集服务(2019.2.7号失效)
++ [Titanic Dataset(891 rows)](http://ooer.space:2018/api/data/titanic)
++ [Library Dataset(200,000 rows)](http://ooer.space:2018/api/data/library)
