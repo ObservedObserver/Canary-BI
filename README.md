@@ -2,7 +2,8 @@
 
 web端自主分析服务
 
-> A Vue.js project
+
+> vue全家桶 + element-ui + echarts/g2
 
 ## 搭建步骤
 
@@ -18,20 +19,7 @@ npm run build
 
 ```
 ## 线上版本
-[Demo](http://ooer.space:1997)
-
-## 效果图
-Dashboard
-![](http://imglf3.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYdXRxUlNjK0Jyc1hjcm0rdmRZZTRDZmpveCtpUXI4VjRBPT0.png?imageView&thumbnail=3000y1672&type=png&quality=96&stripmeta=0)
-
-自主分析
-![](http://imglf4.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYcXZXcjllNFpONU5remJRSUozOXN6V0dEZ2czTG82cUhnPT0.png?imageView&thumbnail=3000y1672&type=png&quality=96&stripmeta=0)
-
-数据透视表
-![](http://imglf5.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYcmtDM1dZZ2xjYVg0R0x0Q3c2dnhUSnBjZTJwTGpIQTF3PT0.png?imageView&thumbnail=3000y1672&type=png&quality=96&stripmeta=0)
-
-数据源配置
-![](http://imglf6.nosdn0.126.net/img/UnhEMnlSbXBDeGo0RUNuWjVncFBYaDZSMllnSVN0WUxIclRycFJmbjJvTHZGWXl4V2hEQXF3PT0.png?imageView&thumbnail=3000y1677&type=png&quality=96&stripmeta=0)
+[Demo](http://bi.canary.plus:1997)
 
 ## OLAP
 
@@ -46,3 +34,5 @@ Dashboard
 ## 后端依赖
 在使用mysql数据源时需要搭建sql转发服务，为了安全性问题，线上不提供开放的demo，建议自行搭建
 [DataSource-Manager](https://github.com/ObservedObserver/DataSource-Manager)
+
+更新：最新版本建议使用[Canary-Server](https://github.com/ObservedObserver/Canary-Server)作为后端(供测试使用)
