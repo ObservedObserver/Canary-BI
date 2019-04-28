@@ -8,7 +8,7 @@ export default {
     LOCAL: 'local'
   },
   server: {
-    sql: 'http://bi.canary.plus:1999/mysql/query'
+    sql: 'http://bi.canary.plus:7001/api/sql'
   },
   aggFunc: [
     { value: 'count', label: '计数' },
