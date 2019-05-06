@@ -1,5 +1,5 @@
 <template>
-  <div id="canary-voyager" ref="voyager">  
+  <div id="canary-voyager" ref="voyager">
   </div>
 </template>
 
@@ -15,18 +15,18 @@ export default {
     this.config = undefined
     console.log(voyager, this.container)
     this.voyager = voyager.CreateVoyager(this.container,
-    {
-      showDataSourceSelector: false,
-      serverUrl: null,
-      hideHeader: true,
-      hideFooter: true,
-      relatedViews: 'initiallyShown',
-      wildcards: 'disabled'
-    },
-    {
-      values: this.dataSource
-    }
-   )
+      {
+        showDataSourceSelector: false,
+        serverUrl: null,
+        hideHeader: true,
+        hideFooter: true,
+        relatedViews: 'initiallyShown',
+        wildcards: 'disabled'
+      },
+      {
+        values: this.dataSource
+      }
+    )
   },
   computed: {
     dataSource () {
@@ -35,14 +35,13 @@ export default {
   },
   watch: {
     dataSource (newVal) {
-        this.voyager.updateData({
-          values: newVal
-        })
-      }
+      this.voyager.updateData({
+        values: newVal
+      })
     }
+  }
 }
 </script>
 <style>
   @import 'datavoyager/build/style.css';
 </style>
-
