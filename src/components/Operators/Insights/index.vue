@@ -8,13 +8,13 @@ import * as voyager from 'datavoyager/build/lib-voyager.js'
 export default {
   name: 'insights',
   data () {
-   return {}
+    return {}
   },
   mounted () {
-   this.container = document.getElementById('canary-voyager')
-   this.config = undefined
-   console.log(voyager, this.container)
-   this.voyager = voyager.CreateVoyager(this.container,
+    this.container = document.getElementById('canary-voyager')
+    this.config = undefined
+    console.log(voyager, this.container)
+    this.voyager = voyager.CreateVoyager(this.container,
     {
       showDataSourceSelector: false,
       serverUrl: null,
@@ -24,21 +24,25 @@ export default {
       wildcards: 'disabled'
     },
     {
-     values: this.dataSource
+      values: this.dataSource
     }
    )
   },
   computed: {
-   dataSource () {
-    return this.$store.state.globalData
-   }
+    dataSource () {
+      return this.$store.state.globalData
+    }
   },
   watch: {
-   dataSource (newVal) {
-    this.voyager.updateData({
-     values: newVal
-    })
-   }
-  }
+    dataSource (newVal) {
+        this.voyager.updateData({
+          values: newVal
+        })
+      }
+    }
 }
 </script>
+<style>
+  @import 'datavoyager/build/style.css';
+</style>
+
