@@ -1,17 +1,22 @@
 <template lang="html">
-  <div class="invizboard">
-    <el-menu :default-active="currentChart" mode="horizontal" @select="changeChart">
-      <el-menu-item v-for="(item, i) in chartMenu" :key="analysisType + item.name" :index="i.toString()">{{item.label}}</el-menu-item>
-    </el-menu>
-    <div class="charts-board">
-      <div v-if="analysisType === 0">
-        <vizController :chartType="chartMenu[parseInt(currentChart)].name" />
+  <div>
+    <div class="invizboard" v-if="analysisType < 2">
+      <el-menu :default-active="currentChart" mode="horizontal" @select="changeChart">
+        <el-menu-item v-for="(item, i) in chartMenu" :key="analysisType + item.name" :index="i.toString()">{{item.label}}</el-menu-item>
+      </el-menu>
+      <div class="charts-board">
+        <div v-if="analysisType === 0">
+          <vizController :chartType="chartMenu[parseInt(currentChart)].name" />
+        </div>
+        <div v-if="analysisType === 1">
+          <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) > 1 && parseInt(currentChart) <= 6"/>
+          <magic-table v-if="currentChart === '1'" />
+          <normal-table v-if="currentChart === '0'" />
+        </div>
       </div>
-      <div v-if="analysisType === 1">
-        <cube :cid="parseInt(currentChart)" v-if="parseInt(currentChart) > 1 && parseInt(currentChart) <= 6"/>
-        <magic-table v-if="currentChart === '1'" />
-        <normal-table v-if="currentChart === '0'" />
-      </div>
+    </div>
+    <div class="invizboard" v-if="analysisType === 2">
+      <insights />
     </div>
   </div>
 </template>
@@ -25,6 +30,7 @@ import magicLine from './MagicChart/linechart.vue'
 import magicPie from './MagicChart/piechart.vue'
 import magicScatter from './MagicChart/scatter.vue'
 import cube from './Cube/index.vue'
+import insights from './insights/index.vue'
 // import pivot from './Pivot/index.vue'
 import vizController from './vizController/index.vue'
 export default {
@@ -85,7 +91,8 @@ export default {
     magicTable,
     cube,
     vizController,
-    normalTable
+    normalTable,
+    insights
     // pivot
   }
 }

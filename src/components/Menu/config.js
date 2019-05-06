@@ -15,6 +15,10 @@ const MENU_ROUTER = [
       {
         title: '探索分析',
         location: { primary: 'Main', secondary: 1 }
+      },
+      {
+        title: '智能推荐',
+        location: { primary: 'Main', secondary: 2 }
       }
     ]
   },
