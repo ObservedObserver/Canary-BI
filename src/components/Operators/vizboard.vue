@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="invizboard" v-if="analysisType === 2">
-      <insights />
+      <!-- <insights /> -->
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ import magicLine from './MagicChart/linechart.vue'
 import magicPie from './MagicChart/piechart.vue'
 import magicScatter from './MagicChart/scatter.vue'
 import cube from './Cube/index.vue'
-import insights from './insights/index.vue'
+// import insights from './insights/index.vue'
 // import pivot from './Pivot/index.vue'
 import vizController from './vizController/index.vue'
 export default {
@@ -91,8 +91,8 @@ export default {
     magicTable,
     cube,
     vizController,
-    normalTable,
-    insights
+    normalTable
+    // insights
     // pivot
   }
 }
